@@ -14,14 +14,11 @@
     <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <!-- Logo Container -->
-                <div class="w-10 h-10 rounded-full overflow-hidden">
-                    <img src="assets/img/ELYTRA.jpg" alt="Elytra Logo" class="w-full h-full object-cover">
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center pulse">
+                    <i class="fas fa-coins text-white"></i>
                 </div>
-                <!-- Logo Text -->
-                <span class="text-xl font-bold text-white">Elytra Pool</span>
+                <span class="text-xl font-bold">Elytra Pool</span>
             </div>
-
 
             <div class="hidden md:flex space-x-8">
                 <a href="#home" class="nav-link">Home</a>
@@ -642,7 +639,7 @@
             </div>
         </div>
     </footer>
-
+    
     <script src="assets/js/script.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

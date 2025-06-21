@@ -59,11 +59,28 @@ body {
     background-color: #1f2937;
     width: 100%;
     z-index: 10;
-    transition: max-height 0.3s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .nav-links.active {
     display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .nav-link {
@@ -71,6 +88,7 @@ body {
     color: #ffffff;
     text-align: center;
     text-decoration: none;
+    width: 100%;
 }
 
 .nav-link:hover {
@@ -83,6 +101,11 @@ body {
         position: static;
         flex-direction: row;
         background-color: transparent;
+        justify-content: center;
+        width: auto;
+        opacity: 1;
+        transform: none;
+        animation: none;
     }
 }
 

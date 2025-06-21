@@ -1,2 +1,2 @@
-# Elytra-Pool
-Elytra Pool is a professional crypto trading website with real-time market data, smooth animations, secure wallet integration, and a clean, responsive UI. Built for both beginners and experienced traders.
+Elytra Pool offers secure and efficient crypto staking and mining services.
+Earn passive income by staking your assets or mining supported coins through our reliable and high-performance infrastructure. Easy to use, energy-efficient, and built for long-term rewards.

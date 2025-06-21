@@ -49,6 +49,43 @@ body {
     width: 100%;
 }
 
+/* Additional styles for mobile navigation */
+.nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1f2937;
+    width: 100%;
+    z-index: 10;
+    transition: max-height 0.3s ease;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+.nav-link {
+    padding: 1rem;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+        position: static;
+        flex-direction: row;
+        background-color: transparent;
+    }
+}
+
 .btn-primary {
     background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
     transition: all 0.3s ease;

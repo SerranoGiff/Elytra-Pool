@@ -109,6 +109,48 @@ body {
     }
 }
 
+/* Add this to your CSS file */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add this to your CSS file */
+@keyframes modalFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+#modalContent, #infoModalContent {
+    max-height: 90vh; /* Set maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    animation: modalFadeIn 0.3s ease-in-out; /* Fade in animation */
+}
+
+.hidden {
+    display: none; /* Hide element */
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease-in-out;
+}
+
 .btn-primary {
     background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
     transition: all 0.3s ease;

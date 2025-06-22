@@ -14,11 +14,17 @@
     <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center pulse">
-                    <i class="fas fa-coins text-white"></i>
-                </div>
-                <span class="text-xl font-bold">Elytra Pool</span>
+                <a href="index.html" class="flex items-center">
+                    <div
+                        class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+                        <img src="assets/img/Elytra Logo.png" alt="Elytra Logo"
+                            class="w-full h-full rounded-full object-cover">
+                    </div>
+                    <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+                        Pool</span>
+                </a>
             </div>
+
 
             <div class="nav-links" id="nav-links">
                 <a href="#home" class="nav-link">Home</a>
@@ -29,10 +35,187 @@
             </div>
 
             <div class="flex items-center space-x-4">
-                <button class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+                <button id="login-button"
+                    class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
                     <i class="fas fa-user"></i>
                     <span>Login</span>
                 </button>
+            </div>
+
+            <!-- Main Login Modal -->
+            <!-- Main Login Modal -->
+            <div id="loginModal"
+                class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+                <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+                <div class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+                    id="modalContent">
+                    <div id="modalContentInner">
+                        <!-- Login Form -->
+                        <div id="loginForm" class="form-section">
+                            <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+                            <form>
+                                <div class="mb-4">
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email
+                                        Address</label>
+                                    <input type="email" id="email"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="password"
+                                        class="block text-sm font-medium text-gray-700">Password</label>
+                                    <input type="password" id="password"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required>
+                                </div>
+                                <div class="flex items-center mb-4">
+                                    <input type="checkbox" id="rememberMe"
+                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember Me</label>
+                                </div>
+                                <button type="submit"
+                                    class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Login</button>
+                            </form>
+                            <div class="mt-4 text-center">
+                                <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account?
+                                    Sign Up</button>
+                            </div>
+                        </div>
+
+                        <!-- Sign Up Form -->
+                        <div id="signUpForm" class="form-section hidden">
+                            <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
+                            <form>
+                                <div class="mb-4">
+                                    <label for="username"
+                                        class="block text-sm font-medium text-gray-700">Username</label>
+                                    <input type="text" id="username"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="signUpEmail" class="block text-sm font-medium text-gray-700">Email
+                                        Address</label>
+                                    <input type="email" id="signUpEmail"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="signUpPassword"
+                                        class="block text-sm font-medium text-gray-700">Password</label>
+                                    <input type="password" id="signUpPassword"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="agreeTerms"
+                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                            disabled>
+                                        <label for="agreeTerms" class="ml-2 block text-sm text-gray-700">
+                                            I agree to the <a href="#" id="termsLink"
+                                                class="text-blue-600 hover:underline">Terms and Conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Sign
+                                    Up</button>
+                            </form>
+                            <div class="mt-4 text-center">
+                                <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an
+                                    account? Login</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button id="closeModal"
+                            class="text-gray-500 hover:text-gray-700 transition duration-200">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and Conditions Modal -->
+            <div id="infoModal"
+                class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+                <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+                <div class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+                    id="infoModalContent">
+                    <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Terms & Conditions</h2>
+                    <div class="max-h-96 overflow-y-auto" id="termsContent">
+                        <p id="modalContentText" class="text-gray-700 mb-4">
+                            <strong>ELYTRA POOL TERMS OF SERVICE</strong><br>
+                            <strong>Last Updated:</strong> June 22, 2025<br><br>
+
+                            <strong>1. Definitions</strong><br>
+                            1.1. <strong>"Platform"</strong> refers to Elytra Pool, its affiliates, subsidiaries, and
+                            any associated decentralized protocols.<br>
+                            1.2. <strong>"User "</strong> ("you") means any entity interacting with the Platform,
+                            including but not limited to stakers, referrers, and purchasers of digital assets.<br>
+                            1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable incentives distributed at
+                            the Platform's sole discretion, with no expectation of profit.<br><br>
+
+                            <strong>2. Acceptance of Terms</strong><br>
+                            2.1. By accessing the Platform, you <strong>irrevocably consent</strong> to these Terms, our
+                            Privacy Policy, and any future amendments (posted without notice).<br>
+                            2.2. Continued use constitutes <strong>binding arbitration agreement</strong> (waiving class
+                            action rights per Section 9.4).<br><br>
+
+                            <strong>3. Eligibility & Account Creation</strong><br>
+                            3.1. Users affirm they are <strong>not</strong> a citizen/resident of prohibited
+                            jurisdictions (e.g., USA, Cuba, North Korea) unless compliant with local regulations.<br>
+                            3.2. <strong>No Guaranteed Access</strong>: Accounts may be terminated without explanation
+                            (Section 7.3).<br><br>
+
+                            <strong>4. Staking & Rewards (No Promises)</strong><br>
+                            4.1. <strong>Variable Rewards</strong>: APY estimates are hypothetical, subject to smart
+                            contract risks, slashing, and protocol changes.<br>
+                            4.2. <strong>No Ownership</strong>: Staked assets remain User's property, but rewards are
+                            <strong>unsecured claims</strong> until distributed.<br>
+                            4.3. <strong>Tax Liability</strong>: Users alone are responsible for reporting rewards as
+                            income (consult a tax advisor).<br><br>
+
+                            <strong>5. Referral Program (No Pyramid Schemes)</strong><br>
+                            5.1. Referral rewards are <strong>limited to 10 levels deep</strong> to avoid regulatory
+                            classification as a security/Ponzi.<br>
+                            5.2. Platform reserves the right to <strong>withhold referrals</strong> deemed fraudulent
+                            (no appeals).<br><br>
+
+                            <strong>6. NFT Avatars & Microtransactions</strong><br>
+                            6.1. <strong>Non-Refundable</strong>: All purchases of digital assets (e.g., avatars, gems)
+                            are final.<br>
+                            6.2. <strong>No Financial Utility</strong>: Avatars confer no staking advantages—purely
+                            cosmetic.<br><br>
+
+                            <strong>7. Termination & Fund Seizure</strong><br>
+                            7.1. <strong>At-Will Suspension</strong>: We may freeze accounts for "suspicious activity"
+                            (undefined).<br>
+                            7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12 months may be
+                            <strong>repurposed as protocol fees</strong>.<br><br>
+
+                            <strong>8. Disclaimers (No Liability)</strong><br>
+                            8.1. <strong>As-Is Service</strong>: The Platform disclaims warranties of merchantability,
+                            fitness, or non-infringement.<br>
+                            8.2. <strong>Third-Party Risks</strong>: We are not liable for exploits in underlying
+                            blockchains (e.g., Ethereum, Solana).<br><br>
+
+                            <strong>9. Governing Law & Arbitration</strong><br>
+                            9.1. <strong>Jurisdiction</strong>: Disputes resolved under [Cayman Islands law] (favors
+                            arbitration).<br>
+                            9.2. <strong>Class Action Waiver</strong>: Users may only pursue individual claims (no class
+                            actions).<br><br>
+
+                            <strong>10. Amendments</strong><br>
+                            10.1. <strong>Unilateral Changes</strong>: We may modify these Terms at any time; continued
+                            use = acceptance.
+                        </p>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button id="confirmTerms"
+                            class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed"
+                            disabled>I Accept</button>
+                    </div>
+                </div>
             </div>
 
             <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
@@ -623,7 +806,7 @@
                         <li><a href="#staking" class="hover:text-white">Staking</a></li>
                         <li><a href="#mining" class="hover:text-white">Mining</a></li>
                         <li><a href="#earnings" class="hover:text-white">Earnings Calculator</a></li>
-                        <li><a href="#about" class="hover:text-white">About Us</a></li>
+                        <li><a href="pages/about.html" class="hover:text-white">About Us</a></li>
                     </ul>
                 </div>
 
@@ -661,6 +844,129 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Get modal elements
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+        const switchToSignUp = document.getElementById('switchToSignUp');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const loginForm = document.getElementById('loginForm');
+        const signUpForm = document.getElementById('signUpForm');
+        const infoModal = document.getElementById('infoModal');
+        const termsLink = document.getElementById('termsLink');
+        const confirmTerms = document.getElementById('confirmTerms');
+        const termsContent = document.getElementById('termsContent');
+
+        // Open modal function
+        document.getElementById('login-button').addEventListener('click', function () {
+            loginModal.classList.remove('hidden');
+            setTimeout(() => {
+                loginModal.querySelector('#modalContent').classList.remove('scale-95', 'opacity-0');
+                loginModal.querySelector('#modalContent').classList.add('scale-100', 'opacity-100');
+            }, 10);
+        });
+
+        // Close modal function
+        closeModal.addEventListener('click', function () {
+            // Add animation classes to the modal content
+            loginModal.querySelector('#modalContent').classList.add('scale-95', 'opacity-0');
+
+            // Wait for the animation to complete before hiding the modal
+            setTimeout(() => {
+                loginModal.classList.add('hidden');
+            }, 300); // Match this duration with your CSS transition duration
+        });
+
+        // Close modal when clicking outside of it
+        window.addEventListener('click', function (event) {
+            if (event.target === loginModal) {
+                closeModal.click();
+            }
+        });
+
+        // Switch to Sign Up form
+        switchToSignUp.addEventListener('click', function () {
+            loginForm.classList.add('hidden');
+            signUpForm.classList.remove('hidden');
+        });
+
+        // Switch to Login form
+        switchToLogin.addEventListener('click', function () {
+            signUpForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+        // Show Terms & Conditions
+        termsLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            infoModal.classList.remove('hidden');
+            setTimeout(() => {
+                infoModal.querySelector('#infoModalContent').classList.remove('scale-95', 'opacity-0');
+                infoModal.querySelector('#infoModalContent').classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            // Reset the button state when modal opens
+            confirmTerms.disabled = true;
+            confirmTerms.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'cursor-pointer');
+            confirmTerms.classList.add('bg-gray-400', 'cursor-not-allowed');
+        });
+
+        // Enable "I Accept" button when scrolled to the bottom
+        termsContent.addEventListener('scroll', function () {
+            const scrollTop = termsContent.scrollTop;
+            const scrollHeight = termsContent.scrollHeight;
+            const clientHeight = termsContent.clientHeight;
+
+            // Check if the user has scrolled to the bottom
+            if (scrollTop + clientHeight >= scrollHeight) {
+                confirmTerms.disabled = false;
+                confirmTerms.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                confirmTerms.classList.add('bg-blue-600', 'hover:bg-blue-700', 'cursor-pointer');
+            } else {
+                confirmTerms.disabled = true;
+                confirmTerms.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'cursor-pointer');
+                confirmTerms.classList.add('bg-gray-400', 'cursor-not-allowed');
+            }
+        });
+
+        // Confirm terms and close modal
+        confirmTerms.addEventListener('click', function () {
+            // Check the terms checkbox
+            document.getElementById('agreeTerms').checked = true;
+
+            infoModal.querySelector('#infoModalContent').classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                infoModal.classList.add('hidden');
+            }, 300);
+        });
+
+        // Close info modal when clicking outside of it
+        window.addEventListener('click', function (event) {
+            if (event.target === infoModal) {
+                infoModal.querySelector('#infoModalContent').classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    infoModal.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // Handle login form submission
+        loginForm.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // Here you can add your login logic (e.g., API call)
+            alert('Login submitted!');
+            closeModal.click(); // Close modal after submission
+        });
+
+        // Handle sign-up form submission
+        signUpForm.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // Here you can add your sign-up logic (e.g., API call)
+            alert('Sign Up submitted!');
+            closeModal.click(); // Close modal after submission
+        });
+    </script>
 
     <script src="assets/js/script.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>

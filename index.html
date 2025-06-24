@@ -2,924 +2,1132 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elytra Pool | Staking Platform</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elytra Pool | Staking Platform</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
 </head>
 
 <body class="min-h-screen">
-    <!-- Navigation -->
-    <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <a href="index.html" class="flex items-center">
-                    <div
-                        class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                        <img src="assets/img/Elytra Logo.png" alt="Elytra Logo"
-                            class="w-full h-full rounded-full object-cover" />
-                    </div>
-                    <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                        Pool</span>
-                </a>
-            </div>
+  <!-- Navigation -->
+  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <a href="index.html" class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+            <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+            Pool</span>
+        </a>
+      </div>
 
-            <div class="nav-links" id="nav-links">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#staking" class="nav-link">Staking</a>
-                <a href="#mining" class="nav-link">Assets</a>
-                <a href="#earnings" class="nav-link">Leaderboard</a>
-                <a href="pages/about.html#about" class="nav-link">FAQ</a>
-            </div>
+      <div class="nav-links" id="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#staking" class="nav-link">Staking</a>
+        <a href="#mining" class="nav-link">Assets</a>
+        <a href="#earnings" class="nav-link">Leaderboard</a>
+        <a href="pages/about.html#about" class="nav-link">FAQ</a>
+      </div>
 
-            <div class="flex items-center space-x-4">
-                <button id="login-button"
-                    class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
-                    <i class="fas fa-user"></i>
-                    <span>Login</span>
+      <div class="flex items-center space-x-4">
+        <button id="login-button" class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+          <i class="fas fa-user"></i>
+          <span>Login</span>
+        </button>
+      </div>
+
+      <!-- Main Login Modal -->
+      <div id="loginModal"
+        class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+        <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+        <div
+          class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+          id="modalContent">
+          <div id="modalContentInner">
+            <!-- Login Form -->
+            <div id="loginForm" class="form-section">
+              <h2 class="text-2xl font-bold text-center mb-6 text-black">
+                Welcome Back
+              </h2>
+              <form>
+                <div class="mb-4">
+                  <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                  <input type="email" id="email"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required />
+                </div>
+                <div class="mb-4">
+                  <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                  <input type="password" id="password"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required />
+                </div>
+                <div class="flex items-center mb-4">
+                  <input type="checkbox" id="rememberMe"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                  <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember Me</label>
+                </div>
+                <button type="submit"
+                  class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">
+                  Login
                 </button>
-            </div>
-
-            <!-- Main Login Modal -->
-            <div id="loginModal"
-                class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-                <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-                <div class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-                    id="modalContent">
-                    <div id="modalContentInner">
-                        <!-- Login Form -->
-                        <div id="loginForm" class="form-section">
-                            <h2 class="text-2xl font-bold text-center mb-6 text-black">
-                                Welcome Back
-                            </h2>
-                            <form>
-                                <div class="mb-4">
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email
-                                        Address</label>
-                                    <input type="email" id="email"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required />
-                                </div>
-                                <div class="mb-4">
-                                    <label for="password"
-                                        class="block text-sm font-medium text-gray-700">Password</label>
-                                    <input type="password" id="password"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required />
-                                </div>
-                                <div class="flex items-center mb-4">
-                                    <input type="checkbox" id="rememberMe"
-                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                                    <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember Me</label>
-                                </div>
-                                <button type="submit"
-                                    class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">
-                                    Login
-                                </button>
-                            </form>
-                            <div class="mt-4 text-center">
-                                <button id="switchToSignUp" class="text-blue-600 hover:underline">
-                                    Don't have an account? Sign Up
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Sign Up Form -->
-                        <div id="signUpForm" class="form-section hidden">
-                            <h2 class="text-2xl font-bold text-center mb-6 text-black">
-                                Create an Account
-                            </h2>
-                            <form>
-                                <div class="mb-3">
-                                    <label for="username"
-                                        class="block text-sm font-medium text-gray-700">Username</label>
-                                    <input type="text" id="username"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="signUpEmail" class="block text-sm font-medium text-gray-700">Email
-                                        Address</label>
-                                    <input type="email" id="signUpEmail"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="signUpPassword"
-                                        class="block text-sm font-medium text-gray-700">Password</label>
-                                    <input type="password" id="signUpPassword"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required />
-                                </div>
-                                <div class="mb-3">
-                                    <div class="flex items-center">
-                                        <input type="checkbox" id="agreeTerms"
-                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                            disabled />
-                                        <label for="agreeTerms" class="ml-2 block text-sm text-gray-700">
-                                            I agree to the
-                                            <a href="#" id="termsLink" class="text-blue-600 hover:underline">Terms and
-                                                Conditions</a>
-                                        </label>
-                                    </div>
-                                </div>
-                                <button type="submit"
-                                    class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">
-                                    Sign Up
-                                </button>
-                            </form>
-                            <div class="mt-4 text-center">
-                                <button id="switchToLogin" class="text-blue-600 hover:underline">
-                                    Already have an account? Login
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition duration-200">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Terms and Conditions Modal -->
-            <div id="infoModal"
-                class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-                <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-                <div class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-                    id="infoModalContent">
-                    <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">
-                        Terms & Conditions
-                    </h2>
-                    <div class="max-h-96 overflow-y-auto" id="termsContent">
-                        <p id="modalContentText" class="text-gray-700 mb-4">
-                            <strong>ELYTRA POOL TERMS OF SERVICE</strong><br />
-                            <strong>Last Updated:</strong> June 22, 2025<br /><br />
-
-                            <strong>1. Definitions</strong><br />
-                            1.1. <strong>"Platform"</strong> refers to Elytra Pool, its
-                            affiliates, subsidiaries, and any associated decentralized
-                            protocols.<br />
-                            1.2. <strong>"User "</strong> ("you") means any entity
-                            interacting with the Platform, including but not limited to
-                            stakers, referrers, and purchasers of digital assets.<br />
-                            1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable
-                            incentives distributed at the Platform's sole discretion, with
-                            no expectation of profit.<br /><br />
-
-                            <strong>2. Acceptance of Terms</strong><br />
-                            2.1. By accessing the Platform, you
-                            <strong>irrevocably consent</strong> to these Terms, our Privacy
-                            Policy, and any future amendments (posted without notice).<br />
-                            2.2. Continued use constitutes
-                            <strong>binding arbitration agreement</strong> (waiving class
-                            action rights per Section 9.4).<br /><br />
-
-                            <strong>3. Eligibility & Account Creation</strong><br />
-                            3.1. Users affirm they are <strong>not</strong> a
-                            citizen/resident of prohibited jurisdictions (e.g., USA, Cuba,
-                            North Korea) unless compliant with local regulations.<br />
-                            3.2. <strong>No Guaranteed Access</strong>: Accounts may be
-                            terminated without explanation (Section 7.3).<br /><br />
-
-                            <strong>4. Staking & Rewards (No Promises)</strong><br />
-                            4.1. <strong>Variable Rewards</strong>: APY estimates are
-                            hypothetical, subject to smart contract risks, slashing, and
-                            protocol changes.<br />
-                            4.2. <strong>No Ownership</strong>: Staked assets remain User's
-                            property, but rewards are
-                            <strong>unsecured claims</strong> until distributed.<br />
-                            4.3. <strong>Tax Liability</strong>: Users alone are responsible
-                            for reporting rewards as income (consult a tax advisor).<br /><br />
-
-                            <strong>5. Referral Program (No Pyramid Schemes)</strong><br />
-                            5.1. Referral rewards are
-                            <strong>limited to 10 levels deep</strong> to avoid regulatory
-                            classification as a security/Ponzi.<br />
-                            5.2. Platform reserves the right to
-                            <strong>withhold referrals</strong> deemed fraudulent (no
-                            appeals).<br /><br />
-
-                            <strong>6. NFT Avatars & Microtransactions</strong><br />
-                            6.1. <strong>Non-Refundable</strong>: All purchases of digital
-                            assets (e.g., avatars, gems) are final.<br />
-                            6.2. <strong>No Financial Utility</strong>: Avatars confer no
-                            staking advantages—purely cosmetic.<br /><br />
-
-                            <strong>7. Termination & Fund Seizure</strong><br />
-                            7.1. <strong>At-Will Suspension</strong>: We may freeze accounts
-                            for "suspicious activity" (undefined).<br />
-                            7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12
-                            months may be
-                            <strong>repurposed as protocol fees</strong>.<br /><br />
-
-                            <strong>8. Disclaimers (No Liability)</strong><br />
-                            8.1. <strong>As-Is Service</strong>: The Platform disclaims
-                            warranties of merchantability, fitness, or non-infringement.<br />
-                            8.2. <strong>Third-Party Risks</strong>: We are not liable for
-                            exploits in underlying blockchains (e.g., Ethereum, Solana).<br /><br />
-
-                            <strong>9. Governing Law & Arbitration</strong><br />
-                            9.1. <strong>Jurisdiction</strong>: Disputes resolved under
-                            [Cayman Islands law] (favors arbitration).<br />
-                            9.2. <strong>Class Action Waiver</strong>: Users may only pursue
-                            individual claims (no class actions).<br /><br />
-
-                            <strong>10. Amendments</strong><br />
-                            10.1. <strong>Unilateral Changes</strong>: We may modify these
-                            Terms at any time; continued use = acceptance.
-                        </p>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button id="confirmTerms"
-                            class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed"
-                            disabled>
-                            I Accept
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="pt-32 pb-20 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="slide-in-left">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">
-                    Earn Passive Crypto <span class="text-blue-400">Effortlessly</span>
-                </h1>
-                <p class="text-lg text-gray-300 mb-8">
-                    Join thousands of investors earning up to 25% APY through our secure
-                    staking and cloud mining platform.
-                </p>
-                <div class="flex space-x-4">
-                    <button class="btn-primary px-6 py-3 rounded-lg">
-                        Start Earning
-                    </button>
-                    <button class="btn-secondary px-6 py-3 rounded-lg">
-                        How It Works
-                    </button>
-                </div>
-                <div class="mt-12 flex flex-wrap gap-4">
-                    <div class="flex items-center">
-                        <div class="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
-                        <span>Secure Platform</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
-                        <span>Instant Withdrawals</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-3 h-3 bg-purple-400 rounded-full mr-2"></div>
-                        <span>24/7 Support</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative slide-in-right">
-                <div class="card-glass p-6 rounded-2xl shadow-xl mining-animation">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-semibold">Your Mining Dashboard</h3>
-                        <div class="text-green-400 font-medium">Active</div>
-                    </div>
-
-                    <div class="h-64 mb-6">
-                        <canvas id="miningChart"></canvas>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <div class="text-sm text-gray-400">Hashrate</div>
-                            <div class="text-xl font-semibold">1.24 TH/s</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Daily Earnings</div>
-                            <div class="text-xl font-semibold">0.0042 BTC</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Mining Progress</span>
-                            <span>78%</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar" style="width: 78%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="absolute -top-6 -left-6 w-32 h-32 bg-blue-500 rounded-full opacity-10 floating"></div>
-                <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-500 rounded-full opacity-10 floating"
-                    style="animation-delay: 0.5s"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-12 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.1s">
-                    <div class="text-3xl font-bold mb-2">$1.2B+</div>
-                    <div class="text-gray-400">Assets Staked</div>
-                </div>
-                <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.2s">
-                    <div class="text-3xl font-bold mb-2">250K+</div>
-                    <div class="text-gray-400">Active Users</div>
-                </div>
-                <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.3s">
-                    <div class="text-3xl font-bold mb-2">15+</div>
-                    <div class="text-gray-400">Supported Coins</div>
-                </div>
-                <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.4s">
-                    <div class="text-3xl font-bold mb-2">99.9%</div>
-                    <div class="text-gray-400">Uptime</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Staking Section -->
-    <section id="staking" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold mb-2 text-center">Crypto Staking</h2>
-            <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
-                Earn passive income by staking your cryptocurrencies with our secure
-                platform.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Bitcoin Staking -->
-                <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.1s">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
-                                <i class="fab fa-btc text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold">Bitcoin</div>
-                                <div class="text-sm text-gray-400">BTC Staking</div>
-                            </div>
-                        </div>
-                        <div class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
-                            6.5% APY
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span>12,450 BTC</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar" style="width: 65%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div class="font-semibold">0.01 BTC</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div class="font-semibold">30 Days</div>
-                        </div>
-                    </div>
-                    <button class="btn-primary w-full py-2 rounded-lg">
-                        Stake Now
-                    </button>
-                </div>
-
-                <!-- Ethereum Staking -->
-                <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.2s">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center mr-3">
-                                <i class="fab fa-ethereum text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold">Ethereum</div>
-                                <div class="text-sm text-gray-400">ETH Staking</div>
-                            </div>
-                        </div>
-                        <div class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
-                            5.2% APY
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span>245,000 ETH</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar" style="width: 78%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div class="font-semibold">0.1 ETH</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div class="font-semibold">14 Days</div>
-                        </div>
-                    </div>
-                    <button class="btn-primary w-full py-2 rounded-lg">
-                        Stake Now
-                    </button>
-                </div>
-
-                <!-- Solana Staking -->
-                <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.3s">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-bolt text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold">Solana</div>
-                                <div class="text-sm text-gray-400">SOL Staking</div>
-                            </div>
-                        </div>
-                        <div class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
-                            8.7% APY
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span>4,560,000 SOL</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar" style="width: 45%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div class="font-semibold">1 SOL</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div class="font-semibold">7 Days</div>
-                        </div>
-                    </div>
-                    <button class="btn-primary w-full py-2 rounded-lg">
-                        Stake Now
-                    </button>
-                </div>
-            </div>
-            <div class="mt-12 text-center">
-                <button class="btn-secondary px-6 py-3 rounded-lg">
-                    View All Staking Options
+              </form>
+              <div class="mt-4 text-center">
+                <button id="switchToSignUp" class="text-blue-600 hover:underline">
+                  Don't have an account? Sign Up
                 </button>
+              </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Mining Section -->
-    <section id="mining" class="py-20 px-6 bg-gray-900">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold mb-2 text-center">Staking Features</h2>
-            <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
-                Start mining cryptocurrency without hardware or technical knowledge.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Starter Plan -->
-                <div class="mining-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.1s">
-                    <div class="text-center mb-6">
-                        <h3 class="text-xl font-semibold">Free</h3>
-                        <div class="text-3xl font-bold mt-2">USDT 0</div>
-                        <div class="text-gray-400">per month</div>
-                    </div>
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>100 GH/s Hashrate</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>Daily Payouts</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>0.5% Pool Fee</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>24/7 Monitoring</span>
-                        </div>
-                    </div>
-                    <button class="btn-primary w-full py-2 rounded-lg">
-                        Start Mining
-                    </button>
+            <!-- Sign Up Form -->
+            <div id="signUpForm" class="form-section hidden">
+              <h2 class="text-2xl font-bold text-center mb-6 text-black">
+                Create an Account
+              </h2>
+              <form>
+                <div class="mb-3">
+                  <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                  <input type="text" id="username"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required />
                 </div>
-
-                <!-- Professional Plan -->
-                <div class="mining-card p-6 rounded-2xl cursor-pointer fade-in"
-                    style="animation-delay: 0.2s; border: 2px solid #3b82f6">
-                    <div
-                        class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl rounded-tr">
-                        POPULAR
-                    </div>
-                    <div class="text-center mb-6">
-                        <h3 class="text-xl font-semibold">Premium</h3>
-                        <div class="text-3xl font-bold mt-2">USDT 499</div>
-                        <div class="text-gray-400">per month</div>
-                    </div>
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>1 TH/s Hashrate</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>Daily Payouts</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>0% Pool Fee</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>24/7 Monitoring</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check text-green-400 mr-2"></i>
-                            <span>Dedicated Support</span>
-                        </div>
-                    </div>
-                    <button class="btn-primary w-full py-2 rounded-lg">
-                        Start Mining
-                    </button>
+                <div class="mb-3">
+                  <label for="signUpEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
+                  <input type="email" id="signUpEmail"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required />
                 </div>
+                <div class="mb-3">
+                  <label for="signUpPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                  <input type="password" id="signUpPassword"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required />
+                </div>
+                <div class="mb-3">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="agreeTerms"
+                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" disabled />
+                    <label for="agreeTerms" class="ml-2 block text-sm text-gray-700">
+                      I agree to the
+                      <a href="#" id="termsLink" class="text-blue-600 hover:underline">Terms and Conditions</a>
+                    </label>
+                  </div>
+                </div>
+                <button type="submit"
+                  class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">
+                  Sign Up
+                </button>
+              </form>
+              <div class="mt-4 text-center">
+                <button id="switchToLogin" class="text-blue-600 hover:underline">
+                  Already have an account? Login
+                </button>
+              </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Earnings Calculator -->
-    <section id="earnings" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold mb-2 text-center">Earnings Calculator</h2>
-            <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
-                Estimate your potential earnings from staking or mining.
-            </p>
-
-            <div class="grid lg:grid-cols-2 gap-12">
-                <div class="card-glass p-8 rounded-2xl slide-in-left">
-                    <h3 class="text-2xl font-semibold mb-4">Staking Calculator</h3>
-
-                    <div class="mb-6">
-                        <label class="block text-sm text-gray-400 mb-2">Cryptocurrency</label>
-                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-                            <option>Bitcoin (BTC)</option>
-                            <option>Ethereum (ETH)</option>
-                            <option>Solana (SOL)</option>
-                            <option>Cardano (ADA)</option>
-                            <option>Polkadot (DOT)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block text-sm text-gray-400 mb-2">Amount to Stake</label>
-                        <div class="flex">
-                            <input type="number"
-                                class="w-full bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-2" value="1.0" />
-                            <div class="bg-gray-700 px-4 py-2 rounded-r-lg">BTC</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block text-sm text-gray-400 mb-2">Staking Period</label>
-                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-                            <option>7 Days</option>
-                            <option>14 Days</option>
-                            <option>30 Days</option>
-                            <option>60 Days</option>
-                            <option>90 Days</option>
-                        </select>
-                    </div>
-
-                    <button class="btn-primary w-full py-3 rounded-lg mb-4">
-                        Calculate Earnings
-                    </button>
-
-                    <div class="card-glass p-4 rounded-lg">
-                        <div class="flex justify-between mb-2">
-                            <span class="text-gray-400">APY</span>
-                            <span class="font-semibold">6.5%</span>
-                        </div>
-                        <div class="flex justify-between mb-2">
-                            <span class="text-gray-400">Estimated Rewards</span>
-                            <span class="font-semibold">0.065 BTC</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">Total Return</span>
-                            <span class="font-semibold">1.065 BTC</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="py-20 px-6 bg-gray-900">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold mb-2 text-center">How It Works</h2>
-            <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
-                Start earning passive income in just a few simple steps.
-            </p>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center fade-in" style="animation-delay: 0.1s">
-                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-white text-2xl font-bold">1</span>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Create Account</h3>
-                    <p class="text-gray-400">
-                        Sign up and verify your identity to access our staking and mining
-                        platform.
-                    </p>
-                </div>
-
-                <div class="text-center fade-in" style="animation-delay: 0.2s">
-                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-white text-2xl font-bold">2</span>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Deposit Funds</h3>
-                    <p class="text-gray-400">
-                        Transfer your crypto to your Elytra Pool wallet or purchase a
-                        mining contract.
-                    </p>
-                </div>
-
-                <div class="text-center fade-in" style="animation-delay: 0.3s">
-                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-white text-2xl font-bold">3</span>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Start Earning</h3>
-                    <p class="text-gray-400">
-                        Stake your coins or activate mining to begin earning passive
-                        income.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="py-20 px-6 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">
-                Ready to Start Earning with Elytra Pool?
-            </h2>
-            <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                Join thousands of investors earning passive income through our secure
-                staking and mining platform.
-            </p>
-            <button class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
-                Get Started Now
+          </div>
+          <div class="mt-4 text-center">
+            <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition duration-200">
+              Close
             </button>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- Footer -->
-    <footer class="py-12 px-6 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div class="flex items-center space-x-2">
-                <a href="index.html" class="flex items-center">
-                    <div
-                        class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                        <img src="assets/img/Elytra Logo.png" alt="Elytra Logo"
-                            class="w-full h-full rounded-full object-cover" />
-                    </div>
-                    <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                        Pool</span>
-                </a>
-            </div>
+      <!-- Terms and Conditions Modal -->
+      <div id="infoModal"
+        class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+        <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+        <div
+          class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+          id="infoModalContent">
+          <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">
+            Terms & Conditions
+          </h2>
+          <div class="max-h-96 overflow-y-auto" id="termsContent">
+            <p id="modalContentText" class="text-gray-700 mb-4">
+              <strong>ELYTRA POOL TERMS OF SERVICE</strong><br />
+              <strong>Last Updated:</strong> June 22, 2025<br /><br />
 
-                <div>
-                    <h4 class="font-semibold mb-4">Products</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#staking" class="hover:text-white">Staking</a></li>
-                        <li><a href="#mining" class="hover:text-white">Assets</a></li>
-                        <li>
-                            <a href="#earnings" class="hover:text-white">Leaderboard</a>
-                        </li>
-                        <li>
-                            <a href="pages/about.html" class="hover:text-white">FAQ</a>
-                        </li>
-                    </ul>
-                </div>
+              <strong>1. Definitions</strong><br />
+              1.1. <strong>"Platform"</strong> refers to Elytra Pool, its
+              affiliates, subsidiaries, and any associated decentralized
+              protocols.<br />
+              1.2. <strong>"User "</strong> ("you") means any entity
+              interacting with the Platform, including but not limited to
+              stakers, referrers, and purchasers of digital assets.<br />
+              1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable
+              incentives distributed at the Platform's sole discretion, with
+              no expectation of profit.<br /><br />
 
-                <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Help Center</a></li>
-                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-white">Status</a></li>
-                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                    </ul>
-                </div>
+              <strong>2. Acceptance of Terms</strong><br />
+              2.1. By accessing the Platform, you
+              <strong>irrevocably consent</strong> to these Terms, our Privacy
+              Policy, and any future amendments (posted without notice).<br />
+              2.2. Continued use constitutes
+              <strong>binding arbitration agreement</strong> (waiving class
+              action rights per Section 9.4).<br /><br />
 
-                <div>
-                    <h4 class="font-semibold mb-4">Follow Us</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Twitter</a></li>
-                        <li><a href="#" class="hover:text-white">Telegram</a></li>
-                        <li><a href="#" class="hover:text-white">Discord</a></li>
-                        <li><a href="#" class="hover:text-white">GitHub</a></li>
-                    </ul>
-                </div>
-            </div>
+              <strong>3. Eligibility & Account Creation</strong><br />
+              3.1. Users affirm they are <strong>not</strong> a
+              citizen/resident of prohibited jurisdictions (e.g., USA, Cuba,
+              North Korea) unless compliant with local regulations.<br />
+              3.2. <strong>No Guaranteed Access</strong>: Accounts may be
+              terminated without explanation (Section 7.3).<br /><br />
 
-            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-                <div class="text-sm text-gray-400 mb-4 md:mb-0">
-                    © 2023 Elytra Pool. All rights reserved.
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
-                </div>
-            </div>
+              <strong>4. Staking & Rewards (No Promises)</strong><br />
+              4.1. <strong>Variable Rewards</strong>: APY estimates are
+              hypothetical, subject to smart contract risks, slashing, and
+              protocol changes.<br />
+              4.2. <strong>No Ownership</strong>: Staked assets remain User's
+              property, but rewards are
+              <strong>unsecured claims</strong> until distributed.<br />
+              4.3. <strong>Tax Liability</strong>: Users alone are responsible
+              for reporting rewards as income (consult a tax advisor).<br /><br />
+
+              <strong>5. Referral Program (No Pyramid Schemes)</strong><br />
+              5.1. Referral rewards are
+              <strong>limited to 10 levels deep</strong> to avoid regulatory
+              classification as a security/Ponzi.<br />
+              5.2. Platform reserves the right to
+              <strong>withhold referrals</strong> deemed fraudulent (no
+              appeals).<br /><br />
+
+              <strong>6. NFT Avatars & Microtransactions</strong><br />
+              6.1. <strong>Non-Refundable</strong>: All purchases of digital
+              assets (e.g., avatars, gems) are final.<br />
+              6.2. <strong>No Financial Utility</strong>: Avatars confer no
+              staking advantages—purely cosmetic.<br /><br />
+
+              <strong>7. Termination & Fund Seizure</strong><br />
+              7.1. <strong>At-Will Suspension</strong>: We may freeze accounts
+              for "suspicious activity" (undefined).<br />
+              7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12
+              months may be
+              <strong>repurposed as protocol fees</strong>.<br /><br />
+
+              <strong>8. Disclaimers (No Liability)</strong><br />
+              8.1. <strong>As-Is Service</strong>: The Platform disclaims
+              warranties of merchantability, fitness, or non-infringement.<br />
+              8.2. <strong>Third-Party Risks</strong>: We are not liable for
+              exploits in underlying blockchains (e.g., Ethereum, Solana).<br /><br />
+
+              <strong>9. Governing Law & Arbitration</strong><br />
+              9.1. <strong>Jurisdiction</strong>: Disputes resolved under
+              [Cayman Islands law] (favors arbitration).<br />
+              9.2. <strong>Class Action Waiver</strong>: Users may only pursue
+              individual claims (no class actions).<br /><br />
+
+              <strong>10. Amendments</strong><br />
+              10.1. <strong>Unilateral Changes</strong>: We may modify these
+              Terms at any time; continued use = acceptance.
+            </p>
+          </div>
+          <div class="text-center mt-4">
+            <button id="confirmTerms"
+              class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>
+              I Accept
+            </button>
+          </div>
         </div>
-    </footer>
+      </div>
 
-    <script>
-        // Get modal elements
-        const loginModal = document.getElementById("loginModal");
-        const closeModal = document.getElementById("closeModal");
-        const switchToSignUp = document.getElementById("switchToSignUp");
-        const switchToLogin = document.getElementById("switchToLogin");
-        const loginForm = document.getElementById("loginForm");
-        const signUpForm = document.getElementById("signUpForm");
-        const infoModal = document.getElementById("infoModal");
-        const termsLink = document.getElementById("termsLink");
-        const confirmTerms = document.getElementById("confirmTerms");
-        const termsContent = document.getElementById("termsContent");
+      <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+  </nav>
 
-        // Open modal function
-        document
-            .getElementById("login-button")
-            .addEventListener("click", function () {
-                loginModal.classList.remove("hidden");
-                setTimeout(() => {
-                    loginModal
-                        .querySelector("#modalContent")
-                        .classList.remove("scale-95", "opacity-0");
-                    loginModal
-                        .querySelector("#modalContent")
-                        .classList.add("scale-100", "opacity-100");
-                }, 10);
-            });
+  <!-- Hero Section -->
+  <section id="home" class="pt-32 pb-20 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div class="slide-in-left">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+          Earn Passive Crypto <span class="text-blue-400">Effortlessly</span>
+        </h1>
+        <p class="text-lg text-gray-300 mb-8">
+          Join thousands of investors earning up to 25% APY through our secure
+          staking and cloud mining platform.
+        </p>
+        <div class="flex space-x-4">
+          <button class="btn-primary px-6 py-3 rounded-lg">
+            Start Earning
+          </button>
+          <button class="btn-secondary px-6 py-3 rounded-lg">
+            How It Works
+          </button>
+        </div>
+        <div class="mt-12 flex flex-wrap gap-4">
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+            <span>Secure Platform</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+            <span>Blockchain Rewards</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-purple-400 rounded-full mr-2"></div>
+            <span>24/7 Support</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-cyan-400 rounded-full mr-2"></div>
+            <span>Web3 Ai</span>
+          </div>
+        </div>
+      </div>
 
-        // Close modal function
-        closeModal.addEventListener("click", function () {
-            // Add animation classes to the modal content
-            loginModal
-                .querySelector("#modalContent")
-                .classList.add("scale-95", "opacity-0");
+      <div class="relative slide-in-right">
+        <div class="card-glass p-6 rounded-2xl shadow-xl mining-animation">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold">Your Staking Dashboard</h3>
+            <div id="mining-status" class="text-green-400 font-medium">Checking...</div>
+          </div>
 
-            // Wait for the animation to complete before hiding the modal
-            setTimeout(() => {
-                loginModal.classList.add("hidden");
-            }, 300); // Match this duration with your CSS transition duration
+          <div class="h-64 mb-6">
+            <canvas id="miningChart"></canvas>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Hashrate</div>
+              <div id="hashrate" class="text-xl font-semibold">-- TH/s</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Daily Earnings</div>
+              <div id="daily-earnings" class="text-xl font-semibold">-- BTC</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span>Staking Progress</span>
+              <span id="progress-percent">-- %</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="absolute -top-6 -left-6 w-32 h-32 bg-blue-500 rounded-full opacity-10 floating"></div>
+        <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-500 rounded-full opacity-10 floating"
+          style="animation-delay: 0.5s"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-12 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.1s">
+          <div class="text-3xl font-bold mb-2">$1.2B+</div>
+          <div class="text-gray-400">Assets Staked</div>
+        </div>
+        <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.2s">
+          <div id="active-users" class="text-3xl font-bold mb-2">1,000,000</div>
+          <div class="text-gray-400">Active Users</div>
+        </div>
+        <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.3s">
+          <div class="text-3xl font-bold mb-2">15+</div>
+          <div class="text-gray-400">Supported Coins</div>
+        </div>
+        <div class="card-glass p-6 rounded-2xl text-center fade-in" style="animation-delay: 0.4s">
+          <div id="uptime" class="text-3xl font-bold mb-2">99.9%</div>
+          <div class="text-gray-400">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Staking Section -->
+  <section id="staking" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold mb-2 text-center">Crypto Staking</h2>
+      <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
+        Earn passive income by staking your cryptocurrencies with our secure
+        platform.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Bitcoin Staking -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.1s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                <i class="fab fa-btc text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Bitcoin</div>
+                <div class="text-sm text-gray-400">BTC Staking</div>
+              </div>
+            </div>
+            <div id="btc-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
+              6.5% APY
+            </div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="btc-stacked">12,450 BTC</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 65%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="btc-min" class="font-semibold">0.01 BTC</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="btc-lock" class="font-semibold">30 Days</div>
+            </div>
+          </div>
+          <a href="https://www.binance.com/en/earn/bitcoin" target="_blank"
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">
+            Stake Now
+          </a>
+        </div>
+
+        <!-- Ethereum Staking -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.2s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center mr-3">
+                <i class="fab fa-ethereum text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Ethereum</div>
+                <div class="text-sm text-gray-400">ETH Staking</div>
+              </div>
+            </div>
+            <div id="eth-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
+              5.2% APY
+            </div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="eth-staked">245,000 ETH</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 78%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="eth-min" class="font-semibold">0.1 ETH</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="eth-lock" class="font-semibold">14 Days</div>
+            </div>
+          </div>
+          <a href="https://stake.lido.fi" target="_blank"
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">
+            Stake Now
+          </a>
+        </div>
+
+        <!-- Solana Staking -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.3s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-bolt text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Solana</div>
+                <div class="text-sm text-gray-400">SOL Staking</div>
+              </div>
+            </div>
+            <div id="sol-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
+              8.7% APY
+            </div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span>4,560,000 SOL</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="sol-staked" class="font-semibold">1 SOL</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="sol-lock" class="font-semibold">7 Days</div>
+            </div>
+          </div>
+          <a href="https://solanabeach.io/staking" target="_blank"
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">
+            Stake Now
+          </a>
+        </div>
+      </div>
+      <div class="mt-12 text-center">
+        <button id="view-all-button" class="btn-secondary px-6 py-3 rounded-lg">
+          View All Staking Options
+        </button>
+      </div>
+
+      <!-- Hidden Section for Additional Cryptocurrencies -->
+      <div id="additional-cryptos" class="hidden mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card for Cardano -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in h-full" style="animation-delay: 0.1s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <!-- Cardano Card with ADA logo workaround -->
+              <div
+                class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3 text-white text-lg font-bold">
+                ₳
+              </div>
+              <div>
+                <div class="font-semibold">Cardano</div>
+                <div class="text-sm text-gray-400">ADA Staking</div>
+              </div>
+            </div>
+            <div id="ada-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
+              5.0% APY
+            </div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="ada-staked">100,000 ADA</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 50%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="ada-min" class="font-semibold">10 ADA</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="ada-lock" class="font-semibold">14 Days</div>
+            </div>
+          </div>
+          <a href="#" class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">
+            Stake Now
+          </a>
+        </div>
+
+        <!-- Card for Polkadot -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in h-full" style="animation-delay: 0.4s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <!-- Polkadot Card with DOT logo workaround -->
+              <div
+                class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center mr-3 text-white text-lg font-bold">
+                ●
+              </div>
+              <div>
+                <div class="font-semibold">Polkadot</div>
+                <div class="text-sm text-gray-400">DOT Staking</div>
+              </div>
+            </div>
+            <div id="dot-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">
+              7.0% APY
+            </div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="dot-staked">500,000 DOT</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="dot-min" class="font-semibold">5 DOT</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="dot-lock" class="font-semibold">28 Days</div>
+            </div>
+          </div>
+          <a href="#" class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">
+            Stake Now
+          </a>
+        </div>
+      </div>
+
+      <!-- Close View Button -->
+      <div id="close-view" class="hidden mt-12 text-center">
+        <button id="close-view-button" class="btn-secondary px-6 py-3 rounded-lg">
+          Close View
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mining Section -->
+  <section id="mining" class="py-20 px-6 bg-gray-900 text-center">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold mb-2">Staking Features</h2>
+      <p class="text-gray-400 mb-12 max-w-2xl mx-auto">
+        Start mining cryptocurrency without hardware or technical knowledge.
+      </p>
+
+      <!-- Cards Container -->
+      <div class="flex flex-col md:flex-row justify-center items-stretch gap-6">
+        <!-- Starter Plan -->
+        <div class="mining-card p-6 rounded-2xl cursor-pointer fade-in w-full md:w-1/3 flex flex-col h-full"
+          style="animation-delay: 0.1s">
+          <div class="text-center mb-6">
+            <h3 class="text-xl font-semibold">Free</h3>
+            <div class="text-3xl font-bold mt-2">USDT 0</div>
+            <div class="text-gray-400">per month</div>
+          </div>
+          <div class="space-y-4 mb-6 flex-1">
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>100 GH/s Hashrate</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>2x a Month Payouts</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>2% Pool Fee</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>You can only do 3 Cycles in a Row</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-multiply text-red-400 mr-2"></i>
+              <span>24/7 Monitoring</span>
+            </div>
+          </div>
+          <button class="btn-primary w-full py-2 rounded-lg mt-auto">
+            Start Staking
+          </button>
+        </div>
+
+        <!-- Premium Plan -->
+        <div
+          class="mining-card p-6 rounded-2xl cursor-pointer fade-in w-full md:w-1/3 flex flex-col h-full relative border-2 border-blue-500"
+          style="animation-delay: 0.2s">
+          <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl rounded-tr">
+            POPULAR
+          </div>
+          <div class="text-center mb-6">
+            <h3 class="text-xl font-semibold">Premium</h3>
+            <div class="text-3xl font-bold mt-2">USDT 499</div>
+            <div class="text-gray-400">per month</div>
+          </div>
+          <div class="space-y-4 mb-6 flex-1">
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>1 TH/s Hashrate</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>Daily Payouts</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>0% Pool Fee</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>24/7 Monitoring</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check text-green-400 mr-2"></i>
+              <span>Dedicated Support</span>
+            </div>
+          </div>
+          <button class="btn-primary w-full py-2 rounded-lg mt-auto">
+            Start Staking
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Earnings Calculator -->
+  <section id="earnings" class="py-20 px-6 text-center">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold mb-2">Earnings Calculator</h2>
+      <p class="text-gray-400 mb-12 max-w-2xl mx-auto">
+        Estimate your potential earnings from staking or mining.
+      </p>
+
+      <div class="flex justify-center">
+        <div class="card-glass p-8 rounded-2xl w-full max-w-xl slide-in-left">
+          <h3 class="text-2xl font-semibold mb-4">Staking Calculator</h3>
+
+          <div class="mb-6 text-left">
+            <label class="block text-sm text-gray-400 mb-2">Cryptocurrency</label>
+            <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+              <option>Bitcoin (BTC)</option>
+              <option>Ethereum (ETH)</option>
+              <option>Solana (SOL)</option>
+              <option>Cardano (ADA)</option>
+              <option>Polkadot (DOT)</option>
+            </select>
+          </div>
+
+          <div class="mb-6 text-left">
+            <label class="block text-sm text-gray-400 mb-2">Amount to Stake</label>
+            <div class="flex">
+              <input type="number" class="w-full bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-2"
+                value="1.0" />
+              <div class="bg-gray-700 px-4 py-2 rounded-r-lg">USDT</div>
+            </div>
+          </div>
+
+          <div class="mb-6 text-left">
+            <label class="block text-sm text-gray-400 mb-2">Staking Period</label>
+            <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+              <option>7 Days</option>
+              <option>14 Days</option>
+              <option>30 Days</option>
+              <option>60 Days</option>
+              <option>90 Days</option>
+            </select>
+          </div>
+
+          <button class="btn-primary w-full py-3 rounded-lg mb-4">
+            Calculate Earnings
+          </button>
+
+          <div class="card-glass p-4 rounded-lg text-left">
+            <div class="flex justify-between mb-2">
+              <span class="text-gray-400">APY</span>
+              <span class="font-semibold">6.5%</span>
+            </div>
+            <div class="flex justify-between mb-2">
+              <span class="text-gray-400">Estimated Rewards</span>
+              <span class="font-semibold">0.065 BTC</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Total Return</span>
+              <span class="font-semibold">1.065 BTC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20 px-6 bg-gray-900">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold mb-2 text-center">How It Works</h2>
+      <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
+        Start earning passive income in just a few simple steps.
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center fade-in" style="animation-delay: 0.1s">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl font-bold">1</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Create Account</h3>
+          <p class="text-gray-400">
+            Sign up and verify your identity to access our staking and mining
+            platform.
+          </p>
+        </div>
+
+        <div class="text-center fade-in" style="animation-delay: 0.2s">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl font-bold">2</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Deposit Funds</h3>
+          <p class="text-gray-400">
+            Transfer your crypto to your Elytra Pool wallet or purchase a
+            mining contract.
+          </p>
+        </div>
+
+        <div class="text-center fade-in" style="animation-delay: 0.3s">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl font-bold">3</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Start Earning</h3>
+          <p class="text-gray-400">
+            Stake your coins or activate mining to begin earning passive
+            income.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-20 px-6 bg-gradient-to-r from-blue-600 to-purple-600">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-4">
+        Ready to Start Earning with Elytra Pool?
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+        Join thousands of investors earning passive income through our secure
+        staking and mining platform.
+      </p>
+      <button class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+        Get Started Now
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="flex items-center space-x-2">
+          <a href="index.html" class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+              <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+              Pool</span>
+          </a>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#staking" class="hover:text-white">Staking</a></li>
+            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li>
+              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+            </li>
+            <li>
+              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Follow Us</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Twitter</a></li>
+            <li><a href="#" class="hover:text-white">Telegram</a></li>
+            <li><a href="#" class="hover:text-white">Discord</a></li>
+            <li><a href="#" class="hover:text-white">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">
+          © 2023 Elytra Pool. All rights reserved.
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <i class="fab fa-discord"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const viewAllButton = document.getElementById('view-all-button');
+    const closeViewButton = document.getElementById('close-view-button');
+    const additionalCryptos = document.getElementById('additional-cryptos');
+    const closeView = document.getElementById('close-view');
+
+    viewAllButton.addEventListener('click', function () {
+      additionalCryptos.classList.remove('hidden');
+      viewAllButton.classList.add('hidden');
+      closeView.classList.remove('hidden');
+    });
+
+    closeViewButton.addEventListener('click', function () {
+      additionalCryptos.classList.add('hidden');
+      viewAllButton.classList.remove('hidden');
+      closeView.classList.add('hidden');
+    });
+  </script>
+
+  <script>
+    // Get modal elements
+    const loginModal = document.getElementById("loginModal");
+    const closeModal = document.getElementById("closeModal");
+    const switchToSignUp = document.getElementById("switchToSignUp");
+    const switchToLogin = document.getElementById("switchToLogin");
+    const loginForm = document.getElementById("loginForm");
+    const signUpForm = document.getElementById("signUpForm");
+    const infoModal = document.getElementById("infoModal");
+    const termsLink = document.getElementById("termsLink");
+    const confirmTerms = document.getElementById("confirmTerms");
+    const termsContent = document.getElementById("termsContent");
+
+    // Open modal function
+    document
+      .getElementById("login-button")
+      .addEventListener("click", function () {
+        loginModal.classList.remove("hidden");
+        setTimeout(() => {
+          loginModal
+            .querySelector("#modalContent")
+            .classList.remove("scale-95", "opacity-0");
+          loginModal
+            .querySelector("#modalContent")
+            .classList.add("scale-100", "opacity-100");
+        }, 10);
+      });
+
+    // Close modal function
+    closeModal.addEventListener("click", function () {
+      // Add animation classes to the modal content
+      loginModal
+        .querySelector("#modalContent")
+        .classList.add("scale-95", "opacity-0");
+
+      // Wait for the animation to complete before hiding the modal
+      setTimeout(() => {
+        loginModal.classList.add("hidden");
+      }, 300); // Match this duration with your CSS transition duration
+    });
+
+    // Close modal when clicking outside of it
+    window.addEventListener("click", function (event) {
+      if (event.target === loginModal) {
+        closeModal.click();
+      }
+    });
+
+    // Switch to Sign Up form
+    switchToSignUp.addEventListener("click", function () {
+      loginForm.classList.add("hidden");
+      signUpForm.classList.remove("hidden");
+    });
+
+    // Switch to Login form
+    switchToLogin.addEventListener("click", function () {
+      signUpForm.classList.add("hidden");
+      loginForm.classList.remove("hidden");
+    });
+
+    // Show Terms & Conditions
+    termsLink.addEventListener("click", function (event) {
+      event.preventDefault();
+      infoModal.classList.remove("hidden");
+      setTimeout(() => {
+        infoModal
+          .querySelector("#infoModalContent")
+          .classList.remove("scale-95", "opacity-0");
+        infoModal
+          .querySelector("#infoModalContent")
+          .classList.add("scale-100", "opacity-100");
+      }, 10);
+
+      // Reset the button state when modal opens
+      confirmTerms.disabled = true;
+      confirmTerms.classList.remove(
+        "bg-blue-600",
+        "hover:bg-blue-700",
+        "cursor-pointer"
+      );
+      confirmTerms.classList.add("bg-gray-400", "cursor-not-allowed");
+    });
+
+    // Enable "I Accept" button when scrolled to the bottom
+    termsContent.addEventListener("scroll", function () {
+      const scrollTop = termsContent.scrollTop;
+      const scrollHeight = termsContent.scrollHeight;
+      const clientHeight = termsContent.clientHeight;
+
+      // Check if the user has scrolled to the bottom
+      if (scrollTop + clientHeight >= scrollHeight) {
+        confirmTerms.disabled = false;
+        confirmTerms.classList.remove("bg-gray-400", "cursor-not-allowed");
+        confirmTerms.classList.add(
+          "bg-blue-600",
+          "hover:bg-blue-700",
+          "cursor-pointer"
+        );
+      } else {
+        confirmTerms.disabled = true;
+        confirmTerms.classList.remove(
+          "bg-blue-600",
+          "hover:bg-blue-700",
+          "cursor-pointer"
+        );
+        confirmTerms.classList.add("bg-gray-400", "cursor-not-allowed");
+      }
+    });
+
+    // Confirm terms and close modal
+    confirmTerms.addEventListener("click", function () {
+      // Check the terms checkbox
+      document.getElementById("agreeTerms").checked = true;
+
+      infoModal
+        .querySelector("#infoModalContent")
+        .classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        infoModal.classList.add("hidden");
+      }, 300);
+    });
+
+    // Close info modal when clicking outside of it
+    window.addEventListener("click", function (event) {
+      if (event.target === infoModal) {
+        infoModal
+          .querySelector("#infoModalContent")
+          .classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          infoModal.classList.add("hidden");
+        }, 300);
+      }
+    });
+
+    // Handle login form submission
+    loginForm
+      .querySelector("form")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        // Here you can add your login logic (e.g., API call)
+        alert("Login submitted!");
+        closeModal.click(); // Close modal after submission
+      });
+
+    // Handle sign-up form submission
+    signUpForm
+      .querySelector("form")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        // Here you can add your sign-up logic (e.g., API call)
+        alert("Sign Up submitted!");
+        closeModal.click(); // Close modal after submission
+      });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('https://stake.lido.fi/api/stats');
+        const data = await response.json();
+
+        const apy = (data.apy * 100).toFixed(2); // Example: 3.92
+        const totalStaked = (data.totalPooledEther / 1e18).toLocaleString(undefined, { maximumFractionDigits: 0 });
+        const percent = Math.min((data.totalPooledEther / 1e18 / 10000000) * 100, 100).toFixed(0); // Target = 10M ETH
+
+        document.getElementById('eth-apy').textContent = `${apy}% APY`;
+        document.getElementById('eth-total-staked').textContent = `${totalStaked} ETH`;
+
+        const progressBar = document.getElementById('eth-progress-bar');
+        if (progressBar) {
+          progressBar.style.width = `${percent}%`;
+        }
+
+      } catch (error) {
+        document.getElementById('eth-apy').textContent = 'Unavailable';
+        document.getElementById('eth-total-staked').textContent = 'Error loading...';
+        console.error('Failed to fetch staking data:', error);
+      }
+
+      //cyrpto staking
+      const cryptoData = {
+        BTC: {
+          apyEl: document.getElementById("btc-apy"),
+          stakedEl: document.getElementById("btc-staked"),
+          minEl: document.getElementById("btc-min"),
+          lockEl: document.getElementById("btc-lock"),
+          maxStake: 20000
+        },
+        ETH: {
+          apyEl: document.getElementById("eth-apy"),
+          stakedEl: document.getElementById("eth-staked"),
+          minEl: document.getElementById("eth-min"),
+          lockEl: document.getElementById("eth-lock"),
+          maxStake: 10000000
+        },
+        SOL: {
+          apyEl: document.getElementById("sol-apy"),
+          stakedEl: document.getElementById("sol-staked"),
+          minEl: document.getElementById("sol-min"),
+          lockEl: document.getElementById("sol-lock"),
+          maxStake: 10000000
+        },
+        ADA: {
+          apyEl: document.getElementById("ada-apy"),
+          stakedEl: document.getElementById("ada-staked"),
+          minEl: document.getElementById("ada-min"),
+          lockEl: document.getElementById("ada-lock"),
+          maxStake: 30000000
+        }
+      };
+
+      function random(min, max) {
+        return (Math.random() * (max - min) + min).toFixed(2);
+      }
+
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function updateData() {
+        Object.entries(cryptoData).forEach(([key, data]) => {
+          const apy = random(2, 10);
+          const staked = formatNumber(Math.floor(Math.random() * data.maxStake));
+          const minStake = random(0.01, 5).toString();
+          const lockDays = Math.floor(Math.random() * 30) + 7;
+
+          data.apyEl.innerText = `${apy}% APY`;
+          data.stakedEl.innerText = `${staked} ${key}`;
+          data.minEl.innerText = `${minStake} ${key}`;
+          data.lockEl.innerText = `${lockDays} Days`;
+
+          // Optional: Update progress bar width
+          const progressBar = data.stakedEl.closest('.mb-6').querySelector('.bg-orange-400, .bg-blue-400, .bg-purple-400, .bg-cyan-400');
+          if (progressBar) {
+            const percent = Math.floor((parseInt(staked.replace(/,/g, '')) / data.maxStake) * 100);
+            progressBar.style.width = `${percent}%`;
+          }
         });
+      }
 
-        // Close modal when clicking outside of it
-        window.addEventListener("click", function (event) {
-            if (event.target === loginModal) {
-                closeModal.click();
-            }
-        });
+      updateData();
+      setInterval(updateData, 5000); // Update every 5 seconds
+    });
+  </script>
 
-        // Switch to Sign Up form
-        switchToSignUp.addEventListener("click", function () {
-            loginForm.classList.add("hidden");
-            signUpForm.classList.remove("hidden");
-        });
-
-        // Switch to Login form
-        switchToLogin.addEventListener("click", function () {
-            signUpForm.classList.add("hidden");
-            loginForm.classList.remove("hidden");
-        });
-
-        // Show Terms & Conditions
-        termsLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            infoModal.classList.remove("hidden");
-            setTimeout(() => {
-                infoModal
-                    .querySelector("#infoModalContent")
-                    .classList.remove("scale-95", "opacity-0");
-                infoModal
-                    .querySelector("#infoModalContent")
-                    .classList.add("scale-100", "opacity-100");
-            }, 10);
-
-            // Reset the button state when modal opens
-            confirmTerms.disabled = true;
-            confirmTerms.classList.remove(
-                "bg-blue-600",
-                "hover:bg-blue-700",
-                "cursor-pointer"
-            );
-            confirmTerms.classList.add("bg-gray-400", "cursor-not-allowed");
-        });
-
-        // Enable "I Accept" button when scrolled to the bottom
-        termsContent.addEventListener("scroll", function () {
-            const scrollTop = termsContent.scrollTop;
-            const scrollHeight = termsContent.scrollHeight;
-            const clientHeight = termsContent.clientHeight;
-
-            // Check if the user has scrolled to the bottom
-            if (scrollTop + clientHeight >= scrollHeight) {
-                confirmTerms.disabled = false;
-                confirmTerms.classList.remove("bg-gray-400", "cursor-not-allowed");
-                confirmTerms.classList.add(
-                    "bg-blue-600",
-                    "hover:bg-blue-700",
-                    "cursor-pointer"
-                );
-            } else {
-                confirmTerms.disabled = true;
-                confirmTerms.classList.remove(
-                    "bg-blue-600",
-                    "hover:bg-blue-700",
-                    "cursor-pointer"
-                );
-                confirmTerms.classList.add("bg-gray-400", "cursor-not-allowed");
-            }
-        });
-
-        // Confirm terms and close modal
-        confirmTerms.addEventListener("click", function () {
-            // Check the terms checkbox
-            document.getElementById("agreeTerms").checked = true;
-
-            infoModal
-                .querySelector("#infoModalContent")
-                .classList.add("scale-95", "opacity-0");
-            setTimeout(() => {
-                infoModal.classList.add("hidden");
-            }, 300);
-        });
-
-        // Close info modal when clicking outside of it
-        window.addEventListener("click", function (event) {
-            if (event.target === infoModal) {
-                infoModal
-                    .querySelector("#infoModalContent")
-                    .classList.add("scale-95", "opacity-0");
-                setTimeout(() => {
-                    infoModal.classList.add("hidden");
-                }, 300);
-            }
-        });
-
-        // Handle login form submission
-        loginForm
-            .querySelector("form")
-            .addEventListener("submit", function (event) {
-                event.preventDefault();
-                // Here you can add your login logic (e.g., API call)
-                alert("Login submitted!");
-                closeModal.click(); // Close modal after submission
-            });
-
-        // Handle sign-up form submission
-        signUpForm
-            .querySelector("form")
-            .addEventListener("submit", function (event) {
-                event.preventDefault();
-                // Here you can add your sign-up logic (e.g., API call)
-                alert("Sign Up submitted!");
-                closeModal.click(); // Close modal after submission
-            });
-    </script>
-
-    <script src="assets/js/script.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/randomizer.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

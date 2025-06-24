@@ -245,63 +245,73 @@
   <!-- Hero Section -->
   <section id="home" class="pt-32 pb-20 px-6">
     <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-        <!-- Left Text Block -->
-        <div class="slide-in-left">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Earn Crypto <span class="text-blue-400">Through Staking</span>
-            </h1>
-            <p class="text-lg text-gray-300 mb-8 max-w-xl">
-                <strong class="text-white">Earn up to 25% APY by staking crypto through secure, decentralized Web3 protocols.</strong><br />
-                Grow your portfolio with blockchain-based staking—user-friendly, higher rewards, and no custodians. Join millions of Web3 users maximizing yields while staying in full control of their assets.
-            </p>
-            <div class="flex flex-wrap gap-4 mb-10">
-                <button class="btn-primary px-6 py-3 rounded-lg">Start Earning</button>
-                <button class="btn-secondary px-6 py-3 rounded-lg">How It Works</button>
-            </div>
-            <div class="mt-8 flex flex-wrap gap-6 text-gray-300">
-                <div class="flex items-center"><div class="w-3 h-3 bg-green-400 rounded-full mr-2"></div><span>Secure Staking Platform</span></div>
-                <div class="flex items-center"><div class="w-3 h-3 bg-blue-400 rounded-full mr-2"></div><span>On-Chain Rewards</span></div>
-                <div class="flex items-center"><div class="w-3 h-3 bg-purple-400 rounded-full mr-2"></div><span>24/7 Customer Support</span></div>
-                <div class="flex items-center"><div class="w-3 h-3 bg-cyan-400 rounded-full mr-2"></div><span>Non-Custodial & Transparent</span></div>
-            </div>
+      <!-- Left Text Block -->
+      <div class="slide-in-left">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white">
+          Earn Crypto <span class="text-blue-400">Through Staking</span>
+        </h1>
+        <p class="text-lg text-gray-300 mb-8 max-w-xl">
+          <strong class="text-white">Earn up to 25% APY by staking crypto through secure, decentralized Web3
+            protocols.</strong><br />
+          Grow your portfolio with blockchain-based staking—user-friendly, higher rewards, and no custodians. Join
+          millions of Web3 users maximizing yields while staying in full control of their assets.
+        </p>
+        <div class="flex flex-wrap gap-4 mb-10">
+          <button class="btn-primary px-6 py-3 rounded-lg">Start Earning</button>
+          <button class="btn-secondary px-6 py-3 rounded-lg">How It Works</button>
         </div>
-
-        <!-- Right Dashboard Block -->
-        <div class="relative slide-in-right">
-            <div class="card-glass p-6 rounded-2xl shadow-xl mining-animation bg-gray-800">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-semibold text-white">Your Staking Dashboard</h3>
-                    <div id="mining-status" class="text-green-400 font-medium">Active</div>
-                </div>
-
-                <div class="h-64 mb-6">
-                    <canvas id="miningChart"></canvas>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mb-6 text-white">
-                    <div>
-                        <div class="text-sm text-gray-400">Hashrate</div>
-                        <div id="hashrate" class="text-xl font-semibold">0.00 TH/s</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-gray-400">Daily Earnings</div>
-                        <div id="daily-earnings" class="text-xl font-semibold">0.000000 BTC</div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="flex justify-between text-sm text-white mb-1">
-                        <span>Staking Progress</span>
-                        <span id="progress-percent">0%</span>
-                    </div>
-                    <div class="w-full bg-gray-700 rounded-full h-2">
-                        <div id="progress-bar" class="progress-bar bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-8 flex flex-wrap gap-6 text-gray-300">
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-green-400 rounded-full mr-2"></div><span>Secure Staking Platform</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-blue-400 rounded-full mr-2"></div><span>On-Chain Rewards</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-purple-400 rounded-full mr-2"></div><span>24/7 Customer Support</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-cyan-400 rounded-full mr-2"></div><span>Non-Custodial & Transparent</span>
+          </div>
         </div>
+      </div>
+
+      <!-- Right Dashboard Block -->
+      <div class="relative slide-in-right">
+        <div class="card-glass p-6 rounded-2xl shadow-xl mining-animation bg-gray-800">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold text-white">Your Staking Dashboard</h3>
+            <div id="mining-status" class="text-green-400 font-medium">Active</div>
+          </div>
+
+          <div class="h-64 mb-6">
+            <canvas id="miningChart"></canvas>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-6 text-white">
+            <div>
+              <div class="text-sm text-gray-400">Hashrate</div>
+              <div id="hashrate" class="text-xl font-semibold">0.00 TH/s</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Daily Earnings</div>
+              <div id="daily-earnings" class="text-xl font-semibold">0.000000 BTC</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="flex justify-between text-sm text-white mb-1">
+              <span>Staking Progress</span>
+              <span id="progress-percent">0%</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2">
+              <div id="progress-bar" class="progress-bar bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
   <!-- Stats Section -->
   <section class="py-12 bg-gray-900">
@@ -587,7 +597,8 @@
         <div
           class="mining-card p-6 rounded-2xl cursor-pointer fade-in w-full md:w-1/3 flex flex-col h-full relative border-2">
           <!-- Ribbon Badge -->
-          <div class="absolute top-0 right-0 text-white text-xs font-bold px-3 py-1 rounded-bl rounded-tr bg-emerald-600">
+          <div
+            class="absolute top-0 right-0 text-white text-xs font-bold px-3 py-1 rounded-bl rounded-tr bg-emerald-600">
             NOW FREE
           </div>
 
@@ -740,48 +751,48 @@
 
   <!-- How It Works -->
   <section class="py-20 px-6 bg-gray-900">
-  <div class="max-w-7xl mx-auto">
-    <h2 class="text-3xl font-bold mb-2 text-center text-white">How Staking Works</h2>
-    <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
-      Earn stable and secure rewards by staking your crypto assets with Elytra.
-    </p>
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold mb-2 text-center text-white">How Staking Works</h2>
+      <p class="text-gray-400 mb-12 text-center max-w-2xl mx-auto">
+        Earn stable and secure rewards by staking your crypto assets with Elytra.
+      </p>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- Step 1 -->
-      <div class="text-center fade-in" style="animation-delay: 0.1s">
-        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <span class="text-white text-2xl font-bold">1</span>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="text-center fade-in" style="animation-delay: 0.1s">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <span class="text-white text-2xl font-bold">1</span>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-2">Create Your Account</h3>
+          <p class="text-gray-400 text-sm">
+            Sign up and complete identity verification to ensure the security and integrity of your staking activity.
+          </p>
         </div>
-        <h3 class="text-xl font-semibold text-white mb-2">Create Your Account</h3>
-        <p class="text-gray-400 text-sm">
-          Sign up and complete identity verification to ensure the security and integrity of your staking activity.
-        </p>
-      </div>
 
-      <!-- Step 2 -->
-      <div class="text-center fade-in" style="animation-delay: 0.2s">
-        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <span class="text-white text-2xl font-bold">2</span>
+        <!-- Step 2 -->
+        <div class="text-center fade-in" style="animation-delay: 0.2s">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <span class="text-white text-2xl font-bold">2</span>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-2">Deposit Crypto</h3>
+          <p class="text-gray-400 text-sm">
+            Fund your staking wallet by transferring crypto assets, ready for allocation to your chosen plan.
+          </p>
         </div>
-        <h3 class="text-xl font-semibold text-white mb-2">Deposit Crypto</h3>
-        <p class="text-gray-400 text-sm">
-          Fund your staking wallet by transferring crypto assets, ready for allocation to your chosen plan.
-        </p>
-      </div>
 
-      <!-- Step 3 -->
-      <div class="text-center fade-in" style="animation-delay: 0.3s">
-        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <span class="text-white text-2xl font-bold">3</span>
+        <!-- Step 3 -->
+        <div class="text-center fade-in" style="animation-delay: 0.3s">
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <span class="text-white text-2xl font-bold">3</span>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-2">Start Earning</h3>
+          <p class="text-gray-400 text-sm">
+            Activate your staking plan and receive passive income with real-time tracking on your dashboard.
+          </p>
         </div>
-        <h3 class="text-xl font-semibold text-white mb-2">Start Earning</h3>
-        <p class="text-gray-400 text-sm">
-          Activate your staking plan and receive passive income with real-time tracking on your dashboard.
-        </p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Call to Action -->
   <section class="py-20 px-6 bg-gradient-to-r from-blue-600 to-purple-600">
@@ -865,6 +876,17 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuButton = document.getElementById("menu-button");
+      const navLinks = document.getElementById("nav-links");
+
+      menuButton.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+    });
+  </script>
 
   <script>
     const viewAllButton = document.getElementById("view-all-button");
@@ -1147,122 +1169,122 @@
   </script>
 
   <!-- Real-time JS -->
-<script>
-        // Initialize chart with saved data or default values
-        const savedData = localStorage.getItem('cryptoChartData');
-        const initialData = savedData ? JSON.parse(savedData) : Array(15).fill(0).map(() => (Math.random() * 2 + 1).toFixed(2));
-        
-        const ctx = document.getElementById('miningChart').getContext('2d');
-        const miningChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array(15).fill(''),
-                datasets: [{
-                    label: 'Staking Rewards (USDT)',
-                    data: initialData,
-                    borderColor: '#3B82F6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 2,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 0
-                },
-                scales: {
-                    x: {
-                        display: false,
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#9CA3AF'
-                        },
-                        grid: {
-                            color: 'rgba(156, 163, 175, 0.1)'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: true,
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: '#1F2937',
-                        titleColor: '#E5E7EB',
-                        bodyColor: '#D1D5DB',
-                        borderColor: '#374151',
-                        borderWidth: 1,
-                        padding: 12,
-                        callbacks: {
-                            label: function(context) {
-                                return ` ${context.dataset.label}: $${context.parsed.y}`;
-                            }
-                        }
-                    }
-                }
+  <script>
+    // Initialize chart with saved data or default values
+    const savedData = localStorage.getItem('cryptoChartData');
+    const initialData = savedData ? JSON.parse(savedData) : Array(15).fill(0).map(() => (Math.random() * 2 + 1).toFixed(2));
+
+    const ctx = document.getElementById('miningChart').getContext('2d');
+    const miningChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array(15).fill(''),
+        datasets: [{
+          label: 'Staking Rewards (USDT)',
+          data: initialData,
+          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          fill: true,
+          tension: 0.4,
+          borderWidth: 2,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 0
+        },
+        scales: {
+          x: {
+            display: false,
+            grid: {
+              display: false
             }
-        });
-
-        // Simulate real-time data updates
-        let hashrate = localStorage.getItem('lastHashrate') || '0.00';
-        let earnings = localStorage.getItem('lastEarnings') || '0.000000';
-        let progress = localStorage.getItem('lastProgress') || 0;
-
-        function updateDashboard() {
-            // Simulate new price data (in a real app, this would come from WebSocket)
-            const newPrice = (Math.random() * 2 + 1).toFixed(2);
-            miningChart.data.datasets[0].data.push(newPrice);
-            miningChart.data.datasets[0].data.shift();
-            miningChart.update();
-            
-            // Save current data to localStorage
-            localStorage.setItem('cryptoChartData', JSON.stringify(miningChart.data.datasets[0].data));
-            
-            // Simulate hashrate and earnings changes
-            hashrate = (parseFloat(hashrate) + (Math.random() * 0.5 - 0.25)).toFixed(2);
-            earnings = (parseFloat(earnings) + (Math.random() * 0.0001 - 0.00005)).toFixed(6);
-            progress = (parseFloat(progress) + Math.random() * 2) % 100;
-            
-            // Update UI
-            document.getElementById('hashrate').textContent = `${hashrate} TH/s`;
-            document.getElementById('daily-earnings').textContent = `${earnings} BTC`;
-            document.getElementById('progress-percent').textContent = `${progress.toFixed(0)}%`;
-            document.getElementById('progress-bar').style.width = `${progress.toFixed(0)}%`;
-            
-            // Save current state
-            localStorage.setItem('lastHashrate', hashrate);
-            localStorage.setItem('lastEarnings', earnings);
-            localStorage.setItem('lastProgress', progress);
+          },
+          y: {
+            ticks: {
+              color: '#9CA3AF'
+            },
+            grid: {
+              color: 'rgba(156, 163, 175, 0.1)'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: true,
+            mode: 'index',
+            intersect: false,
+            backgroundColor: '#1F2937',
+            titleColor: '#E5E7EB',
+            bodyColor: '#D1D5DB',
+            borderColor: '#374151',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              label: function (context) {
+                return ` ${context.dataset.label}: $${context.parsed.y}`;
+              }
+            }
+          }
         }
+      }
+    });
 
-        // Initial update
-        document.getElementById('hashrate').textContent = `${hashrate} TH/s`;
-        document.getElementById('daily-earnings').textContent = `${earnings} BTC`;
-        document.getElementById('progress-percent').textContent = `${progress}%`;
-        document.getElementById('progress-bar').style.width = `${progress}%`;
+    // Simulate real-time data updates
+    let hashrate = localStorage.getItem('lastHashrate') || '0.00';
+    let earnings = localStorage.getItem('lastEarnings') || '0.000000';
+    let progress = localStorage.getItem('lastProgress') || 0;
 
-        // Update every 3 seconds (simulating real-time updates)
-        // setInterval(updateDashboard, 3000);
+    function updateDashboard() {
+      // Simulate new price data (in a real app, this would come from WebSocket)
+      const newPrice = (Math.random() * 2 + 1).toFixed(2);
+      miningChart.data.datasets[0].data.push(newPrice);
+      miningChart.data.datasets[0].data.shift();
+      miningChart.update();
 
-        // For a real application, you would replace the setInterval with a WebSocket connection:
-        const socket = new WebSocket('wss://crypto-price-feed.example.com');
-        socket.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            // Process real data and update chart
-            updateChartWithRealData(data);
-        };
-    </script>
+      // Save current data to localStorage
+      localStorage.setItem('cryptoChartData', JSON.stringify(miningChart.data.datasets[0].data));
+
+      // Simulate hashrate and earnings changes
+      hashrate = (parseFloat(hashrate) + (Math.random() * 0.5 - 0.25)).toFixed(2);
+      earnings = (parseFloat(earnings) + (Math.random() * 0.0001 - 0.00005)).toFixed(6);
+      progress = (parseFloat(progress) + Math.random() * 2) % 100;
+
+      // Update UI
+      document.getElementById('hashrate').textContent = `${hashrate} TH/s`;
+      document.getElementById('daily-earnings').textContent = `${earnings} BTC`;
+      document.getElementById('progress-percent').textContent = `${progress.toFixed(0)}%`;
+      document.getElementById('progress-bar').style.width = `${progress.toFixed(0)}%`;
+
+      // Save current state
+      localStorage.setItem('lastHashrate', hashrate);
+      localStorage.setItem('lastEarnings', earnings);
+      localStorage.setItem('lastProgress', progress);
+    }
+
+    // Initial update
+    document.getElementById('hashrate').textContent = `${hashrate} TH/s`;
+    document.getElementById('daily-earnings').textContent = `${earnings} BTC`;
+    document.getElementById('progress-percent').textContent = `${progress}%`;
+    document.getElementById('progress-bar').style.width = `${progress}%`;
+
+    // Update every 3 seconds (simulating real-time updates)
+    // setInterval(updateDashboard, 3000);
+
+    // For a real application, you would replace the setInterval with a WebSocket connection:
+    const socket = new WebSocket('wss://crypto-price-feed.example.com');
+    socket.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      // Process real data and update chart
+      updateChartWithRealData(data);
+    };
+  </script>
 
   <script src="assets/js/script.js"></script>
   <script src="assets/js/randomizer.js"></script>

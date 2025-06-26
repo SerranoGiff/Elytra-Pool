@@ -1,0 +1,115 @@
+/* Additional styles for buttons */
+.btn-primary {
+    background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Card hover effect */
+.card-glass:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive typography */
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 2rem; /* 32px */
+}
+
+h2 {
+    font-size: 1.5rem; /* 24px */
+}
+
+h3 {
+    font-size: 1.25rem; /* 20px */
+}
+
+/* Responsive padding and margins */
+.container {
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 40px;
+    }
+
+    h1 {
+        font-size: 2.5rem; /* 40px */
+    }
+
+    h2 {
+        font-size: 2rem; /* 32px */
+    }
+}
+
+/* Progress bar styles */
+.progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+    transition: width 0.5s ease;
+}
+
+/* Animation for loading indicators */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.loading::after {
+    content: '';
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Modal styles */
+.modal {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments for modals */
+@media (max-width: 600px) {
+    .modal {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+
+/* Fire glow effect for buttons */
+.fire-hover {
+    animation: fireGlow 1.5s infinite ease-in-out;
+}
+
+@media (hover: none) {
+    .fire-hover:active {
+        animation: fireGlow 1.5s infinite ease-in-out;
+    }
+}

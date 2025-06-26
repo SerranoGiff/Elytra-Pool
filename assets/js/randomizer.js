@@ -35,7 +35,7 @@ function flickNumber(id, oldValue, newValue, flicks = 40) {
 let activeUsers = 1000000;
 
 function updateStats() {
-  const direction = Math.random() < 0.5 ? -1 : 1;
+  const direction = Math.random() < 0.5 ? -1 : 2;
   const change = Math.floor(Math.random() * 150 + 25) * direction;
   let newActiveUsers = activeUsers + change;
 

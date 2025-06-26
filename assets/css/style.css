@@ -272,3 +272,22 @@ body {
         left: 150%;
     }
 }
+
+@keyframes fireGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px hwb(319 36% 7%) 0 0 16px hsl(317, 64%, 52%), 0 0 24px #80017c;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px hwb(319 36% 7%), 0 0 24px hsl(317, 64%, 52%), 0 0 32px #80017c;
+    transform: scale(1.02);
+  }
+}
+.fire-hover:hover {
+  animation: fireGlow 1.5s infinite ease-in-out;
+}
+@media (hover: none) {
+  .fire-hover:active {
+    animation: fireGlow 1.5s infinite ease-in-out;
+  }
+}

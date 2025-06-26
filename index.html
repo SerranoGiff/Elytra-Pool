@@ -277,38 +277,39 @@
       </div>
 
      <div class="relative slide-in-right w-full">
-  <div class="w-full p-4 sm:p-6 rounded-2xl shadow-xl mining-animation bg-gray-800">
+  <div class="w-full p-3 sm:p-4 rounded-xl shadow-lg bg-gray-800">
+    
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
-      <h3 class="text-lg sm:text-xl font-semibold text-white">Your Staking Dashboard</h3>
-      <div id="mining-status" class="text-purple-400 text-sm sm:text-base font-medium">Active</div>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-1">
+      <h3 class="text-base sm:text-lg font-semibold text-white leading-tight">Staking Dashboard</h3>
+      <div id="mining-status" class="text-purple-400 text-xs sm:text-sm font-medium">Active</div>
     </div>
 
     <!-- Chart -->
-    <div class="w-full h-48 sm:h-64 md:h-72 mb-6">
+    <div class="w-full h-36 sm:h-48 mb-4">
       <canvas id="miningChart" class="w-full h-full"></canvas>
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-white">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 text-white text-sm">
       <div>
-        <div class="text-xs sm:text-sm text-gray-400">Hashrate</div>
-        <div id="hashrate" class="text-lg sm:text-xl font-semibold">0.00 TH/s</div>
+        <div class="text-xs text-gray-400">Hashrate</div>
+        <div id="hashrate" class="text-base font-semibold">0.00 TH/s</div>
       </div>
       <div>
-        <div class="text-xs sm:text-sm text-gray-400">Daily Earnings</div>
-        <div id="daily-earnings" class="text-lg sm:text-xl font-semibold">0.000000 BTC</div>
+        <div class="text-xs text-gray-400">Daily Earnings</div>
+        <div id="daily-earnings" class="text-base font-semibold">0.000000 BTC</div>
       </div>
     </div>
 
-    <!-- Progress Bar -->
+    <!-- Progress -->
     <div>
-      <div class="flex justify-between text-xs sm:text-sm text-white mb-1">
-        <span>Staking Progress</span>
+      <div class="flex justify-between text-xs text-white mb-1">
+        <span>Progress</span>
         <span id="progress-percent">0%</span>
       </div>
-      <div class="w-full bg-gray-700 rounded-full h-2">
-        <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500 ease-in-out" style="width: 0%"></div>
+      <div class="w-full bg-gray-700 rounded-full h-1.5">
+        <div id="progress-bar" class="bg-blue-500 h-1.5 rounded-full transition-all duration-500 ease-in-out" style="width: 0%"></div>
       </div>
     </div>
   </div>

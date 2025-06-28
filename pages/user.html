@@ -1,182 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elytra Pool | Crypto Asset Wallet</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../PAGE/ELYTRA.jpg" type="image/x-icon" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elytra Pool | Crypto Asset Wallet</title>
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="shortcut icon" href="../PAGE/ELYTRA.jpg" type="image/x-icon" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="min-h-screen">
-  <!-- Navbar -->
-  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center">
-      <!-- Logo -->
-      <div class="flex justify-center md:justify-start items-center space-x-2 mb-2 md:mb-0">
-        <a href="index.html" class="flex items-center">
-          <div
-            class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
-            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
-              class="w-full h-full rounded-full object-cover" />
-          </div>
-          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-            Pool</span>
-        </a>
-      </div>
-
-      <!-- Mobile View: Menu first then profile -->
-      <div class="flex justify-center md:hidden items-center gap-4">
-        <button class="text-white text-xl" id="menu-button" aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
-          <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
+  <body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <a href="index.html" class="flex items-center">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
+              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+          </a>
         </div>
-      </div>
 
-      <!-- Desktop View Navigation -->
-      <div class="hidden md:flex justify-center gap-6 text-sm items-center">
-        <a href="user.html" class="nav-link">Home</a>
-        <a href="index.html#staking" class="nav-link">Staking</a>
-        <a href="index.html#mining" class="nav-link">Assets</a>
-        <a href="index.html#earnings" class="nav-link">Leaderboard</a>
-        <a href="../pages/deposit.html" class="nav-link">Deposit</a>
-        <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
-        <a href="../pages/Convert.html" class="nav-link">Convert</a>
-        <div class="flex items-center justify-center">
+        <!-- Navigation Centered -->
+        <div class="hidden md:flex flex-1 justify-center">
+          <div class="flex gap-6 text-sm items-center">
+            <a href="user.html" class="nav-link">Home</a>
+            <a href="index.html#staking" class="nav-link">Staking</a>
+            <a href="index.html#mining" class="nav-link">Assets</a>
+            <a href="index.html#earnings" class="nav-link">Leaderboard</a>
+            <a href="../pages/deposit.html" class="nav-link">Deposit</a>
+            <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
+            <a href="../pages/Convert.html" class="nav-link">Convert</a>
+          </div>
+        </div>
+
+        <!-- Profile -->
+        <div class="hidden md:block">
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
+            <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        <!-- Mobile View: Menu then profile -->
+        <div class="flex md:hidden items-center gap-4">
+          <button class="text-white text-xl" id="menu-button" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
           <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
             <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Dashboard -->
-  <div class="max-w-7xl mx-auto px-4 pt-24 pb-10">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-yellow-400">
-        User Wallet Dashboard
-      </h1>
-    </div>
+    <!-- Dashboard -->
+    <div class="max-w-7xl mx-auto px-4 pt-24 pb-10">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-yellow-400">
+          User Wallet Dashboard
+        </h1>
+      </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <!-- Wallet Card -->
-      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
-        <p class="text-white font-semibold text-lg mb-1">
-          Wallet Balance (Total)
-        </p>
-        <p class="text-4xl font-bold text-blue-300">5,000 ELYTRA</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Wallet Card -->
+        <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
+          <p class="text-white font-semibold text-lg mb-1">
+            Wallet Balance (Total)
+          </p>
+          <p class="text-4xl font-bold text-blue-300">5,000 ELYTRA</p>
 
-        <!-- Secure + Last Activity -->
-        <div class="flex justify-between items-center text-sm text-gray-400 mb-4 md:block">
-          <p>Secure and ready to use</p>
-          <p class="text-green-400 font-semibold md:hidden">
-            Last Activity: 2h ago
+          <!-- Secure + Last Activity -->
+          <div class="flex justify-between items-center text-sm text-gray-400 mb-4 md:block">
+            <p>Secure and ready to use</p>
+            <p class="text-green-400 font-semibold md:hidden">Last Activity: 2h ago</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+            <div>
+              <p class="text-gray-400">BTC</p>
+              <p class="text-yellow-300 font-bold">0.215 BTC</p>
+            </div>
+            <div>
+              <p class="text-gray-400">ETH</p>
+              <p class="text-purple-300 font-bold">1.750 ETH</p>
+            </div>
+            <div>
+              <p class="text-gray-400">USDT</p>
+              <p class="text-green-300 font-bold">3,400.00 USDT</p>
+            </div>
+            <div>
+              <p class="text-gray-400">ELYTRA</p>
+              <p class="text-blue-300 font-bold">5,000 ELYTRA</p>
+            </div>
+          </div>
+
+          <!-- Mobile Buttons -->
+          <div class="flex gap-2 mt-2 md:hidden">
+            <a href="deposit.html" class="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded">
+              <i class="fas fa-arrow-down"></i> Deposit
+            </a>
+            <a href="withdraw.html" class="flex-1 flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-xs py-2 rounded">
+              <i class="fas fa-arrow-up"></i> Withdraw
+            </a>
+            <a href="convert.html" class="flex-1 flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 rounded">
+              <i class="fas fa-sync-alt"></i> Convert
+            </a>
+          </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
+          <p class="text-white font-semibold text-lg mb-4">Transaction History</p>
+          <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
+            <div class="flex justify-between border-b border-gray-700 pb-2">
+              <span class="text-gray-300">Deposit</span><span class="text-green-400 font-bold">+1000 ELY</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-700 pb-2">
+              <span class="text-gray-300">Withdraw</span><span class="text-red-400 font-bold">-200 USDT</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-700 pb-2">
+              <span class="text-gray-300">Stake</span><span class="text-purple-300 font-bold">-1500 ELY</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-700 pb-2">
+              <span class="text-gray-300">Convert</span><span class="text-blue-300 font-bold">+0.05 BTC</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-700 pb-2">
+              <span class="text-gray-300">Transfer</span><span class="text-yellow-300 font-bold">-0.02 ETH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Assets Table -->
+      <div class="bg-[#1B263B] rounded-lg shadow-lg overflow-hidden">
+        <div class="p-4 border-b border-[#0D1B2A]">
+          <p class="text-yellow-400 font-semibold text-lg">My Assets</p>
+          <p class="text-sm text-gray-400">
+            Overview of your cryptocurrency holdings and market prices.
           </p>
         </div>
-
-        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
-          <div>
-            <p class="text-gray-400">BTC</p>
-            <p class="text-yellow-300 font-bold">0.215 BTC</p>
-          </div>
-          <div>
-            <p class="text-gray-400">ETH</p>
-            <p class="text-purple-300 font-bold">1.750 ETH</p>
-          </div>
-          <div>
-            <p class="text-gray-400">USDT</p>
-            <p class="text-green-300 font-bold">3,400.00 USDT</p>
-          </div>
-          <div>
-            <p class="text-gray-400">ELYTRA</p>
-            <p class="text-blue-300 font-bold">5,000 ELYTRA</p>
-          </div>
-        </div>
-
-        <!-- Mobile Buttons -->
-        <div class="flex gap-2 mt-2 md:hidden">
-          <a href="deposit.html"
-            class="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded">
-            <i class="fas fa-arrow-down"></i> Deposit
-          </a>
-          <a href="withdraw.html"
-            class="flex-1 flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-xs py-2 rounded">
-            <i class="fas fa-arrow-up"></i> Withdraw
-          </a>
-          <a href="convert.html"
-            class="flex-1 flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 rounded">
-            <i class="fas fa-sync-alt"></i> Convert
-          </a>
-        </div>
-      </div>
-
-      <!-- Transactions -->
-      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
-        <p class="text-white font-semibold text-lg mb-4">
-          Transaction History
-        </p>
-        <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Deposit</span><span class="text-green-400 font-bold">+1000 ELY</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Withdraw</span><span class="text-red-400 font-bold">-200 USDT</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Stake</span><span class="text-purple-300 font-bold">-1500 ELY</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Convert</span><span class="text-blue-300 font-bold">+0.05 BTC</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Transfer</span><span class="text-yellow-300 font-bold">-0.02 ETH</span>
+        <div class="overflow-x-auto">
+          <div class="h-96 overflow-y-auto">
+            <table class="min-w-full text-sm text-white">
+              <thead class="bg-[#0D1B2A] text-yellow-300 uppercase sticky top-0 z-10">
+                <tr>
+                  <th class="px-4 py-3 text-left">#</th>
+                  <th class="px-4 py-3 text-left">Asset</th>
+                  <th class="px-4 py-3">Price</th>
+                  <th class="px-4 py-3">1h %</th>
+                  <th class="px-4 py-3">24h %</th>
+                  <th class="px-4 py-3">7d %</th>
+                  <th class="px-4 py-3">Market Cap</th>
+                </tr>
+              </thead>
+              <tbody id="crypto-table" class="text-center">
+                <!-- Dynamic rows go here -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- My Assets Table -->
-    <div class="bg-[#1B263B] rounded-lg shadow-lg overflow-hidden">
-      <div class="p-4 border-b border-[#0D1B2A]">
-        <p class="text-yellow-400 font-semibold text-lg">My Assets</p>
-        <p class="text-sm text-gray-400">
-          Overview of your cryptocurrency holdings and market prices.
-        </p>
-      </div>
-      <div class="overflow-x-auto">
-        <div class="h-96 overflow-y-auto">
-          <table class="min-w-full text-sm text-white">
-            <thead class="bg-[#0D1B2A] text-yellow-300 uppercase sticky top-0 z-10">
-              <tr>
-                <th class="px-4 py-3 text-left">#</th>
-                <th class="px-4 py-3 text-left">Asset</th>
-                <th class="px-4 py-3">Price</th>
-                <th class="px-4 py-3">1h %</th>
-                <th class="px-4 py-3">24h %</th>
-                <th class="px-4 py-3">7d %</th>
-                <th class="px-4 py-3">Market Cap</th>
-              </tr>
-            </thead>
-            <tbody id="crypto-table" class="text-center">
-              <!-- Dynamic rows go here -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="../assets/js/script.js"></script>
-  <script src="../assets/js/randomizer.js"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</body>
-
+    <!-- Scripts -->
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/randomizer.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  </body>
 </html>

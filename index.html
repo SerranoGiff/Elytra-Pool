@@ -51,110 +51,112 @@
           <div id="modalContentInner">
             <!-- Login Form -->
             <!-- Login Form -->
-<div id="loginForm" class="form-section text-black">
-  <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
-  <form>
-    <div class="mb-4">
-      <label for="email" class="block text-sm font-medium">Email Address</label>
-      <input type="email" id="email"
-        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-        required />
-    </div>
-    <div class="mb-4">
-      <label for="password" class="block text-sm font-medium">Password</label>
-      <input type="password" id="password"
-        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-        required />
-    </div>
-    <div class="flex items-center mb-4">
-      <input type="checkbox" id="rememberMe"
-        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-      <label for="rememberMe" class="ml-2 block text-sm cursor-pointer">Remember Me</label>
-    </div>
-    <div class="mb-4 text-right">
-  <button id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
-</div>
+            <div id="loginForm" class="form-section text-black">
+              <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+              <form>
+                <div class="mb-4">
+                  <label for="email" class="block text-sm font-medium">Email Address</label>
+                  <input type="email" id="email"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    required />
+                </div>
+                <div class="mb-4">
+                  <label for="password" class="block text-sm font-medium">Password</label>
+                  <input type="password" id="password"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    required />
+                </div>
+                <div class="flex items-center mb-4">
+                  <input type="checkbox" id="rememberMe"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                  <label for="rememberMe" class="ml-2 block text-sm cursor-pointer">Remember Me</label>
+                </div>
+                <div class="mb-4 text-right">
+                  <button id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
+                </div>
 
-    <button type="submit"
-      class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Login</button>
-  </form>
-  <div class="mt-4 text-center">
-    <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign Up</button>
-  </div>
-</div>
+                <button type="submit"
+                  class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Login</button>
+              </form>
+              <div class="mt-4 text-center">
+                <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign
+                  Up</button>
+              </div>
+            </div>
 
-<!-- Forgot Password Modal -->
-<div id="forgotPasswordModal"
-  class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-  <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-  <div
-    class="bg-white rounded-lg shadow-lg z-10 p-6 w-full max-w-md transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-    id="forgotPasswordContent">
-    <h2 class="text-lg font-bold mb-4 text-black">Reset Your Password</h2>
-    <p class="mb-4 text-sm text-gray-700">Enter your email address and we’ll send you a password reset link.</p>
-    <form id="forgotPasswordForm">
-      <input type="email" id="forgotEmail"
-        class="w-full mb-4 border border-gray-300 rounded-md p-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Email address" required />
-      <div class="flex justify-end gap-2">
-        <button type="button" id="cancelForgot"
-          class="px-4 py-2 text-sm bg-gray-300 hover:bg-gray-400 rounded-lg text-black">Cancel</button>
-        <button type="submit"
-          class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Send Reset Link</button>
-      </div>
-    </form>
-  </div>
-</div>
+            <!-- Forgot Password Modal -->
+            <div id="forgotPasswordModal"
+              class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+              <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+              <div
+                class="bg-white rounded-lg shadow-lg z-10 p-6 w-full max-w-md transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+                id="forgotPasswordContent">
+                <h2 class="text-lg font-bold mb-4 text-black">Reset Your Password</h2>
+                <p class="mb-4 text-sm text-gray-700">Enter your email address and we’ll send you a password reset link.
+                </p>
+                <form id="forgotPasswordForm">
+                  <input type="email" id="forgotEmail"
+                    class="w-full mb-4 border border-gray-300 rounded-md p-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Email address" required />
+                  <div class="flex justify-end gap-2">
+                    <button type="button" id="cancelForgot"
+                      class="px-4 py-2 text-sm bg-gray-300 hover:bg-gray-400 rounded-lg text-black">Cancel</button>
+                    <button type="submit"
+                      class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Send Reset
+                      Link</button>
+                  </div>
+                </form>
+              </div>
+            </div>
 
-<!-- Sign Up Form -->
-<div id="signUpForm" class="form-section hidden text-black">
-  <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
-  <form>
-    <div class="mb-3">
-      <label for="username" class="block text-sm font-medium">Username</label>
-      <input type="text" id="username"
-        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-        required />
-    </div>
-    <div class="mb-3">
-      <label for="signUpEmail" class="block text-sm font-medium">Email Address</label>
-      <input type="email" id="signUpEmail"
-        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-        required />
-    </div>
-    <div class="mb-3">
-      <label for="signUpPassword" class="block text-sm font-medium">Password</label>
-      <input type="password" id="signUpPassword"
-        class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-        required />
-    </div>
-    <div class="mb-3">
-      <div class="flex items-center">
-        <input type="checkbox" id="agreeTerms"
-          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-        <label for="agreeTerms" class="ml-2 block text-sm cursor-pointer">
-          I agree to the <span class="text-blue-600 hover:underline">Terms and Conditions</span>
-        </label>
-      </div>
-    </div>
-    <div class="mb-3">
-      <div class="flex items-center">
-        <input type="checkbox" id="agreePrivacy"
-          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-        <label for="agreePrivacy" class="ml-2 block text-sm cursor-pointer">
-          I have read and agree to the <span class="text-blue-600 hover:underline">Privacy Policy</span>
-        </label>
-      </div>
-    </div>
-    <button type="submit"
-      class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Sign
-      Up</button>
-  </form>
-  <div class="mt-4 text-center">
-    <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an account? Login</button>
-  </div>
-</div>
-
+            <!-- Sign Up Form -->
+            <div id="signUpForm" class="form-section hidden text-black">
+              <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
+              <form>
+                <div class="mb-3">
+                  <label for="username" class="block text-sm font-medium">Username</label>
+                  <input type="text" id="username"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    required />
+                </div>
+                <div class="mb-3">
+                  <label for="signUpEmail" class="block text-sm font-medium">Email Address</label>
+                  <input type="email" id="signUpEmail"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    required />
+                </div>
+                <div class="mb-3">
+                  <label for="signUpPassword" class="block text-sm font-medium">Password</label>
+                  <input type="password" id="signUpPassword"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    required />
+                </div>
+                <div class="mb-3">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="agreeTerms"
+                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
+                    <label for="agreeTerms" class="ml-2 block text-sm cursor-pointer">
+                      I agree to the <span class="text-blue-600 hover:underline">Terms and Conditions</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="agreePrivacy"
+                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
+                    <label for="agreePrivacy" class="ml-2 block text-sm cursor-pointer">
+                      I have read and agree to the <span class="text-blue-600 hover:underline">Privacy Policy</span>
+                    </label>
+                  </div>
+                </div>
+                <button type="submit"
+                  class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Sign
+                  Up</button>
+              </form>
+              <div class="mt-4 text-center">
+                <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an account? Login</button>
+              </div>
+            </div>
 
           </div>
           <div class="mt-4 text-center">
@@ -898,207 +900,185 @@
   </script>
 
   <script>
-    // Get modal elements
-    const loginModal = document.getElementById("loginModal");
-    const closeModal = document.getElementById("closeModal");
-    const switchToSignUp = document.getElementById("switchToSignUp");
-    const switchToLogin = document.getElementById("switchToLogin");
-    const loginForm = document.getElementById("loginForm");
-    const signUpForm = document.getElementById("signUpForm");
-    const infoModal = document.getElementById("infoModal");
-    const privacyModal = document.getElementById("privacyModal");
-    const termsLink = document.getElementById("termsLink");
-    const privacyLink = document.getElementById("privacyLink");
-    const confirmTerms = document.getElementById("confirmTerms");
-    const confirmPrivacy = document.getElementById("confirmPrivacy");
-    const termsContent = document.getElementById("termsContent");
-    const privacyContent = document.getElementById("privacyContent");
+  const loginModal = document.getElementById("loginModal");
+  const closeModal = document.getElementById("closeModal");
+  const switchToSignUp = document.getElementById("switchToSignUp");
+  const switchToLogin = document.getElementById("switchToLogin");
+  const loginForm = document.getElementById("loginForm");
+  const signUpForm = document.getElementById("signUpForm");
+  const infoModal = document.getElementById("infoModal");
+  const privacyModal = document.getElementById("privacyModal");
+  const confirmTerms = document.getElementById("confirmTerms");
+  const confirmPrivacy = document.getElementById("confirmPrivacy");
+  const termsContent = document.getElementById("termsContent");
+  const privacyContent = document.getElementById("privacyContent");
+  const agreeTerms = document.getElementById("agreeTerms");
+  const agreePrivacy = document.getElementById("agreePrivacy");
 
-    // Open modal function
-    document.getElementById("login-button").addEventListener("click", function () {
-      loginModal.classList.remove("hidden");
-      setTimeout(() => {
-        loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
-        loginModal.querySelector("#modalContent").classList.add("scale-100", "opacity-100");
-      }, 10);
-    });
+  // LOGIN BUTTON – Always show login form, reset sign-up form
+  document.getElementById("login-button").addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    signUpForm.classList.add("hidden");
+    signUpForm.querySelector("form").reset();
+    loginModal.classList.remove("hidden");
+    setTimeout(() => {
+      loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
+      loginModal.querySelector("#modalContent").classList.add("scale-100", "opacity-100");
+    }, 10);
+  });
 
-    // Close modal function
-    closeModal.addEventListener("click", function () {
-      loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
-      setTimeout(() => {
-        loginModal.classList.add("hidden");
-      }, 300);
-    });
+  // CLOSE LOGIN MODAL
+  closeModal.addEventListener("click", () => {
+    loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      loginModal.classList.add("hidden");
+    }, 300);
+  });
 
-    // Close modal when clicking outside of it
-    window.addEventListener("click", function (event) {
-      if (event.target === loginModal) {
-        closeModal.click();
-      }
-    });
+  // SWITCH TO SIGN UP
+  switchToSignUp.addEventListener("click", () => {
+    loginForm.classList.add("hidden");
+    signUpForm.classList.remove("hidden");
+  });
 
-    // Switch to Sign Up form
-    switchToSignUp.addEventListener("click", function () {
-      loginForm.classList.add("hidden");
-      signUpForm.classList.remove("hidden");
-    });
+  // SWITCH TO LOGIN
+  switchToLogin.addEventListener("click", () => {
+    signUpForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  });
 
-    // Switch to Login form
-    switchToLogin.addEventListener("click", function () {
-      signUpForm.classList.add("hidden");
-      loginForm.classList.remove("hidden");
-    });
+  // OPEN TERMS MODAL ON CHECKBOX CLICK
+  agreeTerms.addEventListener("change", function () {
+  if (!this.checked) {
+    infoModal.classList.remove("hidden");
+    setTimeout(() => {
+      infoModal.querySelector("#infoModalContent").classList.remove("scale-95", "opacity-0");
+      infoModal.querySelector("#infoModalContent").classList.add("scale-100", "opacity-100");
+    }, 10);
+  }
+});
 
-    // Show Terms & Conditions
-    // Trigger Terms modal when the checkbox is clicked
-    document.getElementById("agreeTerms").addEventListener("click", function (e) {
-      e.preventDefault();
-      infoModal.classList.remove("hidden");
-      setTimeout(() => {
-        infoModal.querySelector("#infoModalContent").classList.remove("scale-95", "opacity-0");
-        infoModal.querySelector("#infoModalContent").classList.add("scale-100", "opacity-100");
-      }, 10);
-    });
+  // OPEN PRIVACY MODAL ON CHECKBOX CLICK
+agreePrivacy.addEventListener("change", function () {
+  if (!this.checked) {
+    privacyModal.classList.remove("hidden");
+    setTimeout(() => {
+      privacyModal.querySelector("#privacyModalContent").classList.remove("scale-95", "opacity-0");
+      privacyModal.querySelector("#privacyModalContent").classList.add("scale-100", "opacity-100");
+    }, 10);
+  }
+});
 
+  // ACCEPT TERMS
+  confirmTerms.addEventListener("click", () => {
+    agreeTerms.checked = true;
+    infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      infoModal.classList.add("hidden");
+    }, 300);
+  });
 
-    // Enable "I Accept" button when scrolled to the bottom of Terms
-    termsContent.addEventListener("scroll", function () {
-      const scrollTop = termsContent.scrollTop;
-      const scrollHeight = termsContent.scrollHeight;
-      const clientHeight = termsContent.clientHeight;
+  // ACCEPT PRIVACY
+  confirmPrivacy.addEventListener("click", () => {
+    agreePrivacy.checked = true;
+    privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      privacyModal.classList.add("hidden");
+    }, 300);
+  });
 
-      if (scrollTop + clientHeight >= scrollHeight) {
-        confirmTerms.disabled = false;
-        confirmTerms.classList.remove("bg-gray-400", "cursor-not-allowed");
-        confirmTerms.classList.add("bg-blue-600", "hover:bg-blue-700", "cursor-pointer");
-      } else {
-        confirmTerms.disabled = true;
-        confirmTerms.classList.add("bg-gray-400", "cursor-not-allowed");
-        confirmTerms.classList.remove("bg-blue-600", "hover:bg-blue-700", "cursor-pointer");
-      }
-    });
+  // ENABLE TERMS "I Accept" ON SCROLL
+  termsContent.addEventListener("scroll", () => {
+    const scrolled = termsContent.scrollTop + termsContent.clientHeight >= termsContent.scrollHeight;
+    confirmTerms.disabled = !scrolled;
+    confirmTerms.classList.toggle("bg-blue-600", scrolled);
+    confirmTerms.classList.toggle("hover:bg-blue-700", scrolled);
+    confirmTerms.classList.toggle("cursor-pointer", scrolled);
+    confirmTerms.classList.toggle("bg-gray-400", !scrolled);
+    confirmTerms.classList.toggle("cursor-not-allowed", !scrolled);
+  });
 
-    // Enable "I Accept" button when scrolled to the bottom of Privacy Policy
-    privacyContent.addEventListener("scroll", function () {
-      const scrollTop = privacyContent.scrollTop;
-      const scrollHeight = privacyContent.scrollHeight;
-      const clientHeight = privacyContent.clientHeight;
+  // ENABLE PRIVACY "I Accept" ON SCROLL
+  privacyContent.addEventListener("scroll", () => {
+    const scrolled = privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight;
+    confirmPrivacy.disabled = !scrolled;
+    confirmPrivacy.classList.toggle("bg-blue-600", scrolled);
+    confirmPrivacy.classList.toggle("hover:bg-blue-700", scrolled);
+    confirmPrivacy.classList.toggle("cursor-pointer", scrolled);
+    confirmPrivacy.classList.toggle("bg-gray-400", !scrolled);
+    confirmPrivacy.classList.toggle("cursor-not-allowed", !scrolled);
+  });
 
-      if (scrollTop + clientHeight >= scrollHeight) {
-        confirmPrivacy.disabled = false;
-        confirmPrivacy.classList.remove("bg-gray-400", "cursor-not-allowed");
-        confirmPrivacy.classList.add("bg-blue-600", "hover:bg-blue-700", "cursor-pointer");
-      } else {
-        confirmPrivacy.disabled = true;
-        confirmPrivacy.classList.add("bg-gray-400", "cursor-not-allowed");
-        confirmPrivacy.classList.remove("bg-blue-600", "hover:bg-blue-700", "cursor-pointer");
-      }
-    });
-
-    // Confirm terms and close modal
-    confirmTerms.addEventListener("click", function () {
-      document.getElementById("agreeTerms").checked = true; // Check the terms checkbox
+  // CLOSE ANY MODAL WHEN CLICKING OUTSIDE
+  window.addEventListener("click", (e) => {
+    if (e.target === loginModal) closeModal.click();
+    if (e.target === infoModal) {
       infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
-      setTimeout(() => {
-        infoModal.classList.add("hidden");
-      }, 300);
-    });
-
-    // Confirm privacy policy and close modal
-    confirmPrivacy.addEventListener("click", function () {
-      document.getElementById("agreePrivacy").checked = true; // Check the privacy policy checkbox
+      setTimeout(() => infoModal.classList.add("hidden"), 300);
+    }
+    if (e.target === privacyModal) {
       privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
-      setTimeout(() => {
-        privacyModal.classList.add("hidden");
-      }, 300);
-    });
+      setTimeout(() => privacyModal.classList.add("hidden"), 300);
+    }
+    if (e.target === forgotPasswordModal) {
+      forgotPasswordContent.classList.add("scale-95", "opacity-0");
+      setTimeout(() => forgotPasswordModal.classList.add("hidden"), 300);
+    }
+  });
 
-    // Trigger Privacy modal when the checkbox is clicked
-    document.getElementById("agreePrivacy").addEventListener("click", function (e) {
-      e.preventDefault();
-      privacyModal.classList.remove("hidden");
-      setTimeout(() => {
-        privacyModal.querySelector("#privacyModalContent").classList.remove("scale-95", "opacity-0");
-        privacyModal.querySelector("#privacyModalContent").classList.add("scale-100", "opacity-100");
-      }, 10);
-    });
+  // SUBMIT LOGIN
+  loginForm.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Login submitted!");
+    closeModal.click();
+  });
 
-    // Close info modal when clicking outside of it
-    window.addEventListener("click", function (event) {
-      if (event.target === infoModal) {
-        infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
-        setTimeout(() => {
-          infoModal.classList.add("hidden");
-        }, 300);
-      }
-      if (event.target === privacyModal) {
-        privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
-        setTimeout(() => {
-          privacyModal.classList.add("hidden");
-        }, 300);
-      }
-    });
+  // SUBMIT SIGN UP
+  signUpForm.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Sign Up submitted!");
 
-    // Handle login form submission
-    loginForm.querySelector("form").addEventListener("submit", function (event) {
-      event.preventDefault();
-      // Here you can add your login logic (e.g., API call)
-      alert("Login submitted!");
-      closeModal.click(); // Close modal after submission
-    });
+    // Reset form & switch to login
+    signUpForm.querySelector("form").reset();
+    signUpForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
 
-    // Handle sign-up form submission
-    signUpForm.querySelector("form").addEventListener("submit", function (event) {
-      event.preventDefault();
-      // Here you can add your sign-up logic (e.g., API call)
-      alert("Sign Up submitted!");
-      closeModal.click(); // Close modal after submission
-    });
+    // Close modal
+    loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      loginModal.classList.add("hidden");
+    }, 300);
+  });
 
-    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
-const forgotPasswordModal = document.getElementById("forgotPasswordModal");
-const forgotPasswordContent = document.getElementById("forgotPasswordContent");
-const cancelForgot = document.getElementById("cancelForgot");
-const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+  // FORGOT PASSWORD
+  const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+  const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+  const forgotPasswordContent = document.getElementById("forgotPasswordContent");
+  const cancelForgot = document.getElementById("cancelForgot");
+  const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 
-// Show modal
-forgotPasswordBtn.addEventListener("click", () => {
-  forgotPasswordModal.classList.remove("hidden");
-  setTimeout(() => {
-    forgotPasswordContent.classList.remove("scale-95", "opacity-0");
-    forgotPasswordContent.classList.add("scale-100", "opacity-100");
-  }, 10);
-});
+  forgotPasswordBtn.addEventListener("click", () => {
+    forgotPasswordModal.classList.remove("hidden");
+    setTimeout(() => {
+      forgotPasswordContent.classList.remove("scale-95", "opacity-0");
+      forgotPasswordContent.classList.add("scale-100", "opacity-100");
+    }, 10);
+  });
 
-// Hide modal
-cancelForgot.addEventListener("click", () => {
-  forgotPasswordContent.classList.add("scale-95", "opacity-0");
-  setTimeout(() => {
-    forgotPasswordModal.classList.add("hidden");
-  }, 300);
-});
-
-// Close modal by clicking outside
-window.addEventListener("click", (e) => {
-  if (e.target === forgotPasswordModal) {
+  cancelForgot.addEventListener("click", () => {
     forgotPasswordContent.classList.add("scale-95", "opacity-0");
     setTimeout(() => {
       forgotPasswordModal.classList.add("hidden");
     }, 300);
-  }
-});
+  });
 
-// Submit handler
-forgotPasswordForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = document.getElementById("forgotEmail").value;
-  // TODO: Send email via backend
-  alert("Reset link sent to: " + email);
-  cancelForgot.click(); // Close modal
-});
-
-  </script>
+  forgotPasswordForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("forgotEmail").value;
+    alert("Reset link sent to: " + email);
+    cancelForgot.click();
+  });
+</script>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {

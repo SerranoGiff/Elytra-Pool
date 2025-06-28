@@ -48,7 +48,7 @@
                 <div id="profileMenu"
                     class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
                     <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-                    <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                    <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                     <div id="mobileProfileMenu"
                         class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
                         <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-                        <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                        <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
                     </div>
                 </div>
             </div>
@@ -404,6 +404,18 @@
         </div>
     </div>
 
+    <!-- Error Toast Notification -->
+    <div id="errorToast" class="fixed top-6 right-6 z-50 hidden">
+        <div class="bg-red-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in">
+            <i class="fas fa-times-circle text-2xl"></i>
+            <div>
+                <div class="font-bold">Missing Amount</div>
+                <div class="text-sm">Please enter a valid stake amount before confirming.</div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         function calculateReturn() {
             const amount = parseFloat(document.getElementById('amount').value) || 0;
@@ -460,54 +472,64 @@
     </script>
 
     <script>
-        const stakingModal = document.getElementById("stakingModal");
-        const modalTitle = document.getElementById("modalTitle");
-        const modalDescription = document.getElementById("modalDescription");
-        const modalMinStake = document.getElementById("modalMinStake");
-        const modalLockPeriod = document.getElementById("modalLockPeriod");
-        const closeModal = document.getElementById("closeModal");
+    const stakingModal = document.getElementById("stakingModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalMinStake = document.getElementById("modalMinStake");
+    const modalLockPeriod = document.getElementById("modalLockPeriod");
+    const closeModal = document.getElementById("closeModal");
 
-        const stakeButtons = document.querySelectorAll(".stake-btn");
-        const toastNotification = document.getElementById("toastNotification");
-        const confirmBtn = document.querySelector(".staking-modal-btn");
+    const stakeButtons = document.querySelectorAll(".stake-btn");
+    const toastNotification = document.getElementById("toastNotification");
+    const errorToast = document.getElementById("errorToast");
+    const confirmBtn = document.querySelector(".staking-modal-btn");
 
-        stakeButtons.forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
+    stakeButtons.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
 
-                const title = btn.getAttribute("data-title");
-                const minStake = btn.getAttribute("data-min");
-                const lockPeriod = btn.getAttribute("data-lock");
+            const title = btn.getAttribute("data-title");
+            const minStake = btn.getAttribute("data-min");
+            const lockPeriod = btn.getAttribute("data-lock");
 
-                modalTitle.textContent = `Stake ${title}`;
-                modalMinStake.textContent = minStake;
-                modalLockPeriod.textContent = lockPeriod;
-                modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
+            modalTitle.textContent = `Stake ${title}`;
+            modalMinStake.textContent = minStake;
+            modalLockPeriod.textContent = lockPeriod;
+            modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
 
-                stakingModal.classList.remove("hidden");
-            });
+            stakingModal.classList.remove("hidden");
         });
+    });
 
-        closeModal.addEventListener("click", () => {
+    closeModal.addEventListener("click", () => {
+        stakingModal.classList.add("hidden");
+    });
+
+    window.addEventListener("click", (e) => {
+        if (e.target === stakingModal) {
             stakingModal.classList.add("hidden");
-        });
+        }
+    });
 
-        window.addEventListener("click", (e) => {
-            if (e.target === stakingModal) {
-                stakingModal.classList.add("hidden");
-            }
-        });
+    confirmBtn.addEventListener("click", () => {
+        const amount = parseFloat(document.getElementById("stakeAmount").value);
 
-        confirmBtn.addEventListener("click", () => {
-            stakingModal.classList.add("hidden");
-
-            toastNotification.classList.remove("hidden");
-
+        if (!amount || amount <= 0) {
+            errorToast.classList.remove("hidden");
             setTimeout(() => {
-                toastNotification.classList.add("hidden");
+                errorToast.classList.add("hidden");
             }, 3000);
-        });
-    </script>
+            return;
+        }
+
+        stakingModal.classList.add("hidden");
+        toastNotification.classList.remove("hidden");
+
+        setTimeout(() => {
+            toastNotification.classList.add("hidden");
+        }, 3000);
+    });
+</script>
 
 </body>
 

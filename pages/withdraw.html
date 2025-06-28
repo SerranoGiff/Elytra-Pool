@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Withdraw & Transfer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <style>
+    .gradient-bg {
+      background: linear-gradient(to right, #0d1b2a, #1b263b, #0d1b2a);
+    }
+
+    .nav-link {
+      margin-left: 1rem;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #facc15;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0D1B2A] text-white min-h-screen font-sans">
+
+  <!-- Navbar -->
+  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <a href="user.html" class="flex items-center">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+        </a>
+      </div>
+
+      <!-- Links -->
+      <div class="hidden md:flex gap-6 text-sm items-center">
+        <a href="user.html" class="nav-link">Home</a>
+        <a href="index.html#staking" class="nav-link">Staking</a>
+        <a href="index.html#mining" class="nav-link">Assets</a>
+        <a href="index.html#earnings" class="nav-link">Leaderboard</a>
+        <a href="../pages/deposit.html" class="nav-link">Deposit</a>
+        <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
+        <a href="../pages/Convert.html" class="nav-link">Convert</a>
+      </div>
+
+      <!-- Profile Icon -->
+      <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
+        <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="md:hidden ml-4 text-white text-xl" id="menu-button" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Section -->
+  <div class="max-w-5xl mx-auto pt-28 px-4 pb-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- Withdraw Card -->
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">Withdraw Funds</h2>
+
+        <div class="mb-4">
+          <label class="block text-sm mb-2 text-gray-300">Select Network</label>
+          <select id="withdrawNetwork" class="w-full px-3 py-2 rounded text-black text-sm">
+            <option value="">Choose Network</option>
+            <option value="TRC20">TRC20 (Tron)</option>
+            <option value="ERC20">ERC20 (Ethereum)</option>
+            <option value="BEP20">BEP20 (Binance)</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="recipientAddress" class="block text-sm mb-2 text-gray-300">Recipient Wallet Address</label>
+          <input type="text" id="recipientAddress" class="w-full px-3 py-2 rounded text-black text-sm"
+            placeholder="Enter recipient address" />
+        </div>
+
+        <div class="mb-4">
+          <label for="withdrawAmount" class="block text-sm mb-2 text-gray-300">Amount</label>
+          <input type="number" id="withdrawAmount" class="w-full px-3 py-2 rounded text-black text-sm"
+            placeholder="0.00" />
+        </div>
+
+        <button onclick="submitWithdrawal()"
+          class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded w-full font-semibold">Confirm Withdrawal</button>
+      </div>
+
+      <!-- Transfer Card -->
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">Transfer Elytra</h2>
+
+        <div class="mb-4">
+          <label for="transferUsername" class="block text-sm mb-2 text-gray-300">Recipient Username</label>
+          <input type="text" id="transferUsername" class="w-full px-3 py-2 rounded text-black text-sm"
+            placeholder="Enter username" />
+        </div>
+
+        <div class="mb-4">
+          <label for="transferAmount" class="block text-sm mb-2 text-gray-300">Amount (ELYTRA)</label>
+          <input type="number" id="transferAmount" class="w-full px-3 py-2 rounded text-black text-sm"
+            placeholder="0.00 ELYTRA" />
+        </div>
+
+        <button onclick="submitTransfer()"
+          class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full font-semibold">Confirm Transfer</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function submitWithdrawal() {
+      const address = document.getElementById("recipientAddress").value;
+      const amount = document.getElementById("withdrawAmount").value;
+      const network = document.getElementById("withdrawNetwork").value;
+
+      if (!network || !address || !amount || amount <= 0) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      alert(`Withdrawal Request Sent!\nNetwork: ${network}\nAddress: ${address}\nAmount: ${amount}`);
+    }
+
+    function submitTransfer() {
+      const username = document.getElementById("transferUsername").value;
+      const amount = document.getElementById("transferAmount").value;
+
+      if (!username || !amount || amount <= 0) {
+        alert("Please enter a valid username and amount.");
+        return;
+      }
+
+      alert(`Transfer to ${username} of ${amount} ELYTRA successful!`);
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <style>
+    .gradient-bg {
+      background: linear-gradient(to right, #0d1b2a, #1b263b, #0d1b2a);
+    }
+
+    .nav-link {
+      margin-left: 1rem;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #facc15;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0D1B2A] text-white font-sans overflow-x-hidden">
+
+  <!-- Navbar -->
+  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <a href="index.html" class="flex items-center">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+        </a>
+      </div>
+
+      <!-- Links -->
+      <div class="hidden md:flex gap-6 text-sm items-center">
+        <a href="user.html" class="nav-link">Home</a>
+        <a href="index.html#staking" class="nav-link">Staking</a>
+        <a href="index.html#mining" class="nav-link">Assets</a>
+        <a href="index.html#earnings" class="nav-link">Leaderboard</a>
+        <a href="../pages/deposit.html" class="nav-link">Deposit</a>
+        <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
+        <a href="../pages/Convert.html" class="nav-link">Convert</a>
+      </div>
+
+      <!-- Profile Icon -->
+      <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
+        <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="md:hidden ml-4 text-white text-xl" id="menu-button" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex items-center justify-center px-4 pt-20 pb-4">
+    <div class="bg-[#1B263B] p-6 pb-10 rounded-lg w-full max-w-md shadow-lg">
+      <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">Deposit Funds</h2>
+
+      <!-- Wallet Selector -->
+      <div class="mb-4">
+        <label class="block text-sm mb-2 text-gray-300">Select Wallet</label>
+        <select id="walletSelect" class="w-full px-3 py-2 rounded text-black text-sm">
+          <option>(Select)</option>
+          <option>Gate</option>
+          <option>MetaMask</option>
+          <option>Binance</option>
+          <option>Trust Wallet</option>
+          <option>Bybit</option>
+          <option>Bitget</option>
+          <option>OKX</option>
+        </select>
+      </div>
+
+      <!-- Network Selector -->
+      <div class="mb-4">
+        <label class="block text-sm mb-2 text-gray-300">Select Network</label>
+        <select class="w-full px-3 py-2 rounded text-black text-sm">
+          <option>USDT</option>
+          <option>BTC</option>
+          <option>ETH</option>
+        </select>
+      </div>
+
+      <!-- Amount -->
+      <div class="mb-4">
+        <label for="depositAmount" class="block text-sm mb-2 text-gray-300">Amount</label>
+        <input type="number" id="depositAmount" class="w-full px-3 py-2 rounded text-black text-sm" placeholder="0.00" />
+      </div>
+
+      <!-- Wallet Address & QR -->
+      <div class="mb-4">
+        <label class="block text-sm mb-2 text-gray-300">Wallet Address / QR</label>
+        <div class="bg-[#0D1B2A] p-2 rounded flex justify-between items-center text-sm">
+          <span id="walletAddress">TGVATR2m9gRBCrsWicdjT85eQduKcCv7</span>
+          <div class="flex gap-2">
+            <button onclick="copyToClipboard()" class="text-yellow-400 hover:text-yellow-300 text-xs">📋</button>
+            <button onclick="generateQRPopup()" class="text-blue-400 hover:text-blue-300 text-xs">🔳</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Proof -->
+      <div class="mb-4">
+        <label for="receiptUpload" class="block text-sm mb-2 text-gray-300">Upload Receipt</label>
+        <input type="file" id="receiptUpload" accept="image/*" class="w-full text-sm text-black px-2 py-1 rounded" />
+      </div>
+
+      <!-- Agreement -->
+      <div class="mb-4">
+        <label class="flex items-center gap-2 text-sm text-gray-300">
+          <input type="checkbox" id="agree" class="accent-yellow-400" />
+          I agree that my wallet address is correct and verified.
+        </label>
+      </div>
+
+      <!-- Confirm Button -->
+      <button onclick="confirmDeposit()" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded w-full font-semibold">
+        Confirm Deposit
+      </button>
+    </div>
+  </div>
+
+  <!-- QR Popup Modal -->
+  <div id="qrPopup" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+    <div class="bg-[#1B263B] p-8 rounded-2xl shadow-2xl w-96 max-w-full text-center">
+      <h3 class="text-2xl font-semibold mb-4 text-yellow-400">Scan Wallet QR</h3>
+      <p id="qrWalletText" class="text-sm text-gray-300 mb-4 break-all"></p>
+      <img id="qrImage" src="" alt="QR Code" class="w-60 h-60 mx-auto mb-6 border-4 border-yellow-400 rounded-lg shadow-md" />
+      <button onclick="closeQRPopup()" class="px-6 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white text-base font-medium">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function copyToClipboard() {
+      const address = document.getElementById("walletAddress").textContent;
+      navigator.clipboard.writeText(address)
+        .then(() => alert("Wallet address copied!"))
+        .catch(() => alert("Failed to copy address."));
+    }
+
+    function confirmDeposit() {
+      const amount = document.getElementById("depositAmount").value;
+      const agreed = document.getElementById("agree").checked;
+      const receipt = document.getElementById("receiptUpload").files[0];
+
+      if (!amount || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+      }
+
+      if (!receipt) {
+        alert("Please upload your receipt.");
+        return;
+      }
+
+      if (!agreed) {
+        alert("You must agree before proceeding.");
+        return;
+      }
+
+      alert("Your balance will update in 10–20 minutes.\nContact customer service if it’s not showing.\n\n📧 Email sent!");
+    }
+
+    function generateQRPopup() {
+      const address = document.getElementById("walletAddress").textContent;
+      const qrImage = document.getElementById("qrImage");
+      const qrWalletText = document.getElementById("qrWalletText");
+
+      if (!address) {
+        alert("Invalid wallet address.");
+        return;
+      }
+
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(address)}`;
+      qrWalletText.textContent = address;
+
+      document.getElementById("qrPopup").classList.remove("hidden");
+      document.getElementById("qrPopup").classList.add("flex");
+    }
+
+    function closeQRPopup() {
+      document.getElementById("qrPopup").classList.add("hidden");
+    }
+  </script>
+
+</body>
+
+</html>

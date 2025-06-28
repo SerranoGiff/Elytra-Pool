@@ -2,215 +2,181 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elytra Pool | Crypto Asset Wallet</title>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elytra Pool | Crypto Asset Wallet</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="../PAGE/ELYTRA.jpg" type="image/x-icon" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen">
-    <!-- Navigation -->
-    <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <a href="../index.html" class="flex items-center">
-                    <div
-                        class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                        <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
-                            class="w-full h-full rounded-full object-cover" />
-                    </div>
-                    <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                        Pool</span>
-                </a>
-            </div>
-
-            <div class="nav-links" id="nav-links">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#staking" class="nav-link">Staking</a>
-                <a href="#mining" class="nav-link">Assets</a>
-                <a href="#earnings" class="nav-link">Deposit</a>
-                <a href="pages/about.html#about" class="nav-link">Withdraw</a>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                <button id="login-button"
-                    class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
-                    <i class="fas fa-user"></i>
-                    <span>Login</span>
-                </button>
-            </div>
-
-            <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-    </nav>
-
-<!-- Crypto Wallet Section -->
-  <section id="wallet" class="pt-32 pb-20 px-6">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-start">
-
-      <!-- Left Wallet Info -->
-      <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
-        <h2 class="text-2xl font-bold mb-4">Wallet Balance</h2>
-        <div class="text-4xl font-semibold mb-2 text-green-400">$12,540.23</div>
-        <p class="text-gray-400 mb-6">Secure and ready to use</p>
-
-        <div class="grid grid-cols-2 gap-4 text-sm text-gray-300">
-          <div>
-            <p class="text-gray-400">Total Deposited</p>
-            <p class="text-lg font-medium text-green-400">$8,000.00</p>
+  <!-- Navbar -->
+  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center">
+      <!-- Logo -->
+      <div class="flex justify-center md:justify-start items-center space-x-2 mb-2 md:mb-0">
+        <a href="index.html" class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              class="w-full h-full rounded-full object-cover" />
           </div>
-          <div>
-            <p class="text-gray-400">Total Withdrawn</p>
-            <p class="text-lg font-medium text-red-400">$3,200.00</p>
-          </div>
-          <div>
-            <p class="text-gray-400">Total Transferred</p>
-            <p class="text-lg font-medium text-blue-400">$1,340.23</p>
-          </div>
-          <div>
-            <p class="text-gray-400">Last Activity</p>
-            <p class="text-lg font-medium">June 25, 2025</p>
-          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+            Pool</span>
+        </a>
+      </div>
+
+      <!-- Mobile View: Menu first then profile -->
+      <div class="flex justify-center md:hidden items-center gap-4">
+        <button class="text-white text-xl" id="menu-button" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
+          <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
         </div>
       </div>
 
-      <!-- Right Wallet Actions -->
-      <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
-        <h2 class="text-2xl font-bold mb-6">Wallet Actions</h2>
-        <div class="flex flex-col gap-4">
+      <!-- Desktop View Navigation -->
+      <div class="hidden md:flex justify-center gap-6 text-sm items-center">
+        <a href="user.html" class="nav-link">Home</a>
+        <a href="index.html#staking" class="nav-link">Staking</a>
+        <a href="index.html#mining" class="nav-link">Assets</a>
+        <a href="index.html#earnings" class="nav-link">Leaderboard</a>
+        <a href="../pages/deposit.html" class="nav-link">Deposit</a>
+        <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
+        <a href="../pages/Convert.html" class="nav-link">Convert</a>
+        <div class="flex items-center justify-center">
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
+            <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-          <button onclick="openModal('depositModal')" class="flex items-center gap-3 justify-center bg-green-600 hover:bg-green-700 transition text-white py-3 px-5 rounded-lg text-lg">
+  <!-- Dashboard -->
+  <div class="max-w-7xl mx-auto px-4 pt-24 pb-10">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-yellow-400">
+        User Wallet Dashboard
+      </h1>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Wallet Card -->
+      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
+        <p class="text-white font-semibold text-lg mb-1">
+          Wallet Balance (Total)
+        </p>
+        <p class="text-4xl font-bold text-blue-300">5,000 ELYTRA</p>
+
+        <!-- Secure + Last Activity -->
+        <div class="flex justify-between items-center text-sm text-gray-400 mb-4 md:block">
+          <p>Secure and ready to use</p>
+          <p class="text-green-400 font-semibold md:hidden">
+            Last Activity: 2h ago
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+          <div>
+            <p class="text-gray-400">BTC</p>
+            <p class="text-yellow-300 font-bold">0.215 BTC</p>
+          </div>
+          <div>
+            <p class="text-gray-400">ETH</p>
+            <p class="text-purple-300 font-bold">1.750 ETH</p>
+          </div>
+          <div>
+            <p class="text-gray-400">USDT</p>
+            <p class="text-green-300 font-bold">3,400.00 USDT</p>
+          </div>
+          <div>
+            <p class="text-gray-400">ELYTRA</p>
+            <p class="text-blue-300 font-bold">5,000 ELYTRA</p>
+          </div>
+        </div>
+
+        <!-- Mobile Buttons -->
+        <div class="flex gap-2 mt-2 md:hidden">
+          <a href="deposit.html"
+            class="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded">
             <i class="fas fa-arrow-down"></i> Deposit
-          </button>
-
-          <button onclick="openModal('withdrawModal')" class="flex items-center gap-3 justify-center bg-red-600 hover:bg-red-700 transition text-white py-3 px-5 rounded-lg text-lg">
+          </a>
+          <a href="withdraw.html"
+            class="flex-1 flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-xs py-2 rounded">
             <i class="fas fa-arrow-up"></i> Withdraw
-          </button>
-
-          <button onclick="openModal('transferModal')" class="flex items-center gap-3 justify-center bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-5 rounded-lg text-lg">
-            <i class="fas fa-exchange-alt"></i> Transfer
-          </button>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Deposit Modal -->
-  <div id="depositModal" class="modal hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl p-6 w-full max-w-md text-black relative">
-      <button onclick="closeModal('depositModal')" class="absolute top-3 right-4 text-gray-600 text-2xl hover:text-black">&times;</button>
-      <h3 class="text-xl font-bold mb-4">Deposit Funds</h3>
-      <input type="number" placeholder="Enter amount" class="w-full border px-4 py-2 rounded mb-4" />
-      <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded w-full">Confirm Deposit</button>
-    </div>
-  </div>
-
-  <!-- Withdraw Modal -->
-  <div id="withdrawModal" class="modal hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl p-6 w-full max-w-md text-black relative">
-      <button onclick="closeModal('withdrawModal')" class="absolute top-3 right-4 text-gray-600 text-2xl hover:text-black">&times;</button>
-      <h3 class="text-xl font-bold mb-4">Withdraw Funds</h3>
-      <input type="number" placeholder="Enter amount" class="w-full border px-4 py-2 rounded mb-4" />
-      <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded w-full">Confirm Withdrawal</button>
-    </div>
-  </div>
-
-  <!-- Transfer Modal -->
-  <div id="transferModal" class="modal hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl p-6 w-full max-w-md text-black relative">
-      <button onclick="closeModal('transferModal')" class="absolute top-3 right-4 text-gray-600 text-2xl hover:text-black">&times;</button>
-      <h3 class="text-xl font-bold mb-4">Transfer Funds</h3>
-      <input type="text" placeholder="Recipient Address" class="w-full border px-4 py-2 rounded mb-4" />
-      <input type="number" placeholder="Enter amount" class="w-full border px-4 py-2 rounded mb-4" />
-      <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded w-full">Confirm Transfer</button>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="py-12 px-6 border-t border-gray-800">
-    <div class="max-w-7xl mx-auto">
-      <div class="grid md:grid-cols-4 gap-8 mb-8">
-        <div class="flex items-center space-x-2">
-          <a href="../index.html" class="flex items-center">
-            <div
-              class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
-            </div>
-            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-              Pool</span>
           </a>
-        </div>
-
-        <div>
-          <h4 class="font-semibold mb-4">Products</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#staking" class="hover:text-white">Staking</a></li>
-            <li><a href="#mining" class="hover:text-white">Assets</a></li>
-            <li>
-              <a href="#earnings" class="hover:text-white">Leaderboard</a>
-            </li>
-            <li>
-              <a href="pages/about.html" class="hover:text-white">FAQ</a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-semibold mb-4">Support</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white">Help Center</a></li>
-            <li><a href="#" class="hover:text-white">Contact Us</a></li>
-            <li><a href="#" class="hover:text-white">Status</a></li>
-            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-semibold mb-4">Follow Us</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white">Twitter</a></li>
-            <li><a href="#" class="hover:text-white">Telegram</a></li>
-            <li><a href="#" class="hover:text-white">Discord</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-        <div class="text-sm text-gray-400 mb-4 md:mb-0">
-          © 2023 - 2025 Elytra Pool. All rights reserved.
-        </div>
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white">
-            <i class="fab fa-discord"></i>
+          <a href="convert.html"
+            class="flex-1 flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 rounded">
+            <i class="fas fa-sync-alt"></i> Convert
           </a>
         </div>
       </div>
+
+      <!-- Transactions -->
+      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
+        <p class="text-white font-semibold text-lg mb-4">
+          Transaction History
+        </p>
+        <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Deposit</span><span class="text-green-400 font-bold">+1000 ELY</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Withdraw</span><span class="text-red-400 font-bold">-200 USDT</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Stake</span><span class="text-purple-300 font-bold">-1500 ELY</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Convert</span><span class="text-blue-300 font-bold">+0.05 BTC</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Transfer</span><span class="text-yellow-300 font-bold">-0.02 ETH</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </footer>
 
-  <script>
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
+    <!-- My Assets Table -->
+    <div class="bg-[#1B263B] rounded-lg shadow-lg overflow-hidden">
+      <div class="p-4 border-b border-[#0D1B2A]">
+        <p class="text-yellow-400 font-semibold text-lg">My Assets</p>
+        <p class="text-sm text-gray-400">
+          Overview of your cryptocurrency holdings and market prices.
+        </p>
+      </div>
+      <div class="overflow-x-auto">
+        <div class="h-96 overflow-y-auto">
+          <table class="min-w-full text-sm text-white">
+            <thead class="bg-[#0D1B2A] text-yellow-300 uppercase sticky top-0 z-10">
+              <tr>
+                <th class="px-4 py-3 text-left">#</th>
+                <th class="px-4 py-3 text-left">Asset</th>
+                <th class="px-4 py-3">Price</th>
+                <th class="px-4 py-3">1h %</th>
+                <th class="px-4 py-3">24h %</th>
+                <th class="px-4 py-3">7d %</th>
+                <th class="px-4 py-3">Market Cap</th>
+              </tr>
+            </thead>
+            <tbody id="crypto-table" class="text-center">
+              <!-- Dynamic rows go here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-  </script>
-
-    <script src="../assets/js/script.js"></script>
-    <script src="../assets/js/randomizer.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- Scripts -->
+  <script src="../assets/js/script.js"></script>
+  <script src="../assets/js/randomizer.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

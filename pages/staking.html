@@ -472,64 +472,68 @@
     </script>
 
     <script>
-    const stakingModal = document.getElementById("stakingModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDescription = document.getElementById("modalDescription");
-    const modalMinStake = document.getElementById("modalMinStake");
-    const modalLockPeriod = document.getElementById("modalLockPeriod");
-    const closeModal = document.getElementById("closeModal");
+        const stakingModal = document.getElementById("stakingModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDescription = document.getElementById("modalDescription");
+        const modalMinStake = document.getElementById("modalMinStake");
+        const modalLockPeriod = document.getElementById("modalLockPeriod");
+        const closeModal = document.getElementById("closeModal");
 
-    const stakeButtons = document.querySelectorAll(".stake-btn");
-    const toastNotification = document.getElementById("toastNotification");
-    const errorToast = document.getElementById("errorToast");
-    const confirmBtn = document.querySelector(".staking-modal-btn");
+        const stakeButtons = document.querySelectorAll(".stake-btn");
+        const toastNotification = document.getElementById("toastNotification");
+        const errorToast = document.getElementById("errorToast");
+        const confirmBtn = document.querySelector(".staking-modal-btn");
 
-    stakeButtons.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
+        stakeButtons.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
 
-            const title = btn.getAttribute("data-title");
-            const minStake = btn.getAttribute("data-min");
-            const lockPeriod = btn.getAttribute("data-lock");
+                const title = btn.getAttribute("data-title");
+                const minStake = btn.getAttribute("data-min");
+                const lockPeriod = btn.getAttribute("data-lock");
 
-            modalTitle.textContent = `Stake ${title}`;
-            modalMinStake.textContent = minStake;
-            modalLockPeriod.textContent = lockPeriod;
-            modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
+                modalTitle.textContent = `Stake ${title}`;
+                modalMinStake.textContent = minStake;
+                modalLockPeriod.textContent = lockPeriod;
+                modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
 
-            stakingModal.classList.remove("hidden");
+                stakingModal.classList.remove("hidden");
+            });
         });
-    });
 
-    closeModal.addEventListener("click", () => {
-        stakingModal.classList.add("hidden");
-    });
-
-    window.addEventListener("click", (e) => {
-        if (e.target === stakingModal) {
+        closeModal.addEventListener("click", () => {
             stakingModal.classList.add("hidden");
-        }
-    });
+        });
 
-    confirmBtn.addEventListener("click", () => {
-        const amount = parseFloat(document.getElementById("stakeAmount").value);
+        window.addEventListener("click", (e) => {
+            if (e.target === stakingModal) {
+                stakingModal.classList.add("hidden");
+            }
+        });
 
-        if (!amount || amount <= 0) {
-            errorToast.classList.remove("hidden");
+        confirmBtn.addEventListener("click", () => {
+            const stakeInput = document.getElementById("stakeAmount");
+            const amount = parseFloat(stakeInput.value);
+
+            if (!amount || amount <= 0) {
+                errorToast.classList.remove("hidden");
+                setTimeout(() => {
+                    errorToast.classList.add("hidden");
+                }, 3000);
+                return;
+            }
+
+            stakingModal.classList.add("hidden");
+            toastNotification.classList.remove("hidden");
+
+            // Clear modal input
+            stakeInput.value = "";
+
             setTimeout(() => {
-                errorToast.classList.add("hidden");
+                toastNotification.classList.add("hidden");
             }, 3000);
-            return;
-        }
-
-        stakingModal.classList.add("hidden");
-        toastNotification.classList.remove("hidden");
-
-        setTimeout(() => {
-            toastNotification.classList.add("hidden");
-        }, 3000);
-    });
-</script>
+        });
+    </script>
 
 </body>
 

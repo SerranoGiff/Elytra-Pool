@@ -1,174 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elytra Pool | Crypto Asset Wallet</title>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="../PAGE/ELYTRA.jpg" type="image/x-icon" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
 
-  <body class="min-h-screen">
-    <!-- Navbar -->
-    <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <!-- Logo -->
-        <div class="flex items-center space-x-2">
-          <a href="index.html" class="flex items-center">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
-              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
-            </div>
-            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
-          </a>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elytra Pool | Crypto Asset Wallet</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/user.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="../PAGE/ELYTRA.jpg" type="image/x-icon" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-        <!-- Navigation Centered -->
-        <div class="hidden md:flex flex-1 justify-center">
-          <div class="flex gap-6 text-sm items-center">
-            <a href="user.html" class="nav-link">Home</a>
-            <a href="index.html#staking" class="nav-link">Staking</a>
-            <a href="index.html#mining" class="nav-link">Assets</a>
-            <a href="index.html#earnings" class="nav-link">Leaderboard</a>
-            <a href="../pages/deposit.html" class="nav-link">Deposit</a>
-            <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
-            <a href="../pages/Convert.html" class="nav-link">Convert</a>
+<body class="min-h-screen">
+  <!-- Navigation -->
+  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <a href="user.html" class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              class="w-full h-full rounded-full object-cover" />
           </div>
-        </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+            Pool</span>
+        </a>
+      </div>
 
-        <!-- Profile -->
-        <div class="hidden md:block">
-          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
-            <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
-          </div>
-        </div>
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex nav-links" id="nav-links">
+        <a href="user.html" class="nav-link">Home</a>
+        <a href="staking.html" class="nav-link">Staking</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="deposit.html" class="nav-link">Deposit</a>
+        <a href="withdraw.html" class="nav-link">Withdraw</a>
+        <a href="Convert.html" class="nav-link">Convert</a>
+      </div>
 
-        <!-- Mobile View: Menu then profile -->
-        <div class="flex md:hidden items-center gap-4">
-          <button class="text-white text-xl" id="menu-button" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
+      <!-- Desktop Profile -->
+      <div class="relative hidden md:block">
+        <button id="profileBtn" class="focus:outline-none">
+          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+        </button>
+        <div id="profileMenu"
+          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+        </div>
+      </div>
+
+      <!-- Mobile Menu & Profile -->
+      <div class="md:hidden flex items-center gap-4">
+        <button id="menu-button" aria-label="Toggle navigation">
+          <i class="fas fa-bars text-xl text-white"></i>
+        </button>
+        <div class="relative">
+          <button id="mobileProfileBtn" class="focus:outline-none">
+            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
           </button>
-          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
-            <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Dashboard -->
-    <div class="max-w-7xl mx-auto px-4 pt-24 pb-10">
-      <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-yellow-400">
-          User Wallet Dashboard
-        </h1>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <!-- Wallet Card -->
-        <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
-          <p class="text-white font-semibold text-lg mb-1">
-            Wallet Balance (Total)
-          </p>
-          <p class="text-4xl font-bold text-blue-300">5,000 ELYTRA</p>
-
-          <!-- Secure + Last Activity -->
-          <div class="flex justify-between items-center text-sm text-gray-400 mb-4 md:block">
-            <p>Secure and ready to use</p>
-            <p class="text-green-400 font-semibold md:hidden">Last Activity: 2h ago</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 text-sm mb-4">
-            <div>
-              <p class="text-gray-400">BTC</p>
-              <p class="text-yellow-300 font-bold">0.215 BTC</p>
-            </div>
-            <div>
-              <p class="text-gray-400">ETH</p>
-              <p class="text-purple-300 font-bold">1.750 ETH</p>
-            </div>
-            <div>
-              <p class="text-gray-400">USDT</p>
-              <p class="text-green-300 font-bold">3,400.00 USDT</p>
-            </div>
-            <div>
-              <p class="text-gray-400">ELYTRA</p>
-              <p class="text-blue-300 font-bold">5,000 ELYTRA</p>
-            </div>
-          </div>
-
-          <!-- Mobile Buttons -->
-          <div class="flex gap-2 mt-2 md:hidden">
-            <a href="deposit.html" class="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded">
-              <i class="fas fa-arrow-down"></i> Deposit
-            </a>
-            <a href="withdraw.html" class="flex-1 flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-xs py-2 rounded">
-              <i class="fas fa-arrow-up"></i> Withdraw
-            </a>
-            <a href="convert.html" class="flex-1 flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 rounded">
-              <i class="fas fa-sync-alt"></i> Convert
-            </a>
-          </div>
-        </div>
-
-        <!-- Transactions -->
-        <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
-          <p class="text-white font-semibold text-lg mb-4">Transaction History</p>
-          <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
-            <div class="flex justify-between border-b border-gray-700 pb-2">
-              <span class="text-gray-300">Deposit</span><span class="text-green-400 font-bold">+1000 ELY</span>
-            </div>
-            <div class="flex justify-between border-b border-gray-700 pb-2">
-              <span class="text-gray-300">Withdraw</span><span class="text-red-400 font-bold">-200 USDT</span>
-            </div>
-            <div class="flex justify-between border-b border-gray-700 pb-2">
-              <span class="text-gray-300">Stake</span><span class="text-purple-300 font-bold">-1500 ELY</span>
-            </div>
-            <div class="flex justify-between border-b border-gray-700 pb-2">
-              <span class="text-gray-300">Convert</span><span class="text-blue-300 font-bold">+0.05 BTC</span>
-            </div>
-            <div class="flex justify-between border-b border-gray-700 pb-2">
-              <span class="text-gray-300">Transfer</span><span class="text-yellow-300 font-bold">-0.02 ETH</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- My Assets Table -->
-      <div class="bg-[#1B263B] rounded-lg shadow-lg overflow-hidden">
-        <div class="p-4 border-b border-[#0D1B2A]">
-          <p class="text-yellow-400 font-semibold text-lg">My Assets</p>
-          <p class="text-sm text-gray-400">
-            Overview of your cryptocurrency holdings and market prices.
-          </p>
-        </div>
-        <div class="overflow-x-auto">
-          <div class="h-96 overflow-y-auto">
-            <table class="min-w-full text-sm text-white">
-              <thead class="bg-[#0D1B2A] text-yellow-300 uppercase sticky top-0 z-10">
-                <tr>
-                  <th class="px-4 py-3 text-left">#</th>
-                  <th class="px-4 py-3 text-left">Asset</th>
-                  <th class="px-4 py-3">Price</th>
-                  <th class="px-4 py-3">1h %</th>
-                  <th class="px-4 py-3">24h %</th>
-                  <th class="px-4 py-3">7d %</th>
-                  <th class="px-4 py-3">Market Cap</th>
-                </tr>
-              </thead>
-              <tbody id="crypto-table" class="text-center">
-                <!-- Dynamic rows go here -->
-              </tbody>
-            </table>
+          <div id="mobileProfileMenu"
+            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="../assets/js/script.js"></script>
-    <script src="../assets/js/randomizer.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  </body>
+    <!-- Mobile Navigation Links -->
+    <div id="mobile-menu" class="nav-links">
+      <a href="user.html" class="nav-link">Home</a>
+      <a href="staking.html" class="nav-link">Staking</a>
+      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <a href="deposit.html" class="nav-link">Deposit</a>
+      <a href="withdraw.html" class="nav-link">Withdraw</a>
+      <a href="Convert.html" class="nav-link">Convert</a>
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Content -->
+  <main id="dashboard" class="max-w-7xl mx-auto px-4 pt-24 pb-10">
+    <!-- Section: Dashboard Header -->
+    <section aria-label="Dashboard Heading" class="mb-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-yellow-400">
+          User Wallet Dashboard
+        </h1>
+      </div>
+    </section>
+
+    <!-- Section: Wallet + Transactions -->
+    <section aria-label="Wallet and Transactions" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Wallet Card -->
+      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
+        <p class="text-white font-semibold text-lg mb-1">
+          Wallet Balance (Total)
+        </p>
+        <p class="text-4xl font-bold text-blue-300">5,000 ELYTRA</p>
+
+        <div class="flex justify-between items-center text-sm text-gray-400 mb-4 md:block">
+          <p>Secure and ready to use</p>
+          <p class="text-green-400 font-semibold md:hidden">Last Activity: 2h ago</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+          <div>
+            <p class="text-gray-400">BTC</p>
+            <p class="text-yellow-300 font-bold">0.215 BTC</p>
+          </div>
+          <div>
+            <p class="text-gray-400">ETH</p>
+            <p class="text-purple-300 font-bold">1.750 ETH</p>
+          </div>
+          <div>
+            <p class="text-gray-400">USDT</p>
+            <p class="text-green-300 font-bold">3,400.00 USDT</p>
+          </div>
+          <div>
+            <p class="text-gray-400">ELYTRA</p>
+            <p class="text-blue-300 font-bold">5,000 ELYTRA</p>
+          </div>
+        </div>
+
+        <!-- Mobile Buttons -->
+        <div class="flex gap-2 mt-2 md:hidden">
+          <a href="deposit.html"
+            class="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded">
+            <i class="fas fa-arrow-down"></i> Deposit
+          </a>
+          <a href="withdraw.html"
+            class="flex-1 flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-xs py-2 rounded">
+            <i class="fas fa-arrow-up"></i> Withdraw
+          </a>
+          <a href="convert.html"
+            class="flex-1 flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 rounded">
+            <i class="fas fa-sync-alt"></i> Convert
+          </a>
+        </div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
+        <p class="text-white font-semibold text-lg mb-4">
+          Transaction History
+        </p>
+        <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Deposit</span><span class="text-green-400 font-bold">+1000
+              ELY</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Withdraw</span><span class="text-red-400 font-bold">-200 USDT</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Stake</span><span class="text-purple-300 font-bold">-1500 ELY</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Convert</span><span class="text-blue-300 font-bold">+0.05 BTC</span>
+          </div>
+          <div class="flex justify-between border-b border-gray-700 pb-2">
+            <span class="text-gray-300">Transfer</span><span class="text-yellow-300 font-bold">-0.02
+              ETH</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: My Assets Table -->
+    <section id="my-assets" class="bg-[#1B263B] rounded-lg shadow-lg overflow-hidden">
+      <div class="p-4 border-b border-[#0D1B2A]">
+        <p class="text-yellow-400 font-semibold text-lg">My Assets</p>
+        <p class="text-sm text-gray-400">
+          Overview of your cryptocurrency holdings and market prices.
+        </p>
+      </div>
+      <div class="overflow-x-auto">
+        <div class="h-96 overflow-y-auto">
+          <table class="min-w-full text-sm text-white">
+            <thead class="bg-[#0D1B2A] text-yellow-300 uppercase sticky top-0 z-10">
+              <tr>
+                <th class="px-4 py-3 text-left">#</th>
+                <th class="px-4 py-3 text-left">Asset</th>
+                <th class="px-4 py-3">Price</th>
+                <th class="px-4 py-3">1h %</th>
+                <th class="px-4 py-3">24h %</th>
+                <th class="px-4 py-3">7d %</th>
+                <th class="px-4 py-3">Market Cap</th>
+              </tr>
+            </thead>
+            <tbody id="crypto-table" class="text-center">
+              <!-- Dynamic rows go here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="flex items-center space-x-2">
+          <a href="index.html" class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+                class="w-full h-full rounded-full object-cover" />
+            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+              Pool</span>
+          </a>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#staking" class="hover:text-white">Staking</a></li>
+            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li>
+              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+            </li>
+            <li>
+              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Follow Us</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Twitter</a></li>
+            <li><a href="#" class="hover:text-white">Telegram</a></li>
+            <li><a href="#" class="hover:text-white">Discord</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">
+          © 2023 - 2025 Elytra Pool. All rights reserved.
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Navbar Toggle Script -->
+  <script>
+    const menuBtn = document.getElementById("menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const profileBtn = document.getElementById("profileBtn");
+    const profileMenu = document.getElementById("profileMenu");
+    const mobileProfileBtn = document.getElementById("mobileProfileBtn");
+    const mobileProfileMenu = document.getElementById("mobileProfileMenu");
+
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("active");
+    });
+
+    if (profileBtn) {
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target)) {
+          profileMenu.classList.add("hidden");
+        }
+      });
+    }
+
+    if (mobileProfileBtn) {
+      mobileProfileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileProfileMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (!mobileProfileBtn.contains(e.target)) {
+          mobileProfileMenu.classList.add("hidden");
+        }
+      });
+    }
+  </script>
+
+  <script src="../assets/js/script.js"></script>
+  <script src="../assets/js/randomizer.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+
 </html>

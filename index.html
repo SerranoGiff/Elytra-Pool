@@ -50,7 +50,11 @@
           id="modalContent">
           <div id="modalContentInner">
             <!-- Login Form -->
-            <!-- Login Form -->
+            <div id="notification" class="hidden p-4 mb-4 text-sm text-white bg-green-600 rounded-lg text-center">
+              Successfully logged in!
+            </div>
+            <div id="error-message" class="text-red-600 text-sm text-center mb-4"></div>
+
             <div id="loginForm" class="form-section text-black">
               <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
               <form>
@@ -75,8 +79,12 @@
                   <button id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
                 </div>
 
-                <button type="submit"
-                  class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Login</button>
+                <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold 
+                    bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 
+                    hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 
+                    transition-all duration-500 ease-in-out">
+                  Login
+                </button>
               </form>
               <div class="mt-4 text-center">
                 <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign
@@ -101,9 +109,13 @@
                   <div class="flex justify-end gap-2">
                     <button type="button" id="cancelForgot"
                       class="px-4 py-2 text-sm bg-gray-300 hover:bg-gray-400 rounded-lg text-black">Cancel</button>
-                    <button type="submit"
-                      class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Send Reset
-                      Link</button>
+                    <button type="submit" class="px-4 py-2 text-sm text-white rounded-lg
+         bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
+         hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
+         shadow-md hover:shadow-lg hover:shadow-purple-500/40
+         transition-all duration-700 ease-in-out">
+                      Send Reset Link
+                    </button>
                   </div>
                 </form>
               </div>
@@ -112,30 +124,32 @@
             <!-- Sign Up Form -->
             <div id="signUpForm" class="form-section hidden text-black">
               <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
-              <form>
+              <form id="signUpActualForm">
                 <div class="mb-3">
-                  <label for="username" class="block text-sm font-medium">Username</label>
+                  <label for="username" class="block text-sm font-medium text-gray-700 text-black">Username</label>
                   <input type="text" id="username"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required />
                 </div>
                 <div class="mb-3">
-                  <label for="signUpEmail" class="block text-sm font-medium">Email Address</label>
+                  <label for="signUpEmail" class="block text-sm font-medium text-gray-700 text-black">Email
+                    Address</label>
                   <input type="email" id="signUpEmail"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required />
                 </div>
                 <div class="mb-3">
-                  <label for="signUpPassword" class="block text-sm font-medium">Password</label>
+                  <label for="signUpPassword"
+                    class="block text-sm font-medium text-gray-700 text-black">Password</label>
                   <input type="password" id="signUpPassword"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required />
                 </div>
                 <div class="mb-3">
                   <div class="flex items-center">
                     <input type="checkbox" id="agreeTerms"
                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-                    <label for="agreeTerms" class="ml-2 block text-sm cursor-pointer">
+                    <label for="agreeTerms" class="ml-2 block text-sm text-gray-700 cursor-pointer">
                       I agree to the <span class="text-blue-600 hover:underline">Terms and Conditions</span>
                     </label>
                   </div>
@@ -144,15 +158,20 @@
                   <div class="flex items-center">
                     <input type="checkbox" id="agreePrivacy"
                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-                    <label for="agreePrivacy" class="ml-2 block text-sm cursor-pointer">
+                    <label for="agreePrivacy" class="ml-2 block text-sm text-gray-700 cursor-pointer">
                       I have read and agree to the <span class="text-blue-600 hover:underline">Privacy Policy</span>
                     </label>
                   </div>
                 </div>
-                <button type="submit"
-                  class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-200">Sign
-                  Up</button>
+                <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold
+         bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
+         hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
+         shadow-md hover:shadow-lg hover:shadow-purple-500/40
+         transition-all duration-700 ease-in-out">
+                  Sign Up
+                </button>
               </form>
+
               <div class="mt-4 text-center">
                 <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an account? Login</button>
               </div>
@@ -251,23 +270,47 @@
             <p id="modalContentText" class="text-gray-700 mb-4">
               <strong>ELYTRA POOL PRIVACY POLICY</strong><br />
               <strong>Last Updated:</strong> June 22, 2025<br /><br />
-              Your privacy is important to us. This Privacy Policy explains how we collect, use, and share information
-              about you when you use our services.<br /><br />
+
               <strong>1. Information We Collect</strong><br />
-              We may collect personal information that you provide to us directly, such as your name, email address, and
-              any other information you choose to provide.<br /><br />
+              1.1. We may collect personal information that you provide to us directly, such as your name, email
+              address, and any other information you choose to provide.<br />
+              1.2. We also collect wallet addresses, on-chain activity, IP addresses, browser/device information, and
+              technical metadata.<br /><br />
+
               <strong>2. How We Use Your Information</strong><br />
-              We use your information to provide and improve our services, communicate with you, and comply with legal
-              obligations.<br /><br />
+              2.1. We use your data to enable core services (staking, transactions).<br />
+              2.2. We use data to improve security, detect fraud, and comply with legal obligations.<br />
+              2.3. We may send updates or marketing messages (opt-out is available).<br /><br />
+
               <strong>3. Sharing Your Information</strong><br />
-              We do not sell or rent your personal information to third parties. We may share your information with
-              service providers who assist us in providing our services.<br /><br />
-              <strong>4. Security</strong><br />
-              We take reasonable measures to protect your information from unauthorized access, use, or
-              disclosure.<br /><br />
-              <strong>5. Changes to This Policy</strong><br />
-              We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new
-              Privacy Policy on our website.
+              3.1. We do not sell or rent your personal information.<br />
+              3.2. We may share data with third-party vendors (e.g., KYC providers), validators, cloud infrastructure,
+              or when legally required.<br /><br />
+
+              <strong>4. Data Retention</strong><br />
+              4.1. KYC data is stored for 5 years unless legally mandated otherwise.<br />
+              4.2. Wallet activity and public blockchain data are stored indefinitely.<br />
+              4.3. Cookies and session data may be retained for up to 30 days.<br /><br />
+
+              <strong>5. Security Measures</strong><br />
+              5.1. We implement encryption, secure wallets, and periodic audits.<br />
+              5.2. However, no system is 100% secure. Use the platform at your own risk.<br /><br />
+
+              <strong>6. Your Rights</strong><br />
+              6.1. Depending on your jurisdiction, you may access, update, or request deletion of your data.<br />
+              6.2. You may opt-out of marketing or withdraw consent, though some features may become
+              restricted.<br /><br />
+
+              <strong>7. Changes to This Policy</strong><br />
+              7.1. We may modify this policy from time to time.<br />
+              7.2. Continued use of the platform signifies acceptance of updates.<br /><br />
+
+              <strong>8. Contact Us</strong><br />
+              For privacy-related concerns:<br />
+              Email: privacy@elytrapool.com<br />
+              Website: https://elytrapool.com/contact<br /><br />
+
+              By using Elytra Pool, you acknowledge that you have read and agree to this Privacy Policy.
             </p>
           </div>
           <div class="text-center mt-4">
@@ -354,7 +397,8 @@
               <span id="progress-percent">0%</span>
             </div>
             <div class="w-full bg-gray-700 rounded-full h-1.5">
-              <div id="progress-bar" class="bg-blue-500 h-1.5 rounded-full transition-all duration-500 ease-in-out"
+              <div id="progress-bar"
+                class="bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 h-1.5 rounded-full transition-all duration-500 ease-in-out"
                 style="width: 0%"></div>
             </div>
           </div>
@@ -436,7 +480,8 @@
             </div>
           </div>
           <a href="https://www.binance.com/en/earn/bitcoin" target="_blank"
-            class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">Stake Now</a>
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
+            Now</a>
         </div>
 
         <!-- Ethereum Staking -->
@@ -473,7 +518,8 @@
             </div>
           </div>
           <a href="https://stake.lido.fi" target="_blank"
-            class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">Stake Now</a>
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
+            Now</a>
         </div>
 
         <!-- Solana Staking -->
@@ -510,7 +556,8 @@
             </div>
           </div>
           <a href="https://solanabeach.io/staking" target="_blank"
-            class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">Stake Now</a>
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
+            Now</a>
         </div>
       </div>
       <div class="mt-12 text-center">
@@ -552,7 +599,8 @@
               <div id="ada-lock" class="font-semibold">14 Days</div>
             </div>
           </div>
-          <a href="#" class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">Stake
+          <a href="#"
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
             Now</a>
         </div>
 
@@ -589,7 +637,8 @@
               <div id="dot-lock" class="font-semibold">28 Days</div>
             </div>
           </div>
-          <a href="#" class="btn-primary w-full py-2 rounded-lg text-center block bg-blue-600 hover:bg-blue-700">Stake
+          <a href="#"
+            class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
             Now</a>
         </div>
       </div>
@@ -641,7 +690,7 @@
           </div>
 
           <button
-            class="btn-primary w-full py-2 rounded-lg mt-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition duration-200">Start
+            class="btn-primary w-full py-2 rounded-lg mt-auto bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700 text-white font-semibold transition duration-200">Start
             Staking</button>
         </div>
 
@@ -675,7 +724,9 @@
             <div class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i><span>Exclusive Access to the
                 New Updates</span></div>
           </div>
-          <button class="btn-primary w-full py-2 rounded-lg mt-auto">Start Staking</button>
+          <button
+            class="btn-primary w-full py-2 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg mt-auto">Start
+            Staking</button>
         </div>
       </div>
     </div>
@@ -722,7 +773,9 @@
             </select>
           </div>
 
-          <button class="btn-primary w-full py-3 rounded-lg mb-4">Calculate Earnings</button>
+          <button
+            class="btn-primary w-full py-3 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg mb-4">Calculate
+            Earnings</button>
 
           <div class="card-glass p-4 rounded-lg text-left">
             <div class="flex justify-between mb-2">
@@ -900,185 +953,168 @@
   </script>
 
   <script>
-  const loginModal = document.getElementById("loginModal");
-  const closeModal = document.getElementById("closeModal");
-  const switchToSignUp = document.getElementById("switchToSignUp");
-  const switchToLogin = document.getElementById("switchToLogin");
-  const loginForm = document.getElementById("loginForm");
-  const signUpForm = document.getElementById("signUpForm");
-  const infoModal = document.getElementById("infoModal");
-  const privacyModal = document.getElementById("privacyModal");
-  const confirmTerms = document.getElementById("confirmTerms");
-  const confirmPrivacy = document.getElementById("confirmPrivacy");
-  const termsContent = document.getElementById("termsContent");
-  const privacyContent = document.getElementById("privacyContent");
-  const agreeTerms = document.getElementById("agreeTerms");
-  const agreePrivacy = document.getElementById("agreePrivacy");
+    const loginModal = document.getElementById("loginModal");
+    const closeModal = document.getElementById("closeModal");
+    const switchToSignUp = document.getElementById("switchToSignUp");
+    const switchToLogin = document.getElementById("switchToLogin");
+    const loginForm = document.getElementById("loginForm");
+    const signUpForm = document.getElementById("signUpForm");
+    const infoModal = document.getElementById("infoModal");
+    const privacyModal = document.getElementById("privacyModal");
+    const confirmTerms = document.getElementById("confirmTerms");
+    const confirmPrivacy = document.getElementById("confirmPrivacy");
+    const termsContent = document.getElementById("termsContent");
+    const privacyContent = document.getElementById("privacyContent");
+    const agreeTerms = document.getElementById("agreeTerms");
+    const agreePrivacy = document.getElementById("agreePrivacy");
 
-  // LOGIN BUTTON – Always show login form, reset sign-up form
-  document.getElementById("login-button").addEventListener("click", () => {
-    loginForm.classList.remove("hidden");
-    signUpForm.classList.add("hidden");
-    signUpForm.querySelector("form").reset();
-    loginModal.classList.remove("hidden");
-    setTimeout(() => {
-      loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
-      loginModal.querySelector("#modalContent").classList.add("scale-100", "opacity-100");
-    }, 10);
-  });
+    let termsConfirmed = false;
+    let privacyConfirmed = false;
 
-  // CLOSE LOGIN MODAL
-  closeModal.addEventListener("click", () => {
-    loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
-    setTimeout(() => {
-      loginModal.classList.add("hidden");
-    }, 300);
-  });
+    document.getElementById("login-button").addEventListener("click", () => {
+      loginForm.classList.remove("hidden");
+      signUpForm.classList.add("hidden");
+      signUpForm.querySelector("form").reset();
+      loginModal.classList.remove("hidden");
+      setTimeout(() => {
+        loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
+        loginModal.querySelector("#modalContent").classList.add("scale-100", "opacity-100");
+      }, 10);
+    });
 
-  // SWITCH TO SIGN UP
-  switchToSignUp.addEventListener("click", () => {
-    loginForm.classList.add("hidden");
-    signUpForm.classList.remove("hidden");
-  });
+    closeModal.addEventListener("click", () => {
+      loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        loginModal.classList.add("hidden");
+      }, 300);
+    });
 
-  // SWITCH TO LOGIN
-  switchToLogin.addEventListener("click", () => {
-    signUpForm.classList.add("hidden");
-    loginForm.classList.remove("hidden");
-  });
+    switchToSignUp.addEventListener("click", () => {
+      loginForm.classList.add("hidden");
+      signUpForm.classList.remove("hidden");
+    });
 
-  // OPEN TERMS MODAL ON CHECKBOX CLICK
-  agreeTerms.addEventListener("change", function () {
-  if (!this.checked) {
-    infoModal.classList.remove("hidden");
-    setTimeout(() => {
-      infoModal.querySelector("#infoModalContent").classList.remove("scale-95", "opacity-0");
-      infoModal.querySelector("#infoModalContent").classList.add("scale-100", "opacity-100");
-    }, 10);
-  }
-});
+    switchToLogin.addEventListener("click", () => {
+      signUpForm.classList.add("hidden");
+      loginForm.classList.remove("hidden");
+    });
 
-  // OPEN PRIVACY MODAL ON CHECKBOX CLICK
-agreePrivacy.addEventListener("change", function () {
-  if (!this.checked) {
-    privacyModal.classList.remove("hidden");
-    setTimeout(() => {
-      privacyModal.querySelector("#privacyModalContent").classList.remove("scale-95", "opacity-0");
-      privacyModal.querySelector("#privacyModalContent").classList.add("scale-100", "opacity-100");
-    }, 10);
-  }
-});
+    agreeTerms.addEventListener("mousedown", function (e) {
+      if (!termsConfirmed && !this.checked) {
+        e.preventDefault();
+        infoModal.classList.remove("hidden");
+        setTimeout(() => {
+          infoModal.querySelector("#infoModalContent").classList.remove("scale-95", "opacity-0");
+          infoModal.querySelector("#infoModalContent").classList.add("scale-100", "opacity-100");
+        }, 10);
+      }
+    });
 
-  // ACCEPT TERMS
-  confirmTerms.addEventListener("click", () => {
-    agreeTerms.checked = true;
-    infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
-    setTimeout(() => {
-      infoModal.classList.add("hidden");
-    }, 300);
-  });
+    agreePrivacy.addEventListener("mousedown", function (e) {
+      if (!privacyConfirmed && !this.checked) {
+        e.preventDefault();
+        privacyModal.classList.remove("hidden");
+        setTimeout(() => {
+          privacyModal.querySelector("#privacyModalContent").classList.remove("scale-95", "opacity-0");
+          privacyModal.querySelector("#privacyModalContent").classList.add("scale-100", "opacity-100");
+        }, 10);
+      }
+    });
 
-  // ACCEPT PRIVACY
-  confirmPrivacy.addEventListener("click", () => {
-    agreePrivacy.checked = true;
-    privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
-    setTimeout(() => {
-      privacyModal.classList.add("hidden");
-    }, 300);
-  });
-
-  // ENABLE TERMS "I Accept" ON SCROLL
-  termsContent.addEventListener("scroll", () => {
-    const scrolled = termsContent.scrollTop + termsContent.clientHeight >= termsContent.scrollHeight;
-    confirmTerms.disabled = !scrolled;
-    confirmTerms.classList.toggle("bg-blue-600", scrolled);
-    confirmTerms.classList.toggle("hover:bg-blue-700", scrolled);
-    confirmTerms.classList.toggle("cursor-pointer", scrolled);
-    confirmTerms.classList.toggle("bg-gray-400", !scrolled);
-    confirmTerms.classList.toggle("cursor-not-allowed", !scrolled);
-  });
-
-  // ENABLE PRIVACY "I Accept" ON SCROLL
-  privacyContent.addEventListener("scroll", () => {
-    const scrolled = privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight;
-    confirmPrivacy.disabled = !scrolled;
-    confirmPrivacy.classList.toggle("bg-blue-600", scrolled);
-    confirmPrivacy.classList.toggle("hover:bg-blue-700", scrolled);
-    confirmPrivacy.classList.toggle("cursor-pointer", scrolled);
-    confirmPrivacy.classList.toggle("bg-gray-400", !scrolled);
-    confirmPrivacy.classList.toggle("cursor-not-allowed", !scrolled);
-  });
-
-  // CLOSE ANY MODAL WHEN CLICKING OUTSIDE
-  window.addEventListener("click", (e) => {
-    if (e.target === loginModal) closeModal.click();
-    if (e.target === infoModal) {
+    confirmTerms.addEventListener("click", () => {
+      termsConfirmed = true;
+      agreeTerms.checked = true;
       infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
-      setTimeout(() => infoModal.classList.add("hidden"), 300);
-    }
-    if (e.target === privacyModal) {
+      setTimeout(() => {
+        infoModal.classList.add("hidden");
+      }, 300);
+    });
+
+    confirmPrivacy.addEventListener("click", () => {
+      privacyConfirmed = true;
+      agreePrivacy.checked = true;
       privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
-      setTimeout(() => privacyModal.classList.add("hidden"), 300);
-    }
-    if (e.target === forgotPasswordModal) {
+      setTimeout(() => {
+        privacyModal.classList.add("hidden");
+      }, 300);
+    });
+
+    termsContent.addEventListener("scroll", () => {
+      const scrolled = termsContent.scrollTop + termsContent.clientHeight >= termsContent.scrollHeight;
+      confirmTerms.disabled = !scrolled;
+      confirmTerms.classList.toggle("bg-blue-600", scrolled);
+      confirmTerms.classList.toggle("hover:bg-blue-700", scrolled);
+      confirmTerms.classList.toggle("cursor-pointer", scrolled);
+      confirmTerms.classList.toggle("bg-gray-400", !scrolled);
+      confirmTerms.classList.toggle("cursor-not-allowed", !scrolled);
+    });
+
+    privacyContent.addEventListener("scroll", () => {
+      const scrolled = privacyContent.scrollTop + privacyContent.clientHeight >= privacyContent.scrollHeight;
+      confirmPrivacy.disabled = !scrolled;
+      confirmPrivacy.classList.toggle("bg-blue-600", scrolled);
+      confirmPrivacy.classList.toggle("hover:bg-blue-700", scrolled);
+      confirmPrivacy.classList.toggle("cursor-pointer", scrolled);
+      confirmPrivacy.classList.toggle("bg-gray-400", !scrolled);
+      confirmPrivacy.classList.toggle("cursor-not-allowed", !scrolled);
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === loginModal) closeModal.click();
+      if (e.target === infoModal) {
+        infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
+        setTimeout(() => infoModal.classList.add("hidden"), 300);
+      }
+      if (e.target === privacyModal) {
+        privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
+        setTimeout(() => privacyModal.classList.add("hidden"), 300);
+      }
+      if (e.target === forgotPasswordModal) {
+        forgotPasswordContent.classList.add("scale-95", "opacity-0");
+        setTimeout(() => forgotPasswordModal.classList.add("hidden"), 300);
+      }
+    });
+
+    signUpForm.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Sign Up submitted!");
+      signUpForm.querySelector("form").reset();
+      signUpForm.classList.add("hidden");
+      loginForm.classList.remove("hidden");
+      loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        loginModal.classList.add("hidden");
+      }, 300);
+    });
+
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+    const forgotPasswordContent = document.getElementById("forgotPasswordContent");
+    const cancelForgot = document.getElementById("cancelForgot");
+    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+
+    forgotPasswordBtn.addEventListener("click", () => {
+      forgotPasswordModal.classList.remove("hidden");
+      setTimeout(() => {
+        forgotPasswordContent.classList.remove("scale-95", "opacity-0");
+        forgotPasswordContent.classList.add("scale-100", "opacity-100");
+      }, 10);
+    });
+
+    cancelForgot.addEventListener("click", () => {
       forgotPasswordContent.classList.add("scale-95", "opacity-0");
-      setTimeout(() => forgotPasswordModal.classList.add("hidden"), 300);
-    }
-  });
+      setTimeout(() => {
+        forgotPasswordModal.classList.add("hidden");
+      }, 300);
+    });
 
-  // SUBMIT LOGIN
-  loginForm.querySelector("form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    alert("Login submitted!");
-    closeModal.click();
-  });
-
-  // SUBMIT SIGN UP
-  signUpForm.querySelector("form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    alert("Sign Up submitted!");
-
-    // Reset form & switch to login
-    signUpForm.querySelector("form").reset();
-    signUpForm.classList.add("hidden");
-    loginForm.classList.remove("hidden");
-
-    // Close modal
-    loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
-    setTimeout(() => {
-      loginModal.classList.add("hidden");
-    }, 300);
-  });
-
-  // FORGOT PASSWORD
-  const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
-  const forgotPasswordModal = document.getElementById("forgotPasswordModal");
-  const forgotPasswordContent = document.getElementById("forgotPasswordContent");
-  const cancelForgot = document.getElementById("cancelForgot");
-  const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-
-  forgotPasswordBtn.addEventListener("click", () => {
-    forgotPasswordModal.classList.remove("hidden");
-    setTimeout(() => {
-      forgotPasswordContent.classList.remove("scale-95", "opacity-0");
-      forgotPasswordContent.classList.add("scale-100", "opacity-100");
-    }, 10);
-  });
-
-  cancelForgot.addEventListener("click", () => {
-    forgotPasswordContent.classList.add("scale-95", "opacity-0");
-    setTimeout(() => {
-      forgotPasswordModal.classList.add("hidden");
-    }, 300);
-  });
-
-  forgotPasswordForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = document.getElementById("forgotEmail").value;
-    alert("Reset link sent to: " + email);
-    cancelForgot.click();
-  });
-</script>
+    forgotPasswordForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("forgotEmail").value;
+      alert("Reset link sent to: " + email);
+      cancelForgot.click();
+    });
+  </script>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
@@ -1276,7 +1312,7 @@ agreePrivacy.addEventListener("change", function () {
     document.getElementById('progress-bar').style.width = `${progress}%`;
 
     // Update every 3 seconds (simulating real-time updates)
-    // setInterval(updateDashboard, 3000);
+    setInterval(updateDashboard, 3000);
 
     // For a real application, you would replace the setInterval with a WebSocket connection:
     const socket = new WebSocket('wss://crypto-price-feed.example.com');
@@ -1285,6 +1321,47 @@ agreePrivacy.addEventListener("change", function () {
       // Process real data and update chart
       updateChartWithRealData(data);
     };
+  </script>
+
+  <script>
+    // Load saved email if "Remember Me" is checked previously
+    window.onload = function () {
+      const savedEmail = localStorage.getItem("rememberedEmail");
+      const rememberChecked = localStorage.getItem("rememberMeChecked");
+      if (savedEmail && rememberChecked === "true") {
+        document.getElementById("email").value = savedEmail;
+        document.getElementById("rememberMe").checked = true;
+      }
+    };
+
+    document.querySelector("#loginForm form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const remember = document.getElementById("rememberMe").checked;
+
+      if (email === "user@example.com" && password === "password123") {
+        // Save email if remember me is checked
+        if (remember) {
+          localStorage.setItem("rememberedEmail", email);
+          localStorage.setItem("rememberMeChecked", "true");
+        } else {
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberMeChecked");
+        }
+
+        // Show success notification
+        const notification = document.getElementById("notification");
+        notification.classList.remove("hidden");
+
+        // Redirect after 1.5 seconds
+        setTimeout(() => {
+          window.location.href = "pages/user.html";
+        }, 1500);
+      } else {
+        document.getElementById("error-message").innerText = "Invalid email or password.";
+      }
+    });
   </script>
 
   <script src="assets/js/script.js"></script>

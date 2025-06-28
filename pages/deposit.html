@@ -4,73 +4,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deposit</title>
+  <title>Elytra Pool | Deposit</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
-  <style>
-    .gradient-bg {
-      background: linear-gradient(to right, #0d1b2a, #1b263b, #0d1b2a);
-    }
-
-    .nav-link {
-      margin-left: 1rem;
-      color: white;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    .nav-link:hover {
-      color: #facc15;
-    }
-  </style>
+  <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/user.css">
 </head>
 
-<body class="bg-[#0D1B2A] text-white font-sans overflow-x-hidden">
-
-  <!-- Navbar -->
+<body class="min-h-screen">
+  <!-- Navigation -->
   <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="index.html" class="flex items-center">
-          <div class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-200">
+        <a href="user.html" class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
             <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
           </div>
-          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+            Pool</span>
         </a>
       </div>
 
-      <!-- Links -->
-      <div class="hidden md:flex gap-6 text-sm items-center">
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex nav-links" id="nav-links">
         <a href="user.html" class="nav-link">Home</a>
-        <a href="index.html#staking" class="nav-link">Staking</a>
-        <a href="index.html#mining" class="nav-link">Assets</a>
-        <a href="index.html#earnings" class="nav-link">Leaderboard</a>
-        <a href="../pages/deposit.html" class="nav-link">Deposit</a>
-        <a href="../pages/withdraw.html" class="nav-link">Withdraw</a>
-        <a href="../pages/Convert.html" class="nav-link">Convert</a>
+        <a href="staking.html" class="nav-link">Staking</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="deposit.html" class="nav-link">Deposit</a>
+        <a href="withdraw.html" class="nav-link">Withdraw</a>
+        <a href="Convert.html" class="nav-link">Convert</a>
       </div>
 
-      <!-- Profile Icon -->
-      <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400">
-        <img src="/ella.jpg" alt="Profile" class="w-full h-full object-cover" />
+      <!-- Desktop Profile -->
+      <div class="relative hidden md:block">
+        <button id="profileBtn" class="focus:outline-none">
+          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+        </button>
+        <div id="profileMenu"
+          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+        </div>
       </div>
 
-      <!-- Mobile Menu Toggle -->
-      <button class="md:hidden ml-4 text-white text-xl" id="menu-button" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
+      <!-- Mobile Menu & Profile -->
+      <div class="md:hidden flex items-center gap-4">
+        <button id="menu-button" aria-label="Toggle navigation">
+          <i class="fas fa-bars text-xl text-white"></i>
+        </button>
+        <div class="relative">
+          <button id="mobileProfileBtn" class="focus:outline-none">
+            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+          </button>
+          <div id="mobileProfileMenu"
+            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Links -->
+    <div id="mobile-menu" class="nav-links">
+      <a href="user.html" class="nav-link">Home</a>
+      <a href="staking.html" class="nav-link">Staking</a>
+      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <a href="deposit.html" class="nav-link">Deposit</a>
+      <a href="withdraw.html" class="nav-link">Withdraw</a>
+      <a href="Convert.html" class="nav-link">Convert</a>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="flex items-center justify-center px-4 pt-20 pb-4">
-    <div class="bg-[#1B263B] p-6 pb-10 rounded-lg w-full max-w-md shadow-lg">
+  <!-- Main Section -->
+  <main class="flex items-center justify-center px-4 pt-28 pb-20">
+    <section class="bg-[#1B263B] p-6 pb-10 rounded-lg w-full max-w-md shadow-lg">
       <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">Deposit Funds</h2>
 
       <!-- Wallet Selector -->
-      <div class="mb-4">
+      <section class="mb-4">
         <label class="block text-sm mb-2 text-gray-300">Select Wallet</label>
         <select id="walletSelect" class="w-full px-3 py-2 rounded text-black text-sm">
           <option>(Select)</option>
@@ -82,26 +97,27 @@
           <option>Bitget</option>
           <option>OKX</option>
         </select>
-      </div>
+      </section>
 
       <!-- Network Selector -->
-      <div class="mb-4">
+      <section class="mb-4">
         <label class="block text-sm mb-2 text-gray-300">Select Network</label>
         <select class="w-full px-3 py-2 rounded text-black text-sm">
           <option>USDT</option>
           <option>BTC</option>
           <option>ETH</option>
         </select>
-      </div>
+      </section>
 
       <!-- Amount -->
-      <div class="mb-4">
+      <section class="mb-4">
         <label for="depositAmount" class="block text-sm mb-2 text-gray-300">Amount</label>
-        <input type="number" id="depositAmount" class="w-full px-3 py-2 rounded text-black text-sm" placeholder="0.00" />
-      </div>
+        <input type="number" id="depositAmount" class="w-full px-3 py-2 rounded text-black text-sm"
+          placeholder="0.00" />
+      </section>
 
       <!-- Wallet Address & QR -->
-      <div class="mb-4">
+      <section class="mb-4">
         <label class="block text-sm mb-2 text-gray-300">Wallet Address / QR</label>
         <div class="bg-[#0D1B2A] p-2 rounded flex justify-between items-center text-sm">
           <span id="walletAddress">TGVATR2m9gRBCrsWicdjT85eQduKcCv7</span>
@@ -110,40 +126,108 @@
             <button onclick="generateQRPopup()" class="text-blue-400 hover:text-blue-300 text-xs">🔳</button>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Upload Proof -->
-      <div class="mb-4">
+      <section class="mb-4">
         <label for="receiptUpload" class="block text-sm mb-2 text-gray-300">Upload Receipt</label>
         <input type="file" id="receiptUpload" accept="image/*" class="w-full text-sm text-black px-2 py-1 rounded" />
-      </div>
+      </section>
 
       <!-- Agreement -->
-      <div class="mb-4">
+      <section class="mb-4">
         <label class="flex items-center gap-2 text-sm text-gray-300">
           <input type="checkbox" id="agree" class="accent-yellow-400" />
           I agree that my wallet address is correct and verified.
         </label>
-      </div>
+      </section>
 
       <!-- Confirm Button -->
-      <button onclick="confirmDeposit()" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded w-full font-semibold">
-        Confirm Deposit
-      </button>
-    </div>
-  </div>
+      <section>
+        <button onclick="confirmDeposit()"
+          class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded w-full font-semibold">
+          Confirm Deposit
+        </button>
+      </section>
+    </section>
+  </main>
 
   <!-- QR Popup Modal -->
-  <div id="qrPopup" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+  <section id="qrPopup" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
     <div class="bg-[#1B263B] p-8 rounded-2xl shadow-2xl w-96 max-w-full text-center">
       <h3 class="text-2xl font-semibold mb-4 text-yellow-400">Scan Wallet QR</h3>
       <p id="qrWalletText" class="text-sm text-gray-300 mb-4 break-all"></p>
-      <img id="qrImage" src="" alt="QR Code" class="w-60 h-60 mx-auto mb-6 border-4 border-yellow-400 rounded-lg shadow-md" />
-      <button onclick="closeQRPopup()" class="px-6 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white text-base font-medium">
+      <img id="qrImage" src="" alt="QR Code"
+        class="w-60 h-60 mx-auto mb-6 border-4 border-yellow-400 rounded-lg shadow-md" />
+      <button onclick="closeQRPopup()"
+        class="px-6 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white text-base font-medium">
         Close
       </button>
     </div>
-  </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="flex items-center space-x-2">
+          <a href="index.html" class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+                class="w-full h-full rounded-full object-cover" />
+            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+              Pool</span>
+          </a>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#staking" class="hover:text-white">Staking</a></li>
+            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li>
+              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+            </li>
+            <li>
+              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Follow Us</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Twitter</a></li>
+            <li><a href="#" class="hover:text-white">Telegram</a></li>
+            <li><a href="#" class="hover:text-white">Discord</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">
+          © 2023 - 2025 Elytra Pool. All rights reserved.
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- Scripts -->
   <script>
@@ -196,6 +280,46 @@
 
     function closeQRPopup() {
       document.getElementById("qrPopup").classList.add("hidden");
+    }
+  </script>
+
+  <!-- Navbar Toggle Script -->
+  <script>
+    const menuBtn = document.getElementById("menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const profileBtn = document.getElementById("profileBtn");
+    const profileMenu = document.getElementById("profileMenu");
+    const mobileProfileBtn = document.getElementById("mobileProfileBtn");
+    const mobileProfileMenu = document.getElementById("mobileProfileMenu");
+
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("active");
+    });
+
+    if (profileBtn) {
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target)) {
+          profileMenu.classList.add("hidden");
+        }
+      });
+    }
+
+    if (mobileProfileBtn) {
+      mobileProfileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileProfileMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (!mobileProfileBtn.contains(e.target)) {
+          mobileProfileMenu.classList.add("hidden");
+        }
+      });
     }
   </script>
 

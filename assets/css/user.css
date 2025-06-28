@@ -1,11 +1,179 @@
-/* Additional styles for buttons */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
+    overflow-x: hidden;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.card-glass {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mining-card,
+.staking-card {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.mining-card:hover,
+.staking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Shared nav link styles */
+.nav-link {
+    position: relative;
+    display: block;
+    padding: 1rem;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 4px;
+    left: 0;
+    background-color: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Desktop view */
+@media (min-width: 768px) {
+    #nav-links {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    #nav-links .nav-link {
+        width: auto;
+        padding: 0.75rem 1rem;
+        text-align: left;
+        background-color: transparent;
+    }
+
+    #nav-links .nav-link:hover {
+        /* color: #93c5fd; */
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    #nav-links .nav-link::after {
+        bottom: -4px;
+        left: 0;
+        transform: none;
+    }
+}
+
+/* Mobile menu animation */
+#mobile-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #1f2937;
+    z-index: 50;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#mobile-menu.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Add this to your CSS file */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add this to your CSS file */
+@keyframes modalFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+#modalContent,
+#infoModalContent {
+    max-height: 90vh;
+    /* Set maximum height */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    animation: modalFadeIn 0.3s ease-in-out;
+    /* Fade in animation */
+}
+
+.hidden {
+    display: none;
+    /* Hide element */
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease-in-out;
+}
+
 .btn-primary {
     background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    color: white;
-    font-weight: 600;
     transition: all 0.3s ease;
 }
 
@@ -14,49 +182,79 @@
     box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
 }
 
-/* Card hover effect */
-.card-glass:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
-/* Responsive typography */
-h1, h2, h3 {
-    font-weight: 600;
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
-h1 {
-    font-size: 2rem; /* 32px */
+.floating {
+    animation: floating 3s ease-in-out infinite;
 }
 
-h2 {
-    font-size: 1.5rem; /* 24px */
-}
-
-h3 {
-    font-size: 1.25rem; /* 20px */
-}
-
-/* Responsive padding and margins */
-.container {
-    padding: 20px;
-}
-
-@media (min-width: 768px) {
-    .container {
-        padding: 40px;
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
     }
 
-    h1 {
-        font-size: 2.5rem; /* 40px */
+    50% {
+        transform: translateY(-10px);
     }
 
-    h2 {
-        font-size: 2rem; /* 32px */
+    100% {
+        transform: translateY(0px);
     }
 }
 
-/* Progress bar styles */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 .progress-bar {
     height: 8px;
     border-radius: 4px;
@@ -64,47 +262,53 @@ h3 {
     transition: width 0.5s ease;
 }
 
-/* Animation for loading indicators */
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+.mining-animation {
+    position: relative;
+    overflow: hidden;
 }
 
-.loading::after {
+.mining-animation::before {
     content: '';
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #3b82f6;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.05) 45%,
+            rgba(255, 255, 255, 0) 60%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: rotate(30deg);
+    animation: shine 3s infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+@keyframes shine {
+    0% {
+        left: -50%;
+    }
 
-/* Modal styles */
-.modal {
-    background: rgba(15, 23, 42, 0.9);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-/* Responsive adjustments for modals */
-@media (max-width: 600px) {
-    .modal {
-        width: 90%;
-        margin: 0 auto;
+    100% {
+        left: 150%;
     }
 }
 
-/* Fire glow effect for buttons */
-.fire-hover {
+@keyframes fireGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 8px hwb(319 36% 7%) 0 0 16px hsl(317, 64%, 52%), 0 0 24px #80017c;
+        transform: scale(1);
+    }
+
+    50% {
+        box-shadow: 0 0 16px hwb(319 36% 7%), 0 0 24px hsl(317, 64%, 52%), 0 0 32px #80017c;
+        transform: scale(1.02);
+    }
+}
+
+.fire-hover:hover {
     animation: fireGlow 1.5s infinite ease-in-out;
 }
 
@@ -112,4 +316,64 @@ h3 {
     .fire-hover:active {
         animation: fireGlow 1.5s infinite ease-in-out;
     }
+}
+
+@keyframes fadeSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-slide {
+    animation: fadeSlide 0.5s ease-in-out;
+}
+
+/* Fade-in animation for modal */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* Smooth overlay fade */
+.modal-overlay {
+    backdrop-filter: blur(5px);
+    transition: background 0.3s ease;
+}
+
+.staking-modal-btn:hover {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+    transition: 0.3s ease;
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.4s ease-out;
 }

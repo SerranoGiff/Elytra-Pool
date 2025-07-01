@@ -1325,7 +1325,6 @@
   </script>
 
   <script>
-    // Load saved email if "Remember Me" is checked previously
     window.onload = function () {
       const savedEmail = localStorage.getItem("rememberedEmail");
       const rememberChecked = localStorage.getItem("rememberMeChecked");
@@ -1337,12 +1336,38 @@
 
     document.querySelector("#loginForm form").addEventListener("submit", function (event) {
       event.preventDefault();
+
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       const remember = document.getElementById("rememberMe").checked;
 
-      if (email === "user@example.com" && password === "password123") {
-        // Save email if remember me is checked
+      // Define all credentials
+      const credentials = [
+        {
+          role: "masteradmin",
+          email: "admin@example.com",
+          password: "adminpass",
+          redirect: "pages/master admin/masteradmin.html"
+        },
+        {
+          role: "admin",
+          email: "adminonly@example.com",
+          password: "adminonlypass",
+          redirect: "pages/admin/admin.html"
+        },
+        {
+          role: "user",
+          email: "user@example.com",
+          password: "password123",
+          redirect: "pages/user.html"
+        }
+      ];
+
+      // Find matching credentials
+      const matched = credentials.find(acc => acc.email === email && acc.password === password);
+
+      if (matched) {
+        // Remember Me functionality
         if (remember) {
           localStorage.setItem("rememberedEmail", email);
           localStorage.setItem("rememberMeChecked", "true");
@@ -1355,10 +1380,11 @@
         const notification = document.getElementById("notification");
         notification.classList.remove("hidden");
 
-        // Redirect after 1.5 seconds
+        // Redirect after delay
         setTimeout(() => {
-          window.location.href = "pages/user.html";
+          window.location.href = matched.redirect;
         }, 1500);
+
       } else {
         document.getElementById("error-message").innerText = "Invalid email or password.";
       }

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Tools - Crypto Master Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Notification -->
+  <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
+
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Crypto Master Admin - Support Tools</h1>
+    <a href="masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  </nav>
+
+  <main class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Support Tools</h2>
+
+    <!-- Tool Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- System Status -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">System Status</h3>
+        <p class="text-sm text-gray-600 mb-4">Monitor real-time system performance and uptime.</p>
+        <button onclick="checkSystem()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Check Now</button>
+      </div>
+
+      <!-- Broadcast -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">Broadcast Message</h3>
+        <p class="text-sm text-gray-600 mb-4">Send announcements to all users.</p>
+        <button onclick="showBroadcastModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Send Message</button>
+      </div>
+
+      <!-- Server Logs -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">Server Logs</h3>
+        <p class="text-sm text-gray-600 mb-4">Access logs from the past 24 hours.</p>
+        <button onclick="showLogs()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">View Logs</button>
+      </div>
+
+      <!-- Maintenance Mode -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">Maintenance Mode</h3>
+        <p class="text-sm text-gray-600 mb-4">Enable or disable maintenance mode.</p>
+        <button onclick="toggleMaintenance()" id="maintenanceBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Enable Mode</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Broadcast Modal -->
+  <div id="broadcastModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-11/12 max-w-md">
+      <h3 class="text-xl font-bold mb-4">Send Broadcast Message</h3>
+      <textarea id="broadcastMessage" class="w-full border p-2 rounded mb-4" rows="4" placeholder="Enter your message..."></textarea>
+      <div class="flex justify-end space-x-2">
+        <button onclick="closeBroadcastModal()" class="bg-gray-400 px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
+        <button onclick="sendBroadcast()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logs Modal -->
+  <div id="logsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white w-full max-w-lg p-6 rounded shadow">
+      <h3 class="text-xl font-bold mb-4">Recent Logs</h3>
+      <ul class="max-h-64 overflow-y-auto space-y-1 text-sm text-gray-700">
+        <li>[12:01 PM] Server started.</li>
+        <li>[12:05 PM] User login successful: user1</li>
+        <li>[12:10 PM] KYC request verified: user2</li>
+        <li>[12:30 PM] Broadcast sent to 50 users.</li>
+        <li>[12:45 PM] Maintenance mode toggled.</li>
+      </ul>
+      <div class="mt-4 text-right">
+        <button onclick="closeLogs()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    let maintenanceMode = false;
+
+    function showBroadcastModal() {
+      document.getElementById('broadcastModal').classList.remove('hidden');
+    }
+
+    function closeBroadcastModal() {
+      document.getElementById('broadcastModal').classList.add('hidden');
+    }
+
+    function sendBroadcast() {
+      const message = document.getElementById('broadcastMessage').value.trim();
+      if (message === "") {
+        showNotification("Please enter a message before sending.", true);
+        return;
+      }
+      console.log("Broadcast:", message); // Simulated send
+      showNotification("Broadcast message sent.");
+      closeBroadcastModal();
+    }
+
+    function checkSystem() {
+      showNotification("System is online. All services are running.");
+    }
+
+    function toggleMaintenance() {
+      maintenanceMode = !maintenanceMode;
+      const btn = document.getElementById("maintenanceBtn");
+      btn.textContent = maintenanceMode ? "Disable Mode" : "Enable Mode";
+      btn.classList.toggle("bg-red-600", !maintenanceMode);
+      btn.classList.toggle("bg-yellow-600", maintenanceMode);
+      showNotification(`Maintenance mode ${maintenanceMode ? "enabled" : "disabled"}.`);
+    }
+
+    function showLogs() {
+      document.getElementById("logsModal").classList.remove("hidden");
+    }
+
+    function closeLogs() {
+      document.getElementById("logsModal").classList.add("hidden");
+    }
+
+    function showNotification(message, isError = false) {
+      const container = document.getElementById("notification-container");
+      const note = document.createElement("div");
+      note.className = `px-4 py-2 rounded shadow text-white ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+      note.innerText = message;
+      container.appendChild(note);
+      setTimeout(() => note.remove(), 3000);
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Users - Elytra Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">All Users</h1>
+    <a href="masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  </nav>
+
+  <!-- Content -->
+  <main class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Registered Users</h2>
+
+    <div class="overflow-x-auto bg-white shadow rounded p-4">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-100">
+          <tr class="border-b">
+            <th class="py-2 px-4 text-left">Email</th>
+            <th class="py-2 px-4 text-left">Username</th>
+            <th class="py-2 px-4 text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody id="user-list" class="divide-y">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const users = [
+      { email: "user1@crypto.com", username: "user1", status: "active" },
+      { email: "user2@crypto.com", username: "user2", status: "inactive" },
+      { email: "user3@crypto.com", username: "user3", status: "active" }
+    ];
+
+    const userList = document.getElementById('user-list');
+    users.forEach(user => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="py-2 px-4">${user.email}</td>
+        <td class="py-2 px-4">${user.username}</td>
+        <td class="py-2 px-4 ${user.status === 'active' ? 'text-green-600' : 'text-red-600'}">${user.status}</td>
+      `;
+      userList.appendChild(tr);
+    });
+  </script>
+
+</body>
+</html>

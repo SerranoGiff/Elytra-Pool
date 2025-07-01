@@ -1,167 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard | Elytra Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-  </head>
-  <body class="bg-[#0D1B2A] text-white min-h-screen">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Elytra</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-[#0D1B2A] text-white min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="bg-[#1B263B] border-b border-gray-700 py-4 px-6 fixed top-0 w-full z-50">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <a href="dashboard.html" class="flex items-center space-x-2">
-          <img src="../assets/img/Elytra Logo.png" class="w-10 h-10 rounded-full" alt="Logo" />
-          <span class="text-xl font-bold text-white">Elytra Admin</span>
-        </a>
-        <div class="hidden md:flex items-center space-x-6">
-          <a href="dashboard.html" class="text-yellow-400 font-semibold">Dashboard</a>
-          <a href="assets.html" class="hover:text-yellow-400">Assets</a>
-          <!-- Profile Dropdown -->
-          <div class="relative">
-            <button id="profileBtn" class="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400 cursor-pointer focus:outline-none">
-              <img src="../assets/img/admin-profile.jpg" alt="Admin Profile" class="w-full h-full object-cover" />
-            </button>
-            <div id="profileMenu" class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-              <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-              <a href="logout.php" class="block px-4 py-2 hover:bg-gray-100 text-red-500">Logout</a>
+  <!-- Navbar -->
+  <nav class="bg-[#1B263B] border-b border-gray-700 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="admin.html" class="text-2xl font-bold text-yellow-400">Elytra Admin</a>
+      <div class="space-x-4 text-sm">
+        <a href="admin.html" class="hover:text-yellow-400">Dashboard</a>
+        <a href="assets.html" class="hover:text-yellow-400">Assets</a>
+        <a href="settings.html" class="hover:text-yellow-400">Settings</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="pt-24 px-6 max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-yellow-400 mb-6">Admin Dashboard</h1>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow">
+        <p class="text-sm text-gray-400">Total Users</p>
+        <p class="text-2xl font-bold">1,240</p>
+      </div>
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow">
+        <p class="text-sm text-gray-400">Total Stake</p>
+        <p class="text-2xl font-bold">₱8,430,000</p>
+      </div>
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow">
+        <p class="text-sm text-gray-400">Transactions</p>
+        <p class="text-2xl font-bold">3,582</p>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="bg-[#1B263B] p-6 rounded-lg shadow mb-12">
+      <h2 class="text-xl font-semibold text-yellow-300 mb-4">Recent Transactions</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="text-yellow-400 border-b border-gray-600">
+            <tr>
+              <th class="py-2 px-4 text-left">User</th>
+              <th class="py-2 px-4 text-left">Type</th>
+              <th class="py-2 px-4 text-left">Amount</th>
+              <th class="py-2 px-4 text-left">Date</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-700">
+            <tr>
+              <td class="py-2 px-4">CryptoKing88</td>
+              <td class="py-2 px-4">Deposit</td>
+              <td class="py-2 px-4 text-green-400">₱500,000</td>
+              <td class="py-2 px-4">June 27, 2025</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">SatoshiPH</td>
+              <td class="py-2 px-4">Stake</td>
+              <td class="py-2 px-4 text-purple-400">₱750,000</td>
+              <td class="py-2 px-4">June 26, 2025</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">BitLord</td>
+              <td class="py-2 px-4">Withdraw</td>
+              <td class="py-2 px-4 text-red-400">₱200,000</td>
+              <td class="py-2 px-4">June 25, 2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- KYC and Support Tickets Side-by-Side -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- KYC Verifications -->
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow max-h-80 overflow-y-auto">
+        <h2 class="text-xl font-semibold text-yellow-300 mb-4">KYC Verifications</h2>
+        <table class="min-w-full text-sm">
+          <thead class="text-yellow-400 border-b border-gray-600 sticky top-0 bg-[#1B263B]">
+            <tr>
+              <th class="py-2 px-4 text-left">User</th>
+              <th class="py-2 px-4 text-left">Status</th>
+              <th class="py-2 px-4 text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-700" id="kyc-list">
+            <tr>
+              <td class="py-2 px-4">user1@crypto.com</td>
+              <td class="py-2 px-4 text-yellow-400">Pending</td>
+              <td class="py-2 px-4 space-x-2">
+                <button onclick="viewKyc('user1@crypto.com')" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">View</button>
+                <button onclick="verifyKyc('user1@crypto.com')" class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded">Verify</button>
+                <button onclick="rejectKyc('user1@crypto.com')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">Reject</button>
+              </td>
+            </tr>
+            <!-- Add more dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Customer Support Tickets -->
+      <div class="bg-[#1B263B] p-6 rounded-lg shadow max-h-80 overflow-y-auto">
+        <h2 class="text-xl font-semibold text-yellow-300 mb-4">Customer Service Tickets</h2>
+        <div class="space-y-4 text-sm">
+          <div class="bg-[#0D1B2A] p-4 rounded border border-gray-600">
+            <div class="mb-2 text-yellow-400 font-semibold">Subject: Login Issue</div>
+            <p class="text-gray-300 mb-2">User: cryptoqueen@elytra.com</p>
+            <p class="text-gray-400">I can't access my account even after resetting the password.</p>
+            <div class="mt-3">
+              <button class="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded text-white text-xs">Reply</button>
+              <button class="bg-gray-500 hover:bg-gray-600 px-3 py-1 rounded text-white text-xs">Mark as Resolved</button>
             </div>
           </div>
-        </div>
-        <!-- Mobile Menu Toggle -->
-        <div class="md:hidden">
-          <button id="mobileMenuBtn" class="text-white focus:outline-none">
-            ☰
-          </button>
+          <!-- Add more tickets here -->
         </div>
       </div>
-      <!-- Mobile Menu -->
-      <div id="mobileMenu" class="hidden md:hidden mt-4">
-        <a href="dashboard.html" class="block py-2 text-yellow-400 font-semibold">Dashboard</a>
-        <a href="assets.html" class="block py-2 hover:text-yellow-400">Assets</a>
-        <a href="settings.html" class="block py-2 hover:text-yellow-400">Settings</a>
-        <a href="logout.php" class="block py-2 text-red-500 hover:text-red-600">Logout</a>
-      </div>
-    </nav>
+    </div>
+  </div>
 
-    <!-- Main -->
-    <main class="pt-24 max-w-7xl mx-auto px-4">
-      <h1 class="text-3xl font-bold text-yellow-400 mb-6">Admin Dashboard</h1>
+  <!-- Footer -->
+  <footer class="mt-16 py-6 border-t border-gray-700 text-center text-sm text-gray-400">
+    © 2025 Elytra Admin Panel. All rights reserved.
+  </footer>
 
-      <!-- Summary Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-        <div class="bg-[#1B263B] p-4 rounded-lg shadow text-center">
-          <p class="text-sm text-gray-400">Total Users</p>
-          <p class="text-2xl font-bold" id="totalUsers">1,024</p>
-        </div>
-        <div class="bg-[#1B263B] p-4 rounded-lg shadow text-center">
-          <p class="text-sm text-gray-400">Total Deposits</p>
-          <p class="text-2xl font-bold" id="totalDeposits">₱12,500,000</p>
-        </div>
-        <div class="bg-[#1B263B] p-4 rounded-lg shadow text-center">
-          <p class="text-sm text-gray-400">Total Withdrawals</p>
-          <p class="text-2xl font-bold" id="totalWithdrawals">₱4,890,000</p>
-        </div>
-        <div class="bg-[#1B263B] p-4 rounded-lg shadow text-center">
-          <p class="text-sm text-gray-400">Active Stakers</p>
-          <p class="text-2xl font-bold" id="activeStakers">238</p>
-        </div>
-      </div>
+  <!-- Script -->
+  <script>
+    function viewKyc(email) {
+      alert("Viewing KYC documents for " + email);
+    }
 
-      <!-- Chart Section -->
-      <div class="bg-[#1B263B] p-6 rounded-lg shadow">
-        <h2 class="text-lg font-semibold mb-4 text-yellow-400">Crypto Activity (Real-time)</h2>
-        <canvas id="adminChart" height="100"></canvas>
-      </div>
-    </main>
+    function verifyKyc(email) {
+      alert("KYC verified for " + email);
+    }
 
-    <!-- Footer -->
-    <footer class="mt-16 py-8 px-6 border-t border-gray-800 bg-[#1B263B]">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-        <div class="mb-4 md:mb-0">© 2023 - 2025 Elytra Admin. All rights reserved.</div>
-        <div class="flex space-x-6">
-          <a href="#" class="hover:text-white">Twitter</a>
-          <a href="#" class="hover:text-white">Telegram</a>
-          <a href="#" class="hover:text-white">Discord</a>
-        </div>
-      </div>
-    </footer>
+    function rejectKyc(email) {
+      alert("KYC request rejected for " + email);
+    }
+  </script>
 
-    <!-- Realtime Chart Script -->
-    <script>
-      const ctx = document.getElementById('adminChart').getContext('2d');
-      const dataPoints = [200000, 450000, 300000, 600000, 800000, 750000, 920000];
-      const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-      const adminChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Elytra Volume (₱)',
-            data: [...dataPoints],
-            fill: false,
-            borderColor: '#FACC15',
-            tension: 0.3
-          }]
-        },
-        options: {
-          responsive: true,
-          animation: false,
-          scales: {
-            y: {
-              ticks: { color: 'white' },
-              grid: { color: '#374151' }
-            },
-            x: {
-              ticks: { color: 'white' },
-              grid: { color: '#374151' }
-            }
-          },
-          plugins: {
-            legend: {
-              labels: { color: 'white' }
-            }
-          }
-        }
-      });
-
-      function updateChartData() {
-        const newData = Math.floor(200000 + Math.random() * 1000000);
-        adminChart.data.labels.push(new Date().toLocaleTimeString());
-        adminChart.data.labels.shift();
-        adminChart.data.datasets[0].data.push(newData);
-        adminChart.data.datasets[0].data.shift();
-        adminChart.update();
-      }
-
-      setInterval(updateChartData, 3000); // update every 3 seconds
-
-      // Toggle profile dropdown
-      const profileBtn = document.getElementById('profileBtn');
-      const profileMenu = document.getElementById('profileMenu');
-
-      profileBtn.addEventListener('click', () => {
-        profileMenu.classList.toggle('hidden');
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
-          profileMenu.classList.add('hidden');
-        }
-      });
-
-      // Mobile menu toggle
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-      });
-    </script>
-
-  </body>
+</body>
 </html>

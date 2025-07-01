@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Service</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Customer Service</h1>
+    <a href="/masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="p-6 max-w-5xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Support Messages</h2>
+
+    <!-- Message List -->
+    <div id="message-list" class="space-y-4"></div>
+  </div>
+
+  <!-- Reply Modal -->
+  <div id="reply-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white w-full max-w-md p-6 rounded shadow">
+      <h3 class="text-xl font-semibold mb-2">Reply to Message</h3>
+      <p class="text-sm text-gray-600 mb-1" id="modal-email"></p>
+      <p class="text-sm text-gray-500 mb-4" id="modal-subject"></p>
+      <textarea id="reply-text" rows="4" class="w-full border rounded p-2 mb-4" placeholder="Type your reply..."></textarea>
+      <div class="flex justify-end space-x-2">
+        <button onclick="closeModal()" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Cancel</button>
+        <button onclick="sendReply()" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const messages = [
+      { id: 1, email: 'user1@crypto.com', subject: 'Issue with withdrawal', message: 'I cannot withdraw my funds.', status: 'open' },
+      { id: 2, email: 'user3@crypto.com', subject: 'KYC stuck', message: 'My KYC is pending for days.', status: 'open' }
+    ];
+
+    let currentMessageId = null;
+
+    function renderMessages() {
+      const container = document.getElementById('message-list');
+      container.innerHTML = '';
+
+      messages.forEach(msg => {
+        container.innerHTML += `
+          <div class="bg-white shadow p-4 rounded border ${msg.status === 'read' ? 'opacity-60' : ''}">
+            <div class="font-semibold">${msg.subject}</div>
+            <div class="text-sm text-gray-600 mb-2">From: ${msg.email}</div>
+            <p class="mb-2">${msg.message}</p>
+            ${
+              msg.status === 'read'
+              ? `<span class="text-green-600 font-semibold text-sm">✔️ Marked as Read</span>`
+              : `<button onclick="openReply(${msg.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Reply</button>`
+            }
+          </div>
+        `;
+      });
+    }
+
+    function openReply(id) {
+      const msg = messages.find(m => m.id === id);
+      if (!msg) return;
+
+      currentMessageId = id;
+      document.getElementById('modal-email').innerText = `To: ${msg.email}`;
+      document.getElementById('modal-subject').innerText = `Subject: ${msg.subject}`;
+      document.getElementById('reply-text').value = '';
+      document.getElementById('reply-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('reply-modal').classList.add('hidden');
+    }
+
+    function sendReply() {
+      const message = document.getElementById('reply-text').value.trim();
+      if (message === '') {
+        alert('Reply cannot be empty!');
+        return;
+      }
+
+      const index = messages.findIndex(m => m.id === currentMessageId);
+      if (index !== -1) {
+        messages[index].status = 'read';
+        alert(`Reply sent to ${messages[index].email}:\n\n${message}`);
+        renderMessages();
+        closeModal();
+      }
+    }
+
+    renderMessages();
+  </script>
+</body>
+</html>

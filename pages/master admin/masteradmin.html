@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Master Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Notification container -->
+  <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
+
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Crypto Master Admin</h1>
+    <div class="space-x-4">
+      <span>Welcome, SuperAdmin</span>
+      <button class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Main layout -->
+  <div class="flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white min-h-screen p-5 space-y-4">
+      <a href="masterKey.html" class="block py-2 bg-gray-700 rounded">Dashboard</a>
+      <a href="all-user.html" class="block py-2 hover:bg-gray-700 rounded">All Users</a>
+      <a href="admin-view.html" class="block py-2 hover:bg-gray-700 rounded">Admins</a>
+      <a href="kyc-verifications.html" class="block py-2 hover:bg-gray-700 rounded">KYC Verifications</a>
+      <a href="support.html" class="block py-2 hover:bg-gray-700 rounded">Support Tools</a>
+      <a href="customer-service.html" class="block py-2 hover:bg-gray-700 rounded">Customer Service</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <h2 class="text-2xl font-bold mb-4">Manage Accounts</h2>
+
+      <!-- Search -->
+      <input type="text" placeholder="Search users..." oninput="searchUsers(this.value)" class="p-2 border rounded mb-4 w-full">
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- User List -->
+        <div class="bg-white shadow p-4 rounded">
+          <h3 class="text-xl font-semibold mb-2">Users</h3>
+          <div class="max-h-[400px] overflow-y-auto pr-2">
+            <ul id="user-list" class="space-y-2"></ul>
+          </div>
+        </div>
+
+        <!-- Admin List -->
+        <div class="bg-white shadow p-4 rounded">
+          <h3 class="text-xl font-semibold mb-2">Admins</h3>
+          <div class="max-h-[400px] overflow-y-auto pr-2">
+            <ul id="admin-list" class="space-y-2"></ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Activity Logs -->
+      <div class="mt-10 bg-white shadow p-4 rounded">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xl font-semibold mb-2">Activity Logs</h3>
+          <button onclick="exportLogs()" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">Export Logs</button>
+        </div>
+        <ul id="log-list" class="space-y-2 max-h-60 overflow-y-auto text-sm text-gray-700 pr-2"></ul>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let users = [
+      { email: "user1@crypto.com", username: "user1", password: "pass123", kycRequested: true, kycVerified: false, active: true },
+      { email: "user2@crypto.com", username: "user2", password: "pass456", kycRequested: false, kycVerified: false, active: true },
+      { email: "user3@crypto.com", username: "user3", password: "pass789", kycRequested: true, kycVerified: true, active: true }
+    ];
+
+    let admins = [
+      { email: "admin1@crypto.com", username: "admin1", password: "adminpass", active: true }
+    ];
+
+    let logs = [
+      { time: new Date().toLocaleString(), message: "System initialized." }
+    ];
+
+    function logActivity(message, isMasterAction = false) {
+      if (isMasterAction) return;
+      logs.unshift({ time: new Date().toLocaleString(), message });
+      renderLogs();
+    }
+
+    function showNotification(message) {
+      const container = document.getElementById('notification-container');
+      const note = document.createElement("div");
+      note.className = "bg-green-500 text-white px-4 py-2 rounded shadow";
+      note.innerText = message;
+      container.appendChild(note);
+      setTimeout(() => note.remove(), 3000);
+    }
+
+    function renderLogs() {
+      const logList = document.getElementById('log-list');
+      logList.innerHTML = logs.map(log => `
+        <li class="border-b py-1">
+          <span class="text-gray-500">${log.time}</span> - ${log.message}
+        </li>
+      `).join('');
+    }
+
+    function refreshLists(filtered = null) {
+      const userList = document.getElementById('user-list');
+      const adminList = document.getElementById('admin-list');
+      const listToUse = filtered || users;
+
+      userList.innerHTML = '';
+      adminList.innerHTML = '';
+
+      listToUse.forEach(user => {
+        const kycStatus = user.kycVerified
+          ? `<span class="text-green-600 font-semibold">✅ Verified</span>`
+          : user.kycRequested
+          ? `<span class="text-yellow-500 font-semibold">Requested</span>`
+          : `<span class="text-gray-500">Not Requested</span>`;
+
+        userList.innerHTML += `
+          <li class="border-b py-2">
+            <div>
+              <div><strong>Email:</strong> ${user.email}</div>
+              <div class="text-sm">${kycStatus}</div>
+              <div class="text-sm text-gray-500">Username: ${user.username}</div>
+              <div class="text-sm text-gray-500">Password: ${user.password}</div>
+              <div class="text-sm text-${user.active ? 'green' : 'red'}-600 font-semibold">${user.active ? 'Active' : 'Inactive'}</div>
+            </div>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <button onclick="grantAdmin('${user.email}')" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Grant Admin</button>
+              ${user.kycRequested && !user.kycVerified
+                ? `<button onclick="verifyKYC('${user.email}')" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Verify KYC</button>`
+                : `<button onclick="viewKYC('${user.email}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">View KYC</button>`}
+              <button onclick="toggleUserAccess('${user.email}')" class="bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600">${user.active ? 'Deactivate' : 'Activate'}</button>
+              <button onclick="resetPassword('${user.email}', 'user')" class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">Reset Password</button>
+              <button onclick="deleteAccount('${user.email}', 'user')" class="bg-black text-white px-2 py-1 rounded hover:bg-gray-800">Delete</button>
+            </div>
+          </li>`;
+      });
+
+      admins.forEach(admin => {
+        adminList.innerHTML += `
+          <li class="border-b py-2">
+            <div>
+              <strong>Email:</strong> ${admin.email}<br />
+              <span class="text-sm text-gray-500">Username: ${admin.username}</span><br />
+              <span class="text-sm text-gray-500">Password: ${admin.password}</span><br />
+              <span class="text-sm text-${admin.active ? 'green' : 'red'}-600 font-semibold">${admin.active ? 'Active' : 'Offline'}</span>
+            </div>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <button onclick="revokeAdmin('${admin.email}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Admin</button>
+              <button onclick="resetPassword('${admin.email}', 'admin')" class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">Reset Password</button>
+              <button onclick="deleteAccount('${admin.email}', 'admin')" class="bg-black text-white px-2 py-1 rounded hover:bg-gray-800">Delete</button>
+            </div>
+          </li>`;
+      });
+    }
+
+    function grantAdmin(email) {
+      const index = users.findIndex(u => u.email === email);
+      if (index !== -1) {
+        const newAdmin = {
+          email: users[index].email,
+          username: users[index].username,
+          password: users[index].password,
+          active: true
+        };
+        admins.push(newAdmin);
+        users.splice(index, 1);
+        showNotification("Admin granted!");
+        logActivity(`Granted admin access to ${email}`);
+        refreshLists();
+      }
+    }
+
+    function revokeAdmin(email) {
+      const index = admins.findIndex(a => a.email === email);
+      if (index !== -1) {
+        const newUser = {
+          email: admins[index].email,
+          username: admins[index].username,
+          password: admins[index].password,
+          kycRequested: false,
+          kycVerified: false,
+          active: true
+        };
+        users.push(newUser);
+        admins.splice(index, 1);
+        showNotification("Admin removed.");
+        logActivity(`Removed admin access from ${email}`);
+        refreshLists();
+      }
+    }
+
+    function viewKYC(email) {
+      alert("Viewing KYC info for " + email);
+      logActivity(`Viewed KYC info of ${email}`);
+    }
+
+    function verifyKYC(email) {
+      const user = users.find(u => u.email === email);
+      if (user) {
+        user.kycVerified = true;
+        user.kycRequested = false;
+        alert(`KYC verified for ${email}`);
+        logActivity(`Verified KYC for ${email}`);
+        refreshLists();
+      }
+    }
+
+    function resetPassword(email, type) {
+      const newPassword = Math.random().toString(36).slice(-8);
+      if (type === 'user') {
+        const user = users.find(u => u.email === email);
+        if (user) user.password = newPassword;
+      } else {
+        const admin = admins.find(a => a.email === email);
+        if (admin) admin.password = newPassword;
+      }
+      showNotification("Password reset!");
+      logActivity(`Reset password for ${email}`);
+      refreshLists();
+    }
+
+    function deleteAccount(email, type) {
+      if (type === 'user') {
+        users = users.filter(u => u.email !== email);
+      } else {
+        admins = admins.filter(a => a.email !== email);
+      }
+      showNotification("Account deleted.");
+      logActivity(`Deleted ${type} account: ${email}`);
+      refreshLists();
+    }
+
+    function toggleUserAccess(email) {
+      const user = users.find(u => u.email === email);
+      if (user) {
+        user.active = !user.active;
+        logActivity(`${user.active ? 'Activated' : 'Deactivated'} user ${email}`);
+        refreshLists();
+      }
+    }
+
+    function exportLogs() {
+      const content = logs.map(log => `${log.time} - ${log.message}`).join('\n');
+      const blob = new Blob([content], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'activity-logs.txt';
+      link.click();
+      logActivity("Exported activity logs");
+    }
+
+    function searchUsers(keyword) {
+      const trimmed = keyword.trim().toLowerCase();
+      if (trimmed === "") return refreshLists();
+      const filteredUsers = users.filter(user =>
+        user.email.toLowerCase().includes(trimmed) ||
+        user.username.toLowerCase().includes(trimmed)
+      );
+      refreshLists(filteredUsers);
+    }
+
+    refreshLists();
+    renderLogs();
+  </script>
+
+</body>
+</html>

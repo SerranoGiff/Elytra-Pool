@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KYC Verifications - Crypto Master Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Crypto Master Admin - KYC Verifications</h1>
+    <a href="masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  </nav>
+
+  <main class="p-6">
+    <h2 class="text-2xl font-bold mb-4">KYC Verification Requests</h2>
+
+    <div class="overflow-x-auto bg-white shadow rounded p-4">
+      <table class="min-w-full text-left text-sm">
+        <thead>
+          <tr class="border-b">
+            <th class="py-2">Email</th>
+            <th class="py-2">Username</th>
+            <th class="py-2">KYC Status</th>
+            <th class="py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="kyc-table-body"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- KYC Modal -->
+  <div id="kycModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
+      <h3 class="text-xl font-bold mb-4">KYC Details</h3>
+      <div id="kycDetails" class="text-sm space-y-2">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="flex justify-end mt-4">
+        <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const kycUsers = [
+      {
+        email: "user1@crypto.com",
+        username: "user1",
+        kycStatus: "requested",
+        name: "Juan Dela Cruz",
+        idType: "Passport",
+        idNumber: "P123456789",
+        documentUrl: "https://via.placeholder.com/300x180?text=Passport+Document"
+      },
+      {
+        email: "user2@crypto.com",
+        username: "user2",
+        kycStatus: "verified",
+        name: "Maria Santos",
+        idType: "Driver's License",
+        idNumber: "DL987654321",
+        documentUrl: "https://via.placeholder.com/300x180?text=Driver's+License"
+      },
+      {
+        email: "user3@crypto.com",
+        username: "user3",
+        kycStatus: "requested",
+        name: "Pedro Reyes",
+        idType: "National ID",
+        idNumber: "NID11223344",
+        documentUrl: "https://via.placeholder.com/300x180?text=National+ID"
+      }
+    ];
+
+    function renderKycTable() {
+      const tableBody = document.getElementById("kyc-table-body");
+      tableBody.innerHTML = "";
+
+      kycUsers.forEach((user, index) => {
+        const row = document.createElement("tr");
+        row.classList.add("border-b");
+
+        row.innerHTML = `
+          <td class="py-2">${user.email}</td>
+          <td class="py-2">${user.username}</td>
+          <td class="py-2">
+            ${user.kycStatus === "verified"
+              ? '<span class="text-green-600 font-semibold">Verified</span>'
+              : '<span class="text-yellow-600 font-semibold">Pending</span>'}
+          </td>
+          <td class="py-2 space-x-2">
+            <button onclick="viewKyc(${index})" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">View</button>
+            ${user.kycStatus === "requested" ? `
+              <button onclick="verifyKyc(${index})" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Verify</button>
+              <button onclick="rejectKyc(${index})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Reject</button>
+            ` : ''}
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function viewKyc(index) {
+      const user = kycUsers[index];
+      const modal = document.getElementById("kycModal");
+      const details = document.getElementById("kycDetails");
+
+      details.innerHTML = `
+        <p><strong>Name:</strong> ${user.name}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Username:</strong> ${user.username}</p>
+        <p><strong>ID Type:</strong> ${user.idType}</p>
+        <p><strong>ID Number:</strong> ${user.idNumber}</p>
+        <p><strong>Document:</strong></p>
+        <img src="${user.documentUrl}" alt="KYC Document" class="w-full rounded border" />
+      `;
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("kycModal").classList.add("hidden");
+    }
+
+    function verifyKyc(index) {
+      kycUsers[index].kycStatus = "verified";
+      alert(`KYC for ${kycUsers[index].email} verified!`);
+      renderKycTable();
+    }
+
+    function rejectKyc(index) {
+      kycUsers.splice(index, 1);
+      alert("KYC request rejected and removed.");
+      renderKycTable();
+    }
+
+    renderKycTable();
+  </script>
+
+</body>
+</html>

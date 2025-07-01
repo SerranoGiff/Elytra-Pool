@@ -169,3 +169,4 @@ setInterval(updateEthereumStaking, 15000);
 // Crypto update (make sure updateDashboard is defined elsewhere)
 updateDashboard();
 setInterval(updateDashboard, 5000);
+

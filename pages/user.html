@@ -15,8 +15,8 @@
 
 <body class="min-h-screen">
   <!-- Navigation -->
-  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
+  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
         <a href="user.html" class="flex items-center">
@@ -31,22 +31,41 @@
       </div>
 
       <!-- Desktop Nav Links -->
-      <div class="hidden md:flex nav-links" id="nav-links">
-        <a href="user.html" class="nav-link">Home</a>
-        <a href="staking.html" class="nav-link">Staking</a>
-        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-        <a href="deposit.html" class="nav-link">Deposit</a>
-        <a href="withdraw.html" class="nav-link">Withdraw</a>
-        <a href="Convert.html" class="nav-link">Convert</a>
-      </div>
+<div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Home</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Staking</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="leaderboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Deposit</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="withdraw.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Convert</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+</div>
+
 
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
           <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
           <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
@@ -86,118 +105,124 @@
     <!-- Section: Dashboard Header -->
     <section aria-label="Dashboard Heading" class="mb-8">
       <div class="flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-yellow-400">
+        <h1 class="text-4xl font-bold text-purple-400">
           User Wallet Dashboard
         </h1>
       </div>
     </section>
 
-    <!-- Section: Wallet + Transactions -->
-    <section aria-label="Wallet and Transactions" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <!-- Wallet Card -->
-      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
-        <p class="text-white font-semibold text-lg mb-1">
-          Wallet Balance (Total)
-        </p>
-        <p class="text-4xl font-bold text-blue-300">5,000 ELYTRA</p>
+    <!-- Wallet Card -->
+<div class="relative bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
+  <!-- Last Activity top-right -->
+  <p class="absolute top-4 right-6 text-sm text-gray-400 font-semibold">
+    Last Activity: 2h ago
+  </p>
 
-        <div class="flex justify-between items-center text-sm text-gray-400 mb-4 md:block">
-          <p>Secure and ready to use</p>
-          <p class="text-green-400 font-semibold md:hidden">Last Activity: 2h ago</p>
-        </div>
+  <p class="text-white font-semibold text-lg mb-1">
+    Wallet Balance (Total)
+  </p>
+  <p class="text-4xl font-bold text-[#c084fc]">5,000 ELTR</p>
 
-        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
-          <div>
-            <p class="text-gray-400">BTC</p>
-            <p class="text-yellow-300 font-bold">0.215 BTC</p>
-          </div>
-          <div>
-            <p class="text-gray-400">ETH</p>
-            <p class="text-purple-300 font-bold">1.750 ETH</p>
-          </div>
-          <div>
-            <p class="text-gray-400">USDT</p>
-            <p class="text-green-300 font-bold">3,400.00 USDT</p>
-          </div>
-          <div>
-            <p class="text-gray-400">ELYTRA</p>
-            <p class="text-blue-300 font-bold">5,000 ELYTRA</p>
-          </div>
-        </div>
+  <div class="text-sm text-slate-400 mb-4">
+    Secure and ready to use
+  </div>
 
-        <!-- Mobile Buttons -->
-        <div class="flex gap-2 mt-2 md:hidden">
-          <a href="deposit.html"
-            class="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded">
-            <i class="fas fa-arrow-down"></i> Deposit
-          </a>
-          <a href="withdraw.html"
-            class="flex-1 flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-xs py-2 rounded">
-            <i class="fas fa-arrow-up"></i> Withdraw
-          </a>
-          <a href="Convert.html"
-            class="flex-1 flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 rounded">
-            <i class="fas fa-sync-alt"></i> Convert
-          </a>
-        </div>
-      </div>
+  <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+    <div>
+      <p class="text-slate-400">BTC</p>
+      <p class="text-yellow-300 font-bold">0.215 BTC</p>
+    </div>
+    <div>
+      <p class="text-slate-400">ETH</p>
+      <p class="text-purple-300 font-bold">1.750 ETH</p>
+    </div>
+    <div>
+      <p class="text-slate-400">USDT</p>
+      <p class="text-green-300 font-bold">3,400.00 USDT</p>
+    </div>
+    <div>
+      <p class="text-slate-400">ELYTRA</p>
+      <p class="text-blue-300 font-bold">5,000 ELTR</p>
+    </div>
+  </div>
+
+  <!-- Neon Buttons -->
+  <div class="flex gap-2 mt-2">
+    <a href="deposit.html"
+      class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-purple-800/30">
+      <i class="fas fa-arrow-down"></i> Deposit
+    </a>
+    <a href="withdraw.html"
+      class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-red-800/30">
+      <i class="fas fa-arrow-up"></i> Withdraw
+    </a>
+    <a href="Convert.html"
+      class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-blue-800/30">
+      <i class="fas fa-sync-alt"></i> Convert
+    </a>
+  </div>
+</div>
+
+
 
       <!-- Transactions -->
-      <div class="bg-[#1B263B] p-6 rounded-xl shadow-lg">
-        <p class="text-white font-semibold text-lg mb-4">
-          Transaction History
-        </p>
-        <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Deposit</span><span class="text-green-400 font-bold">+1000
-              ELY</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Withdraw</span><span class="text-red-400 font-bold">-200 USDT</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Stake</span><span class="text-purple-300 font-bold">-1500 ELY</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Convert</span><span class="text-blue-300 font-bold">+0.05 BTC</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-700 pb-2">
-            <span class="text-gray-300">Transfer</span><span class="text-yellow-300 font-bold">-0.02
-              ETH</span>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
+  <p class="text-white font-semibold text-lg mb-4">
+    Transaction History
+  </p>
+  <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
+    <div class="flex justify-between border-b border-purple-800 pb-2">
+      <span class="text-slate-300">Deposit</span>
+      <span class="text-emerald-400 font-bold">+1,000 ELTR</span>
+    </div>
+    <div class="flex justify-between border-b border-purple-800 pb-2">
+      <span class="text-slate-300">Withdraw</span>
+      <span class="text-red-400 font-bold">-200 USDT</span>
+    </div>
+    <div class="flex justify-between border-b border-purple-800 pb-2">
+      <span class="text-slate-300">Stake</span>
+      <span class="text-purple-300 font-bold">-1,500 ELTR</span>
+    </div>
+    <div class="flex justify-between border-b border-purple-800 pb-2">
+      <span class="text-slate-300">Convert</span>
+      <span class="text-blue-300 font-bold">+0.05 BTC</span>
+    </div>
+    <div class="flex justify-between border-b border-purple-800 pb-2">
+      <span class="text-slate-300">Transfer</span>
+      <span class="text-yellow-300 font-bold">-0.02 ETH</span>
+    </div>
+  </div>
+</div>
 
-    <!-- Section: My Assets Table -->
-    <section id="my-assets" class="bg-[#1B263B] rounded-lg shadow-lg overflow-hidden">
-      <div class="p-4 border-b border-[#0D1B2A]">
-        <p class="text-yellow-400 font-semibold text-lg">My Assets</p>
-        <p class="text-sm text-gray-400">
-          Overview of your cryptocurrency holdings and market prices.
-        </p>
-      </div>
-      <div class="overflow-x-auto">
-        <div class="h-96 overflow-y-auto">
-          <table class="min-w-full text-sm text-white">
-            <thead class="bg-[#0D1B2A] text-yellow-300 uppercase sticky top-0 z-10">
-              <tr>
-                <th class="px-4 py-3 text-left">#</th>
-                <th class="px-4 py-3 text-left">Asset</th>
-                <th class="px-4 py-3">Price</th>
-                <th class="px-4 py-3">1h %</th>
-                <th class="px-4 py-3">24h %</th>
-                <th class="px-4 py-3">7d %</th>
-                <th class="px-4 py-3">Market Cap</th>
-              </tr>
-            </thead>
-            <tbody id="crypto-table" class="text-center">
-              <!-- Dynamic rows go here -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+ <!-- Section: My Assets Table -->
+<section id="my-assets" class="bg-[#1a1f36] rounded-lg shadow-lg border border-purple-500 overflow-hidden">
+  <div class="p-4 border-b border-purple-800">
+    <p class="text-[#c084fc] font-semibold text-lg">My Assets</p>
+    <p class="text-sm text-slate-400">
+      Overview of your cryptocurrency holdings and market prices.
+    </p>
+  </div>
+  <div class="overflow-x-auto">
+    <div class="h-96 overflow-y-auto">
+      <table class="min-w-full text-sm text-white">
+        <thead class="bg-[#1a1330] text-purple-300 uppercase sticky top-0 z-10">
+          <tr>
+            <th class="px-4 py-3 text-left">#</th>
+            <th class="px-4 py-3 text-left">Asset</th>
+            <th class="px-4 py-3">Price</th>
+            <th class="px-4 py-3">1h %</th>
+            <th class="px-4 py-3">24h %</th>
+            <th class="px-4 py-3">7d %</th>
+            <th class="px-4 py-3">Market Cap</th>
+          </tr>
+        </thead>
+        <tbody id="crypto-table" class="text-center divide-y divide-purple-900">
+          <!-- Dynamic rows go here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
   </main>
 
   <!-- Footer -->

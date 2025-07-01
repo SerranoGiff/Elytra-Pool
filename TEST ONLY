@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elytra Pool</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
+</head>
+
+<body class="min-h-screen">
+  <!-- Navigation -->
+  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <a href="index.html" class="flex items-center">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+            <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+        </a>
+      </div>
+
+      <div class="nav-links" id="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#staking" class="nav-link">Staking</a>
+        <a href="#mining" class="nav-link">Assets</a>
+        <a href="#earnings" class="nav-link">Leaderboard</a>
+        <a href="pages/about.html#about" class="nav-link">FAQ</a>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <button id="login-button" class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+          <i class="fas fa-user"></i>
+          <span>Login</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="pt-32 pb-20 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div class="slide-in-left">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+          Earn Passive Crypto <span class="text-blue-400">Effortlessly</span>
+        </h1>
+        <p class="text-lg text-gray-300 mb-8">
+          Join thousands of investors earning up to 25% APY through our secure staking and cloud mining platform.
+        </p>
+        <div class="flex space-x-4">
+          <button class="btn-primary px-6 py-3 rounded-lg">Start Earning</button>
+          <button class="btn-secondary px-6 py-3 rounded-lg">How It Works</button>
+        </div>
+      </div>
+
+      <div class="relative slide-in-right">
+        <div class="card-glass p-6 rounded-2xl shadow-xl mining-animation">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold">Your Staking Dashboard</h3>
+            <div id="mining-status" class="text-green-400 font-medium">Checking...</div>
+          </div>
+
+          <div class="h-64 mb-6">
+            <canvas id="miningChart"></canvas>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Hashrate</div>
+              <div id="hashrate" class="text-xl font-semibold">-- TH/s</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Daily Earnings</div>
+              <div id="daily-earnings" class="text-xl font-semibold">-- BTC</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span>Staking Progress</span>
+              <span id="progress-percent">-- %</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">© 2023 Elytra Pool. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Initialize the mining chart
+    const ctx = document.getElementById("miningChart").getContext("2d");
+    const miningChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [], // Start with an empty array for labels
+        datasets: [{
+          label: 'BTC Earnings',
+          data: [], // Start with an empty array for data
+          borderColor: '#4F46E5',
+          backgroundColor: 'rgba(79,70,229,0.2)',
+          borderWidth: 2,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 3,
+          // Enable data labels
+          datalabels: {
+            anchor: 'end',
+            align: 'end',
+            formatter: (value) => value.toFixed(4), // Format the label to 4 decimal places
+            color: '#fff', // Label color
+            font: {
+              weight: 'bold',
+            },
+          }
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          },
+          datalabels: {
+            display: true, // Enable data labels
+          }
+        },
+        scales: {
+          x: {
+            type: 'time', // Use time scale for x-axis
+            time: {
+              unit: 'second', // Display seconds
+              tooltipFormat: 'll HH:mm:ss', // Tooltip format
+              displayFormats: {
+                second: 'HH:mm:ss' // Display format for x-axis
+              }
+            },
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'BTC Earnings'
+            },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Function to update chart and other elements
+    async function updateData() {
+      // Simulate new data points
+      const newDataPoint = Math.random() * 0.01; // Simulated earnings
+      const hashrate = (Math.random() * 10).toFixed(2); // Simulated hashrate in TH/s
+      const dailyEarnings = (newDataPoint * 24).toFixed(4); // Simulated daily earnings
+      const progressPercent = Math.min(Math.floor(Math.random() * 100), 100); // Simulated progress percent
+
+      // Update chart data
+      const currentTime = new Date(); // Get current time
+      miningChart.data.labels.push(currentTime); // Add current time to labels
+      miningChart.data.datasets[0].data.push(newDataPoint); // Add new data point
+
+      // Keep only the last 30 data points
+      if (miningChart.data.labels.length > 30) {
+        miningChart.data.labels.shift(); // Remove the oldest label
+        miningChart.data.datasets[0].data.shift(); // Remove the oldest data point
+      }
+
+      miningChart.update(); // Update the chart
+
+      // Update hashrate
+      document.getElementById('hashrate').innerText = `${hashrate} TH/s`;
+
+      // Update daily earnings
+      document.getElementById('daily-earnings').innerText = `${dailyEarnings} BTC`;
+
+      // Update progress bar
+      document.getElementById('progress-percent').innerText = `${progressPercent} %`;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+    }
+
+    // Update the chart and other elements every 2 seconds
+    setInterval(updateData, 2000);
+
+    // Make chart responsive on window resize
+    window.addEventListener('resize', function () {
+      miningChart.resize();
+    });
+  </script>
+</body>
+
+</html>

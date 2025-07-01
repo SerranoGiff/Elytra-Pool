@@ -9,37 +9,62 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen">
+<body class="min-h-screen bg-gray-950 text-white">
   <!-- Navigation -->
-  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <a href="index.html" class="flex items-center">
-          <div
-            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-            <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
-          </div>
-          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-            Pool</span>
+  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      
+      <!-- Logo and Title -->
+      <a href="index.html" class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform duration-300">
+          <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full object-cover" />
+        </div>
+        <span class="text-xl font-semibold tracking-wide text-white hover:text-purple-300 transition duration-300">
+          Elytra Pool
+        </span>
+      </a>
+
+      <!-- Navigation Links with Hover Zoom -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Home</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#staking" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Staking</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#mining" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Features</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#earnings" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Calculator</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="pages/about.html#about" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">About</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
       </div>
 
-      <div class="nav-links" id="nav-links">
-        <a href="#home" class="nav-link">Home</a>
-        <a href="#staking" class="nav-link">Staking</a>
-        <a href="#mining" class="nav-link">Features</a>
-        <a href="#earnings" class="nav-link">Calculator</a>
-        <a href="pages/about.html#about" class="nav-link">About</a>
-      </div>
+  <!-- Login Button -->
+<div class="flex items-center space-x-4">
+  <button id="login-button"
+    class="flex items-center space-x-2 px-6 py-2 border border-purple-500 text-purple-300 
+    bg-transparent shadow-[0_0_8px_#a855f7] hover:shadow-[0_0_12px_#a855f7] 
+    hover:bg-purple-700/10 active:bg-purple-800/20 
+    transition-all duration-300 ease-in-out">
+    <i class="fas fa-user"></i>
+    <span>Login</span>
+  </button>
+</div>
 
-      <div class="flex items-center space-x-4">
-        <button id="login-button" class="btn-primary px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
-          <i class="fas fa-user"></i>
-          <span>Login</span>
-        </button>
-      </div>
+    </div>
+  </nav>
 
       <!-- Main Login Modal -->
       <div id="loginModal"
@@ -335,7 +360,7 @@
         <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white">Earn Crypto <span class="text-purple-400">Through
             Staking</span></h1>
         <p class="text-lg text-gray-300 mb-8 max-w-xl">
-          <strong class="text-white">Earn up to 25% APY by staking crypto through secure, decentralized Web3
+          <strong class="text-white">Earn up to 25% Daily Average Earning by staking crypto through secure, decentralized Web3
             protocols.</strong><br />
           Grow your portfolio with blockchain-based & User-friendly, Higher rewards, and no custodians. Join millions of
           Web3 users maximizing yields while staying in full control of your assets.
@@ -473,7 +498,7 @@
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div id="btc-min" class="font-semibold">0.01 BTC</div>
+              <div id="btc-min" class="font-semibold">0.00094 BTC</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
@@ -511,7 +536,7 @@
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div id="eth-min" class="font-semibold">0.1 ETH</div>
+              <div id="eth-min" class="font-semibold">0.041 ETH</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
@@ -549,7 +574,7 @@
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div id="sol-min" class="font-semibold">1 SOL</div>
+              <div id="sol-min" class="font-semibold">0.65 SOL</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
@@ -733,69 +758,86 @@
     </div>
   </section>
 
-  <!-- Earnings Calculator -->
-  <section id="earnings" class="py-20 px-6 text-center">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl font-bold mb-2">Earnings Calculator</h2>
-      <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Estimate your potential earnings from staking or mining.</p>
+<section id="earnings" class="py-20 px-4 sm:px-6 text-center">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-3xl font-bold mb-4">Earnings Calculator</h2>
+    <p class="text-gray-400 mb-8">Estimate your staking rewards in USDT. Minimum amount depends on duration.</p>
 
-      <div class="flex justify-center">
-        <div class="card-glass p-8 rounded-2xl w-full max-w-xl slide-in-left">
-          <h3 class="text-2xl font-semibold mb-4">Staking Calculator</h3>
-
-          <div class="mb-6 text-left">
-            <label class="block text-sm text-gray-400 mb-2">Cryptocurrency</label>
-            <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-              <option>Bitcoin (BTC)</option>
-              <option>Ethereum (ETH)</option>
-              <option>Solana (SOL)</option>
-              <option>Cardano (ADA)</option>
-              <option>Polkadot (DOT)</option>
-            </select>
-          </div>
-
-          <div class="mb-6 text-left">
-            <label class="block text-sm text-gray-400 mb-2">Amount to Stake</label>
-            <div class="flex">
-              <input type="number" class="w-full bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-2"
-                value="1.0" />
-              <div class="bg-gray-700 px-4 py-2 rounded-r-lg">USDT</div>
-            </div>
-          </div>
-
-          <div class="mb-6 text-left">
-            <label class="block text-sm text-gray-400 mb-2">Staking Period</label>
-            <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-              <option>7 Days</option>
-              <option>14 Days</option>
-              <option>30 Days</option>
-              <option>60 Days</option>
-              <option>90 Days</option>
-            </select>
-          </div>
-
-          <button
-            class="btn-primary w-full py-3 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg mb-4">Calculate
-            Earnings</button>
-
-          <div class="card-glass p-4 rounded-lg text-left">
-            <div class="flex justify-between mb-2">
-              <span class="text-gray-400">APY</span>
-              <span class="font-semibold">6.5%</span>
-            </div>
-            <div class="flex justify-between mb-2">
-              <span class="text-gray-400">Estimated Rewards</span>
-              <span class="font-semibold">0.065 BTC</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-gray-400">Total Return</span>
-              <span class="font-semibold">1.065 BTC</span>
-            </div>
-          </div>
-        </div>
+    <div class="bg-gray-900 bg-opacity-60 p-6 sm:p-8 rounded-2xl shadow-xl text-left">
+      <!-- Staking Period -->
+      <div class="mb-6">
+        <label for="period" class="block text-sm text-gray-400 mb-2">Staking Period</label>
+        <select id="period" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+          <option value="3">3 Days</option>
+          <option value="7">7 Days</option>
+          <option value="15">15 Days</option>
+          <option value="30">30 Days</option>
+          <option value="60">60 Days</option>
+          <option value="90">90 Days</option>
+        </select>
       </div>
+
+      <!-- Crypto Selection -->
+      <div class="mb-6">
+        <label for="crypto" class="block text-sm text-gray-400 mb-2">Cryptocurrency</label>
+        <select id="crypto" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+          <option value="bitcoin">Bitcoin (BTC)</option>
+          <option value="ethereum">Ethereum (ETH)</option>
+          <option value="solana">Solana (SOL)</option>
+          <option value="cardano">Cardano (ADA)</option>
+          <option value="polkadot">Polkadot (DOT)</option>
+        </select>
+      </div>
+
+      <!-- Amount Input -->
+      <div class="mb-2">
+        <label for="amount" class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+          Amount to Stake (USDT)
+          <span class="relative group cursor-pointer">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M18 10A8 8 0 112 10a8 8 0 0116 0zM9 7a1 1 0 112 0v1a1 1 0 01-2 0V7zm0 4a1 1 0 012 0v3a1 1 0 01-2 0v-3z" />
+            </svg>
+            <div class="absolute z-10 hidden group-hover:block w-56 text-xs text-white bg-gray-700 p-2 rounded shadow-lg mt-2 left-1/2 -translate-x-1/2">
+              Minimum stake varies by duration:
+              <ul class="list-disc list-inside">
+                <li>3D: 100</li><li>7D: 3,000</li><li>15D: 7,000</li>
+                <li>30D: 10,000</li><li>60D: 30,000</li><li>90D: 50,000</li>
+              </ul>
+            </div>
+          </span>
+        </label>
+        <input id="amount" type="number" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" value="1000" />
+      </div>
+      <p id="min-note" class="text-sm text-yellow-400 mb-6"></p>
+
+      <!-- Calculate Button -->
+      <button id="calculateBtn" type="button" class="relative w-full py-3 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg text-white flex items-center justify-center">
+        <span>Calculate Earnings</span>
+        <svg id="spinner" class="hidden ml-3 w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+        </svg>
+      </button>
+
+      <p id="error-msg" class="text-red-500 mt-4 text-sm"></p>
+
+      <!-- 2.5 Result Box -->
+<div id="results" class="bg-gray-800 p-4 rounded-lg mt-6 space-y-3 hidden">
+  <div class="flex justify-between"><span class="text-gray-400">APY</span><span id="apy" class="font-semibold text-white"></span></div>
+  <div class="flex justify-between"><span class="text-gray-400">Estimated Rewards</span><span id="rewards" class="font-semibold text-white"></span></div>
+  <div class="flex justify-between"><span class="text-gray-400">Total Return</span><span id="total" class="font-semibold text-white"></span></div>
+  <div class="flex justify-between"><span class="text-gray-400">Daily Earnings</span><span id="daily" class="font-semibold text-white"></span></div>
+  <div class="flex justify-between border-t border-gray-700 pt-2"><span class="text-gray-400">Earnings (in USDT)</span><span id="earnings-usdt" class="font-semibold text-green-400"></span></div>
+  <div class="flex justify-between border-t border-gray-700 pt-2"><span class="text-gray-400">Earnings (in Elytra)</span><span id="earnings-elytra" class="font-semibold text-purple-400"></span></div>
+</div>
+
     </div>
-  </section>
+  </div>
+</section>
+
+
+
+
 
   <!-- How It Works -->
   <section id="howitworks" class="py-20 px-6 text-white">
@@ -855,7 +897,7 @@
   </section>
 
   <!-- Call to Action -->
-  <section class="py-20 px-6 bg-gradient-to-r from-blue-600 to-purple-600">
+  <section class="py-20 px-6 bg-gradient-to-r from-blue-700 to-purple-600">
     <div class="max-w-7xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-4">Ready to Start Earning with Elytra Pool?</h2>
       <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">Earn up to <span class="font-semibold text-white">25%
@@ -1396,6 +1438,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="assets/js/calculator.js"></script>
+
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,56 +10,77 @@
     ::-webkit-scrollbar {
       width: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
       background-color: #888;
       border-radius: 10px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background-color: #555;
     }
   </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen">
 
   <!-- Notification container -->
   <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 
   <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Crypto Master Admin</h1>
-    <div class="space-x-4">
-      <span>Welcome, SuperAdmin</span>
-      <button class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Logout</button>
+  <nav class="bg-gray-800 text-white px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <button class="lg:hidden text-2xl" onclick="toggleSidebar()">☰</button>
+      <h1 class="text-lg lg:text-xl font-bold">Crypto Master Admin</h1>
+    </div>
+    <div class="relative group">
+      <button class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
+        <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+          <path
+            d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.8 1.7-9.8 5v2.7h19.6V19.2c0-3.3-6.5-5-9.8-5z" />
+        </svg>
+        <span class="hidden sm:inline">Profile</span>
+      </button>
+      <div class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden group-hover:block z-50">
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+      </div>
     </div>
   </nav>
 
-  <!-- Main layout -->
-  <div class="flex">
+  <!-- Sidebar Overlay -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 lg:hidden" onclick="toggleSidebar()"></div>
 
+  <div class="flex">
     <!-- Sidebar -->
-    <aside class="w-64 bg-gray-900 text-white min-h-screen p-5 space-y-4">
-      <a href="masterKey.html" class="block py-2 bg-gray-700 rounded">Dashboard</a>
-      <a href="all-user.html" class="block py-2 hover:bg-gray-700 rounded">All Users</a>
-      <a href="admin-view.html" class="block py-2 hover:bg-gray-700 rounded">Admins</a>
-      <a href="kyc-verifications.html" class="block py-2 hover:bg-gray-700 rounded">KYC Verifications</a>
-      <a href="support.html" class="block py-2 hover:bg-gray-700 rounded">Support Tools</a>
-      <a href="customer-service.html" class="block py-2 hover:bg-gray-700 rounded">Customer Service</a>
+    <aside id="sidebar"
+      class="fixed top-0 left-0 w-64 bg-gray-900 text-white min-h-screen p-5 transform -translate-x-full transition-transform duration-300 z-50 lg:relative lg:translate-x-0 lg:block">
+      <div class="mt-6 space-y-4">
+        <a href="masterKey.html" class="block py-2 bg-gray-700 rounded">Dashboard</a>
+        <a href="all-user.html" class="block py-2 hover:bg-gray-700 rounded">All Users</a>
+        <a href="admin-view.html" class="block py-2 hover:bg-gray-700 rounded">Admins</a>
+        <a href="customer-service.html" class="block py-2 hover:bg-gray-700 rounded">Staking</a>
+        <a href="kyc-verifications.html" class="block py-2 hover:bg-gray-700 rounded">KYC Verifications</a>
+        <a href="support.html" class="block py-2 hover:bg-gray-700 rounded">Support Tools</a>
+        <a href="customer-service.html" class="block py-2 hover:bg-gray-700 rounded">Customer Service</a>
+      </div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 p-6">
       <h2 class="text-2xl font-bold mb-4">Manage Accounts</h2>
 
-      <!-- Search -->
-      <input type="text" placeholder="Search users..." oninput="searchUsers(this.value)" class="p-2 border rounded mb-4 w-full">
+      <input type="text" placeholder="Search users..." oninput="searchUsers(this.value)"
+        class="p-2 border rounded mb-4 w-full">
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
+      <!-- Cards: Users & Admins -->
+      <div class="flex flex-col lg:flex-row gap-6">
         <!-- User List -->
-        <div class="bg-white shadow p-4 rounded">
+        <div class="bg-white shadow p-4 rounded flex-1">
           <h3 class="text-xl font-semibold mb-2">Users</h3>
           <div class="max-h-[400px] overflow-y-auto pr-2">
             <ul id="user-list" class="space-y-2"></ul>
@@ -66,43 +88,42 @@
         </div>
 
         <!-- Admin List -->
-        <div class="bg-white shadow p-4 rounded">
+        <div class="bg-white shadow p-4 rounded flex-1">
           <h3 class="text-xl font-semibold mb-2">Admins</h3>
           <div class="max-h-[400px] overflow-y-auto pr-2">
             <ul id="admin-list" class="space-y-2"></ul>
           </div>
         </div>
-
       </div>
 
       <!-- Activity Logs -->
       <div class="mt-10 bg-white shadow p-4 rounded">
         <div class="flex justify-between items-center">
           <h3 class="text-xl font-semibold mb-2">Activity Logs</h3>
-          <button onclick="exportLogs()" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">Export Logs</button>
+          <button onclick="exportLogs()" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
+            Export Logs
+          </button>
         </div>
         <ul id="log-list" class="space-y-2 max-h-60 overflow-y-auto text-sm text-gray-700 pr-2"></ul>
       </div>
     </main>
   </div>
 
+  <!-- Scripts -->
   <script>
     let users = [
-      { email: "user1@crypto.com", username: "user1", password: "pass123", kycRequested: true, kycVerified: false, active: true },
-      { email: "user2@crypto.com", username: "user2", password: "pass456", kycRequested: false, kycVerified: false, active: true },
-      { email: "user3@crypto.com", username: "user3", password: "pass789", kycRequested: true, kycVerified: true, active: true }
+      { email: "user1@crypto.com", username: "user1", password: "pass123", kycRequested: true, kycVerified: false, active: true, balance: 150 },
+      { email: "user2@crypto.com", username: "user2", password: "pass456", kycRequested: false, kycVerified: false, active: true, balance: 230 },
+      { email: "user3@crypto.com", username: "user3", password: "pass789", kycRequested: true, kycVerified: true, active: true, balance: 85 }
     ];
 
     let admins = [
-      { email: "admin1@crypto.com", username: "admin1", password: "adminpass", active: true }
+      { email: "admin1@crypto.com", username: "admin1", password: "adminpass" }
     ];
 
-    let logs = [
-      { time: new Date().toLocaleString(), message: "System initialized." }
-    ];
+    let logs = [{ time: new Date().toLocaleString(), message: "System initialized." }];
 
-    function logActivity(message, isMasterAction = false) {
-      if (isMasterAction) return;
+    function logActivity(message) {
       logs.unshift({ time: new Date().toLocaleString(), message });
       renderLogs();
     }
@@ -137,8 +158,8 @@
         const kycStatus = user.kycVerified
           ? `<span class="text-green-600 font-semibold">✅ Verified</span>`
           : user.kycRequested
-          ? `<span class="text-yellow-500 font-semibold">Requested</span>`
-          : `<span class="text-gray-500">Not Requested</span>`;
+            ? `<span class="text-yellow-500 font-semibold">Requested</span>`
+            : `<span class="text-gray-500">Not Requested</span>`;
 
         userList.innerHTML += `
           <li class="border-b py-2">
@@ -147,14 +168,16 @@
               <div class="text-sm">${kycStatus}</div>
               <div class="text-sm text-gray-500">Username: ${user.username}</div>
               <div class="text-sm text-gray-500">Password: ${user.password}</div>
+              <div class="text-sm text-blue-600 font-semibold">Balance: $${user.balance.toFixed(2)}</div>
               <div class="text-sm text-${user.active ? 'green' : 'red'}-600 font-semibold">${user.active ? 'Active' : 'Inactive'}</div>
             </div>
             <div class="mt-2 flex flex-wrap gap-2">
               <button onclick="grantAdmin('${user.email}')" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Grant Admin</button>
               ${user.kycRequested && !user.kycVerified
-                ? `<button onclick="verifyKYC('${user.email}')" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Verify KYC</button>`
-                : `<button onclick="viewKYC('${user.email}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">View KYC</button>`}
+            ? `<button onclick="verifyKYC('${user.email}')" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Verify KYC</button>`
+            : `<button onclick="viewKYC('${user.email}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">View KYC</button>`}
               <button onclick="toggleUserAccess('${user.email}')" class="bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600">${user.active ? 'Deactivate' : 'Activate'}</button>
+              <button onclick="editBalance('${user.email}')" class="bg-purple-500 text-white px-2 py-1 rounded hover:bg-purple-600">Edit Balance</button>
               <button onclick="resetPassword('${user.email}', 'user')" class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">Reset Password</button>
               <button onclick="deleteAccount('${user.email}', 'user')" class="bg-black text-white px-2 py-1 rounded hover:bg-gray-800">Delete</button>
             </div>
@@ -167,8 +190,7 @@
             <div>
               <strong>Email:</strong> ${admin.email}<br />
               <span class="text-sm text-gray-500">Username: ${admin.username}</span><br />
-              <span class="text-sm text-gray-500">Password: ${admin.password}</span><br />
-              <span class="text-sm text-${admin.active ? 'green' : 'red'}-600 font-semibold">${admin.active ? 'Active' : 'Offline'}</span>
+              <span class="text-sm text-gray-500">Password: ${admin.password}</span>
             </div>
             <div class="mt-2 flex flex-wrap gap-2">
               <button onclick="revokeAdmin('${admin.email}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Admin</button>
@@ -179,16 +201,45 @@
       });
     }
 
+    function editBalance(email) {
+      const user = users.find(u => u.email === email);
+      if (!user) return;
+      const newBalance = prompt(`Enter new balance for ${email}`, user.balance);
+      if (newBalance !== null && !isNaN(newBalance) && parseFloat(newBalance) >= 0) {
+        user.balance = parseFloat(newBalance);
+        showNotification("Balance updated.");
+        logActivity(`Updated balance of ${email} to $${user.balance.toFixed(2)}`);
+        refreshLists();
+      } else {
+        alert("Invalid balance amount.");
+      }
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const backdrop = document.getElementById("sidebar-backdrop");
+      const isOpen = sidebar.classList.contains("translate-x-0");
+
+      if (isOpen) {
+        sidebar.classList.remove("translate-x-0");
+        sidebar.classList.add("-translate-x-full");
+        backdrop.classList.add("hidden");
+      } else {
+        sidebar.classList.remove("-translate-x-full");
+        sidebar.classList.add("translate-x-0");
+        backdrop.classList.remove("hidden");
+      }
+    }
+
+    // Other supporting functions here...
     function grantAdmin(email) {
       const index = users.findIndex(u => u.email === email);
       if (index !== -1) {
-        const newAdmin = {
+        admins.push({
           email: users[index].email,
           username: users[index].username,
-          password: users[index].password,
-          active: true
-        };
-        admins.push(newAdmin);
+          password: users[index].password
+        });
         users.splice(index, 1);
         showNotification("Admin granted!");
         logActivity(`Granted admin access to ${email}`);
@@ -199,25 +250,20 @@
     function revokeAdmin(email) {
       const index = admins.findIndex(a => a.email === email);
       if (index !== -1) {
-        const newUser = {
+        users.push({
           email: admins[index].email,
           username: admins[index].username,
           password: admins[index].password,
           kycRequested: false,
           kycVerified: false,
-          active: true
-        };
-        users.push(newUser);
+          active: true,
+          balance: 0
+        });
         admins.splice(index, 1);
         showNotification("Admin removed.");
         logActivity(`Removed admin access from ${email}`);
         refreshLists();
       }
-    }
-
-    function viewKYC(email) {
-      alert("Viewing KYC info for " + email);
-      logActivity(`Viewed KYC info of ${email}`);
     }
 
     function verifyKYC(email) {
@@ -227,6 +273,20 @@
         user.kycRequested = false;
         alert(`KYC verified for ${email}`);
         logActivity(`Verified KYC for ${email}`);
+        refreshLists();
+      }
+    }
+
+    function viewKYC(email) {
+      alert("Viewing KYC info for " + email);
+      logActivity(`Viewed KYC info of ${email}`);
+    }
+
+    function toggleUserAccess(email) {
+      const user = users.find(u => u.email === email);
+      if (user) {
+        user.active = !user.active;
+        logActivity(`${user.active ? 'Activated' : 'Deactivated'} user ${email}`);
         refreshLists();
       }
     }
@@ -256,15 +316,6 @@
       refreshLists();
     }
 
-    function toggleUserAccess(email) {
-      const user = users.find(u => u.email === email);
-      if (user) {
-        user.active = !user.active;
-        logActivity(`${user.active ? 'Activated' : 'Deactivated'} user ${email}`);
-        refreshLists();
-      }
-    }
-
     function exportLogs() {
       const content = logs.map(log => `${log.time} - ${log.message}`).join('\n');
       const blob = new Blob([content], { type: 'text/plain' });
@@ -288,6 +339,6 @@
     refreshLists();
     renderLogs();
   </script>
-
 </body>
+
 </html>

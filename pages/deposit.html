@@ -14,8 +14,8 @@
 
 <body class="min-h-screen">
   <!-- Navigation -->
-  <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
+  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
         <a href="user.html" class="flex items-center">
@@ -29,14 +29,33 @@
       </div>
 
       <!-- Desktop Nav Links -->
-      <div class="hidden md:flex nav-links" id="nav-links">
-        <a href="user.html" class="nav-link">Home</a>
-        <a href="staking.html" class="nav-link">Staking</a>
-        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-        <a href="deposit.html" class="nav-link">Deposit</a>
-        <a href="withdraw.html" class="nav-link">Withdraw</a>
-        <a href="Convert.html" class="nav-link">Convert</a>
-      </div>
+    <!-- Desktop Nav Links -->
+<div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Home</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Staking</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="leaderboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Deposit</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="withdraw.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Convert</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+</div>
 
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
@@ -80,77 +99,77 @@
   </nav>
 
   <!-- Main Section -->
-  <main class="flex items-center justify-center px-4 pt-28 pb-20">
-    <section class="bg-[#1B263B] p-6 pb-10 rounded-lg w-full max-w-md shadow-lg">
-      <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">Deposit Funds</h2>
+<main class="flex items-center justify-center px-4 pt-28 pb-20">
+  <section class="bg-[#1a1f36] border border-purple-500 p-6 pb-10 rounded-lg w-full max-w-md shadow-lg">
+    <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Deposit Funds</h2>
 
-      <!-- Wallet Selector -->
-      <section class="mb-4">
-        <label class="block text-sm mb-2 text-gray-300">Select Wallet</label>
-        <select id="walletSelect" class="w-full px-3 py-2 rounded text-black text-sm">
-          <option>(Select)</option>
-          <option>Gate</option>
-          <option>MetaMask</option>
-          <option>Binance</option>
-          <option>Trust Wallet</option>
-          <option>Bybit</option>
-          <option>Bitget</option>
-          <option>OKX</option>
-        </select>
-      </section>
-
-      <!-- Network Selector -->
-      <section class="mb-4">
-        <label class="block text-sm mb-2 text-gray-300">Select Network</label>
-        <select class="w-full px-3 py-2 rounded text-black text-sm">
-          <option>USDT</option>
-          <option>BTC</option>
-          <option>ETH</option>
-        </select>
-      </section>
-
-      <!-- Amount -->
-      <section class="mb-4">
-        <label for="depositAmount" class="block text-sm mb-2 text-gray-300">Amount</label>
-        <input type="number" id="depositAmount" class="w-full px-3 py-2 rounded text-black text-sm"
-          placeholder="0.00" />
-      </section>
-
-      <!-- Wallet Address & QR -->
-      <section class="mb-4">
-        <label class="block text-sm mb-2 text-gray-300">Wallet Address / QR</label>
-        <div class="bg-[#0D1B2A] p-2 rounded flex justify-between items-center text-sm">
-          <span id="walletAddress">TGVATR2m9gRBCrsWicdjT85eQduKcCv7</span>
-          <div class="flex gap-2">
-            <button onclick="copyToClipboard()" class="text-yellow-400 hover:text-yellow-300 text-xs">📋</button>
-            <button onclick="generateQRPopup()" class="text-blue-400 hover:text-blue-300 text-xs">🔳</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Upload Proof -->
-      <section class="mb-4">
-        <label for="receiptUpload" class="block text-sm mb-2 text-gray-300">Upload Receipt</label>
-        <input type="file" id="receiptUpload" accept="image/*" class="w-full text-sm text-black px-2 py-1 rounded" />
-      </section>
-
-      <!-- Agreement -->
-      <section class="mb-4">
-        <label class="flex items-center gap-2 text-sm text-gray-300">
-          <input type="checkbox" id="agree" class="accent-yellow-400" />
-          I agree that my wallet address is correct and verified.
-        </label>
-      </section>
-
-      <!-- Confirm Button -->
-      <section>
-        <button onclick="confirmDeposit()"
-          class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded w-full font-semibold">
-          Confirm Deposit
-        </button>
-      </section>
+    <!-- Wallet Selector -->
+    <section class="mb-4">
+      <label class="block text-sm mb-2 text-purple-300">Select Wallet</label>
+      <select id="walletSelect" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
+        <option>(Select)</option>
+        <option>Gate</option>
+        <option>MetaMask</option>
+        <option>Binance</option>
+        <option>Trust Wallet</option>
+        <option>Bybit</option>
+        <option>Bitget</option>
+        <option>OKX</option>
+      </select>
     </section>
-  </main>
+
+    <!-- Network Selector -->
+    <section class="mb-4">
+      <label class="block text-sm mb-2 text-purple-300">Select Network</label>
+      <select class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
+        <option>USDT</option>
+        <option>BTC</option>
+        <option>ETH</option>
+      </select>
+    </section>
+
+    <!-- Amount -->
+    <section class="mb-4">
+      <label for="depositAmount" class="block text-sm mb-2 text-purple-300">Amount</label>
+      <input type="number" id="depositAmount" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
+        placeholder="0.00" />
+    </section>
+
+    <!-- Wallet Address & QR -->
+    <section class="mb-4">
+      <label class="block text-sm mb-2 text-purple-300">Wallet Address / QR</label>
+      <div class="bg-[#0D1B2A] border border-purple-400 p-2 rounded flex justify-between items-center text-sm text-white">
+        <span id="walletAddress" class="truncate">TGVATR2m9gRBCrsWicdjT85eQduKcCv7</span>
+        <div class="flex gap-2">
+          <button onclick="copyToClipboard()" class="text-yellow-400 hover:text-yellow-300 text-xs">📋</button>
+          <button onclick="generateQRPopup()" class="text-blue-400 hover:text-blue-300 text-xs">🔳</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload Proof -->
+    <section class="mb-4">
+      <label for="receiptUpload" class="block text-sm mb-2 text-purple-300">Upload Receipt</label>
+      <input type="file" id="receiptUpload" accept="image/*" class="w-full px-2 py-1 rounded bg-slate-900 text-white text-sm border border-purple-400" />
+    </section>
+
+    <!-- Agreement -->
+    <section class="mb-4">
+      <label class="flex items-center gap-2 text-sm text-purple-300">
+        <input type="checkbox" id="agree" class="accent-yellow-400" />
+        I agree that my wallet address is correct and verified.
+      </label>
+    </section>
+
+    <!-- Confirm Button -->
+    <section>
+      <button onclick="confirmDeposit()" class="bg-green-500 px-4 py-2 rounded w-full font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white text-sm">
+        Confirm Deposit
+      </button>
+    </section>
+  </section>
+</main>
+
 
   <!-- QR Popup Modal -->
   <section id="qrPopup" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">

@@ -54,3 +54,6 @@ updateStats();
 
 // Update every 60 seconds (1 minute = 60000 ms)
 setInterval(updateStats, 60000);
+
+
+

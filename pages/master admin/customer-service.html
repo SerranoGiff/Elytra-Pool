@@ -9,17 +9,17 @@
 <body class="bg-gray-100 min-h-screen">
 
   <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Customer Service</h1>
-    <a href="/masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  <nav class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+    <h1 class="text-base font-bold">Customer Service</h1>
+    <a href="/masterKey.html" class="bg-gray-600 px-3 py-1 text-sm rounded hover:bg-gray-700">Back to Dashboard</a>
   </nav>
 
   <!-- Main Content -->
   <div class="p-6 max-w-5xl mx-auto">
     <h2 class="text-2xl font-bold mb-4">Support Messages</h2>
 
-    <!-- Message List -->
-    <div id="message-list" class="space-y-4"></div>
+    <!-- Scrollable Card Container -->
+    <div id="message-list" class="space-y-4 h-[28rem] overflow-y-auto pr-2"></div>
   </div>
 
   <!-- Reply Modal -->
@@ -36,10 +36,14 @@
     </div>
   </div>
 
+  <!-- JavaScript -->
   <script>
     const messages = [
       { id: 1, email: 'user1@crypto.com', subject: 'Issue with withdrawal', message: 'I cannot withdraw my funds.', status: 'open' },
-      { id: 2, email: 'user3@crypto.com', subject: 'KYC stuck', message: 'My KYC is pending for days.', status: 'open' }
+      { id: 2, email: 'user3@crypto.com', subject: 'KYC stuck', message: 'My KYC is pending for days.', status: 'open' },
+      { id: 3, email: 'user4@crypto.com', subject: 'App crashing', message: 'The app keeps crashing when I open it.', status: 'open' },
+      { id: 4, email: 'user5@crypto.com', subject: 'Incorrect balance', message: 'My balance is showing 0 but I deposited.', status: 'open' },
+      { id: 5, email: 'user6@crypto.com', subject: 'Account suspended', message: 'Why is my account suspended without notice?', status: 'open' }
     ];
 
     let currentMessageId = null;
@@ -49,18 +53,21 @@
       container.innerHTML = '';
 
       messages.forEach(msg => {
-        container.innerHTML += `
-          <div class="bg-white shadow p-4 rounded border ${msg.status === 'read' ? 'opacity-60' : ''}">
-            <div class="font-semibold">${msg.subject}</div>
-            <div class="text-sm text-gray-600 mb-2">From: ${msg.email}</div>
-            <p class="mb-2">${msg.message}</p>
-            ${
-              msg.status === 'read'
+        const card = document.createElement('div');
+        card.className = `bg-white shadow p-4 rounded border transition-opacity duration-200 ${msg.status === 'read' ? 'opacity-60' : ''}`;
+
+        card.innerHTML = `
+          <div class="font-semibold text-lg mb-1">${msg.subject}</div>
+          <div class="text-sm text-gray-600 mb-2">From: ${msg.email}</div>
+          <p class="text-sm mb-3 text-gray-800">${msg.message}</p>
+          ${
+            msg.status === 'read'
               ? `<span class="text-green-600 font-semibold text-sm">✔️ Marked as Read</span>`
-              : `<button onclick="openReply(${msg.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Reply</button>`
-            }
-          </div>
+              : `<button onclick="openReply(${msg.id})" class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-blue-600">Reply</button>`
+          }
         `;
+
+        container.appendChild(card);
       });
     }
 

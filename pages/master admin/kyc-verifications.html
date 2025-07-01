@@ -6,14 +6,15 @@
   <title>KYC Verifications - Crypto Master Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen relative">
 
   <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Crypto Master Admin - KYC Verifications</h1>
-    <a href="masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  <nav class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+    <h1 class="text-base font-bold flex-1">Crypto Master Admin - KYC Verifications</h1>
+    <a href="masterKey.html" class="bg-gray-600 px-3 py-1 text-sm rounded hover:bg-gray-700">Back to Dashboard</a>
   </nav>
 
+  <!-- Main Content -->
   <main class="p-6">
     <h2 class="text-2xl font-bold mb-4">KYC Verification Requests</h2>
 
@@ -32,13 +33,14 @@
     </div>
   </main>
 
+  <!-- Global Dropdown -->
+  <div id="globalDropdown" class="hidden fixed z-50 bg-white shadow-md rounded w-36 text-sm border"></div>
+
   <!-- KYC Modal -->
   <div id="kycModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
       <h3 class="text-xl font-bold mb-4">KYC Details</h3>
-      <div id="kycDetails" class="text-sm space-y-2">
-        <!-- Populated dynamically -->
-      </div>
+      <div id="kycDetails" class="text-sm space-y-2"></div>
       <div class="flex justify-end mt-4">
         <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
       </div>
@@ -84,23 +86,64 @@
         const row = document.createElement("tr");
         row.classList.add("border-b");
 
+        const statusBadge = user.kycStatus === "verified"
+          ? '<span class="text-green-600 font-semibold">Verified</span>'
+          : '<span class="text-yellow-600 font-semibold">Pending</span>';
+
+        const actionButton = `
+          <button data-index="${index}" class="dropdown-trigger bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none">
+            Actions
+          </button>
+        `;
+
         row.innerHTML = `
           <td class="py-2">${user.email}</td>
           <td class="py-2">${user.username}</td>
-          <td class="py-2">
-            ${user.kycStatus === "verified"
-              ? '<span class="text-green-600 font-semibold">Verified</span>'
-              : '<span class="text-yellow-600 font-semibold">Pending</span>'}
-          </td>
-          <td class="py-2 space-x-2">
-            <button onclick="viewKyc(${index})" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">View</button>
-            ${user.kycStatus === "requested" ? `
-              <button onclick="verifyKyc(${index})" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Verify</button>
-              <button onclick="rejectKyc(${index})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Reject</button>
-            ` : ''}
-          </td>
+          <td class="py-2">${statusBadge}</td>
+          <td class="py-2">${actionButton}</td>
         `;
+
         tableBody.appendChild(row);
+      });
+
+      // Add dropdown trigger functionality
+      document.querySelectorAll('.dropdown-trigger').forEach(button => {
+        button.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const index = this.getAttribute("data-index");
+          const user = kycUsers[index];
+          const dropdown = document.getElementById("globalDropdown");
+
+          let items = `
+            <button onclick="viewKyc(${index})" class="block w-full text-left px-4 py-2 hover:bg-gray-100">View</button>
+          `;
+
+          if (user.kycStatus === "requested") {
+            items += `
+              <button onclick="verifyKyc(${index})" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Verify</button>
+              <button onclick="rejectKyc(${index})" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">Reject</button>
+            `;
+          }
+
+          dropdown.innerHTML = items;
+
+          const rect = this.getBoundingClientRect();
+          const dropdownHeight = user.kycStatus === "requested" ? 130 : 60;
+          const windowHeight = window.innerHeight;
+
+          let top = rect.bottom;
+          if (rect.bottom + dropdownHeight > windowHeight) {
+            top = rect.top - dropdownHeight;
+          }
+
+          dropdown.style.top = `${top}px`;
+          dropdown.style.left = `${rect.left}px`;
+          dropdown.classList.remove("hidden");
+        });
+      });
+
+      document.addEventListener('click', () => {
+        document.getElementById("globalDropdown").classList.add("hidden");
       });
     }
 
@@ -140,6 +183,5 @@
 
     renderKycTable();
   </script>
-
 </body>
 </html>

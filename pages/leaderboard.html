@@ -10,12 +10,18 @@
     <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/user.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+</style>
+
 </head>
 
 <body class="min-h-screen">
     <!-- Navigation -->
-    <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
                 <a href="user.html" class="flex items-center">
@@ -30,14 +36,34 @@
             </div>
 
             <!-- Desktop Nav Links -->
-            <div class="hidden md:flex nav-links" id="nav-links">
-                <a href="user.html" class="nav-link">Home</a>
-                <a href="staking.html" class="nav-link">Staking</a>
-                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-                <a href="deposit.html" class="nav-link">Deposit</a>
-                <a href="withdraw.html" class="nav-link">Withdraw</a>
-                <a href="Convert.html" class="nav-link">Convert</a>
-            </div>
+            <!-- Desktop Nav Links -->
+<div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Home</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Staking</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="leaderboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Deposit</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="withdraw.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Convert</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+</div>
+
 
             <!-- Desktop Profile -->
             <div class="relative hidden md:block">
@@ -84,98 +110,107 @@
 
     <!-- Main Section -->
     <!-- Main Section -->
-<main class="flex items-center justify-center px-4 pt-28 pb-20">
-    <section class="bg-[#1B263B] p-6 rounded-xl w-full max-w-3xl shadow-2xl border border-gray-700">
-        <h2 class="text-4xl font-bold text-yellow-400 mb-4 text-center tracking-tight">🏆 Top 10 Leaderboard</h2>
-        <p class="text-sm text-gray-400 text-center mb-6">Updated every 4 seconds with real-time simulated earnings.</p>
+<main class="flex flex-col items-center justify-center px-4 pt-28 pb-20 bg-[#0f172a]">
+  <!-- Stats Summary -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10 w-full max-w-5xl mx-auto">
+    
+    <!-- Yesterday’s Profit -->
+    <div class="bg-[#1e293b] border border-[#7c3aed] rounded-xl p-5 text-white">
+      <p class="text-sm text-slate-400 mb-1">Yesterday’s Profit</p>
+      <p class="text-3xl font-bold text-[#c084fc]">+1,000 ELTR</p>
+      <p class="text-xs text-slate-500 mt-1">Platform-wide earnings</p>
+    </div>
 
-        <div class="overflow-x-auto rounded-lg">
-            <table class="min-w-full divide-y divide-gray-700 text-sm text-white">
-                <thead class="bg-[#0D1B2A] text-yellow-300">
-                    <tr>
-                        <th class="py-3 px-4 text-left">Rank</th>
-                        <th class="py-3 px-4 text-left">User</th>
-                        <th class="py-3 px-4 text-left">Total Staked</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboardBody" class="divide-y divide-gray-800 bg-[#1E293B] transition-all duration-500 ease-in-out">
-                    <!-- JS will populate -->
-                </tbody>
-            </table>
-        </div>
+    <!-- 30 Days Cumulative -->
+    <div class="bg-[#1e293b] border border-[#7c3aed] rounded-xl p-5 text-white">
+      <p class="text-sm text-slate-400 mb-1">30 Days Cumulative Income</p>
+      <p class="text-3xl font-bold text-[#c084fc]">+18,420 ELTR</p>
+      <p class="text-xs text-slate-500 mt-1">Platform-wide earnings</p>
+    </div>
 
-        <!-- Your Stats Section -->
-        <div class="mt-10 p-6 bg-[#0D1B2A] border border-yellow-400 rounded-xl text-white text-center">
-            <h3 class="text-xl font-semibold text-yellow-400 mb-2">Your Stats</h3>
-            <p class="mb-1">👑 <span id="yourRank" class="font-bold text-white">Rank: --</span></p>
-            <p>💰 <span id="yourEarnings" class="font-bold text-green-400">$--</span> Total Staked</p>
-        </div>
-    </section>
-</main>
+    <!-- Total Active Users -->
+    <div class="bg-[#1e293b] border border-[#7c3aed] rounded-xl p-5 text-white">
+      <p class="text-sm text-slate-400 mb-1">Total Active Users</p>
+      <p class="text-3xl font-bold text-[#c084fc]">1,240 Users</p>
+      <p class="text-xs text-slate-500 mt-1">All-Time Participants</p>
+    </div>
+    
+  </div>
 
-    <!-- Footer -->
-    <footer class="py-12 px-6 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div class="flex items-center space-x-2">
-                    <a href="index.html" class="flex items-center">
-                        <div
-                            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
-                                class="w-full h-full rounded-full object-cover" />
-                        </div>
-                        <span
-                            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                            Pool</span>
-                    </a>
-                </div>
+   <section class="bg-[#1e293b] p-6 rounded-xl w-full max-w-4xl shadow-xl border border-[#7c3aed]">
+  <h2 class="text-3xl md:text-4xl font-bold text-[#c084fc] mb-4 text-center tracking-tight">
+    🏆 Top 10 Leaderboard
+  </h2>
+  <p class="text-sm text-slate-400 text-center mb-6">
+    Real-time  earnings.
+  </p>
 
-                <div>
-                    <h4 class="font-semibold mb-4">Products</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#staking" class="hover:text-white">Staking</a></li>
-                        <li><a href="#mining" class="hover:text-white">Assets</a></li>
-                        <li>
-                            <a href="#earnings" class="hover:text-white">Leaderboard</a>
-                        </li>
-                        <li>
-                            <a href="pages/about.html" class="hover:text-white">FAQ</a>
-                        </li>
-                    </ul>
-                </div>
+  <!-- Leaderboard Table -->
+  <div class="overflow-x-auto rounded-lg">
+    <table class="min-w-full divide-y divide-[#334155] text-sm text-white">
+      <thead class="bg-[#0f172a] text-[#c084fc">
+        <tr>
+          <th class="py-3 px-4 text-left">Rank</th>
+          <th class="py-3 px-4 text-left">User</th>
+          <th class="py-3 px-4 text-left">Total Staked</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardBody" class="divide-y divide-[#2e1065] bg-[#1e1b36] transition-all duration-500 ease-in-out">
+        <!-- JS will populate -->
+      </tbody>
+    </table>
+  </div>
 
-                <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Help Center</a></li>
-                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-white">Status</a></li>
-                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                    </ul>
-                </div>
+  <!-- Your Stats Section -->
+  <div class="mt-10 bg-[#0f172a] border border-[#7c3aed] rounded-xl p-6 text-center">
+    <h3 class="text-xl font-semibold text-[#a78bfa] mb-2">Your Stats</h3>
+    <p class="mb-1">👑 <span id="yourRank" class="font-bold text-white">Rank: --</span></p>
+    <p>💰 <span id="yourEarnings" class="font-bold text-[#c084fc]">--</span> Total Staked</p>
+  </div>
+</section>
 
-                <div>
-                    <h4 class="font-semibold mb-4">Follow Us</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Twitter</a></li>
-                        <li><a href="#" class="hover:text-white">Telegram</a></li>
-                        <li><a href="#" class="hover:text-white">Discord</a></li>
-                    </ul>
-                </div>
-            </div>
 
-            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-                <div class="text-sm text-gray-400 mb-4 md:mb-0">
-                    © 2023 - 2025 Elytra Pool. All rights reserved.
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+  <!-- Footer -->
+  <footer class="py-10 px-6 border-t border-purple-900 mt-20">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 text-sm text-gray-400">
+      <div>
+        <a href="user.html" class="flex items-center gap-3 mb-4">
+          <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-10 h-10 rounded-full object-cover" />
+          <span class="text-xl font-bold text-white">Elytra Pool</span>
+        </a>
+        <p class="text-xs">Empowering Web3 staking with ease and rewards.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-3">Products</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white">Staking</a></li>
+          <li><a href="#" class="hover:text-white">Assets</a></li>
+          <li><a href="#" class="hover:text-white">Leaderboard</a></li>
+          <li><a href="#" class="hover:text-white">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-3">Support</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white">Help Center</a></li>
+          <li><a href="#" class="hover:text-white">Contact</a></li>
+          <li><a href="#" class="hover:text-white">Status</a></li>
+          <li><a href="#" class="hover:text-white">Privacy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-3">Follow Us</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white">Twitter</a></li>
+          <li><a href="#" class="hover:text-white">Telegram</a></li>
+          <li><a href="#" class="hover:text-white">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-10 border-t border-purple-900 pt-6 text-center text-gray-500 text-xs">
+      © 2023–2025 Elytra Pool. All rights reserved.
+    </div>
+  </footer>
 
     <script>
     const defaultUsers = [
@@ -207,15 +242,15 @@
         users.forEach((user, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td class="px-4 py-3 font-bold text-yellow-400">${index + 1}</td>
-                <td class="px-4 py-3">${user.username}</td>
-                <td class="px-4 py-3 text-green-400">$${user.earnings.toLocaleString()}</td>
-            `;
+  <td class="px-4 py-3 font-semibold text-[#c084fc]">${index + 1}</td>
+  <td class="px-4 py-3 text-blue-100">${user.username}</td>
+  <td class="px-4 py-3 font-medium text-purple-200">${user.earnings.toLocaleString()} ELTR</td>
+`;
             tbody.appendChild(row);
 
             if (user.username === loggedInUser) {
                 document.getElementById("yourRank").innerText = `Rank: ${index + 1}`;
-                document.getElementById("yourEarnings").innerText = `$${user.earnings.toLocaleString()}`;
+                document.getElementById("yourEarnings").innerText = `${user.earnings.toLocaleString()} ELTR`;
             }
         });
 
@@ -223,7 +258,7 @@
     }
 
     updateLeaderboard();
-    setInterval(updateLeaderboard, 4000);
+    setInterval(updateLeaderboard, 1000000);
 </script>
 
 

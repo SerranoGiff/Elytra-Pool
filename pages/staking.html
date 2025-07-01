@@ -14,8 +14,8 @@
 
 <body class="min-h-screen">
     <!-- Navigation -->
-    <nav class="gradient-bg border-b border-gray-800 py-4 px-6 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
                 <a href="user.html" class="flex items-center">
@@ -30,14 +30,34 @@
             </div>
 
             <!-- Desktop Nav Links -->
-            <div class="hidden md:flex nav-links" id="nav-links">
-                <a href="user.html" class="nav-link">Home</a>
-                <a href="staking.html" class="nav-link">Staking</a>
-                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-                <a href="deposit.html" class="nav-link">Deposit</a>
-                <a href="withdraw.html" class="nav-link">Withdraw</a>
-                <a href="Convert.html" class="nav-link">Convert</a>
-            </div>
+           <!-- Desktop Nav Links -->
+<div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Home</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Staking</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="leaderboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Deposit</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="withdraw.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+  <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+    <span class="text-white hover:text-purple-300 transition">Convert</span>
+    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+  </a>
+</div>
+
 
             <!-- Desktop Profile -->
             <div class="relative hidden md:block">
@@ -82,6 +102,8 @@
         </div>
     </nav>
 
+
+    
     <!-- Staking Section -->
     <section id="staking" class="pt-32 pb-20 px-4 md:px-10">
         <div class="max-w-[90rem] mx-auto">
@@ -89,6 +111,47 @@
             <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg">
                 Earn passive income by staking your cryptocurrencies with our secure platform.
             </p>
+<!-- Earnings Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+  <!-- Yesterday's Profit -->
+  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+    <div class="text-sm text-gray-400 mb-1">Yesterday's Profit</div>
+    <div class="text-3xl font-bold">+1,000 <span class="text-purple-400">ELTR</span></div>
+    <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
+  </div>
+
+  <!-- 30 Days Cumulative Income -->
+  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+    <div class="text-sm text-gray-400 mb-1">30 Days Cumulative Income</div>
+    <div class="text-3xl font-bold">+18,420 <span class="text-purple-400">ELTR</span></div>
+    <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
+  </div>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 w-full">
+  <button class="tab-btn w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white font-semibold hover:brightness-110 transition">Staking Cycles</button>
+  <button class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Active Stakes</button>
+  <button class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Staking History</button>
+</div>
+
+<!-- Section Containers -->
+<div id="stakingCyclesSection">
+  <!-- Keep your existing staking cards inside this div -->
+</div>
+
+<div class="hidden" id="activeStakesSection">
+  <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
+    <p class="text-lg">You have no active stakes yet.</p>
+  </div>
+</div>
+
+<div class="hidden" id="stakingHistorySection">
+  <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
+    <p class="text-lg">No staking history found.</p>
+  </div>
+</div>
+
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Bitcoin Staking -->
@@ -564,6 +627,33 @@
             }, 3000);
         });
     </script>
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const stakingCycles = document.getElementById('stakingCyclesSection');
+  const activeStakes = document.getElementById('activeStakesSection');
+  const stakingHistory = document.getElementById('stakingHistorySection');
+
+  tabs.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(tab => {
+        tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
+        tab.classList.remove('bg-purple-700');
+        tab.classList.add('bg-gray-700');
+      });
+
+      btn.classList.remove('bg-gray-700');
+      btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
+
+      stakingCycles.classList.add('hidden');
+      activeStakes.classList.add('hidden');
+      stakingHistory.classList.add('hidden');
+
+      if (index === 0) stakingCycles.classList.remove('hidden');
+      else if (index === 1) activeStakes.classList.remove('hidden');
+      else if (index === 2) stakingHistory.classList.remove('hidden');
+    });
+  });
+</script>
 
 </body>
 

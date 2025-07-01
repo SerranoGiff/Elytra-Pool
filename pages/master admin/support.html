@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Support Tools - Crypto Master Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,17 +12,16 @@
   <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 
   <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Crypto Master Admin - Support Tools</h1>
-    <a href="masteradmin.html" class="bg-gray-600 px-3 py-1 rounded hover:bg-gray-700">Back to Dashboard</a>
+  <nav class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+    <h1 class="text-base font-bold flex-1">Crypto Master Admin - Support Tools</h1>
+    <a href="/masterKey.html" class="bg-gray-600 px-3 py-1 text-sm rounded hover:bg-gray-700">Back to Dashboard</a>
   </nav>
 
+  <!-- Main Content -->
   <main class="p-6">
     <h2 class="text-2xl font-bold mb-4">Support Tools</h2>
 
-    <!-- Tool Section -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
       <!-- System Status -->
       <div class="bg-white p-6 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">System Status</h3>
@@ -30,7 +29,7 @@
         <button onclick="checkSystem()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Check Now</button>
       </div>
 
-      <!-- Broadcast -->
+      <!-- Broadcast Message -->
       <div class="bg-white p-6 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">Broadcast Message</h3>
         <p class="text-sm text-gray-600 mb-4">Send announcements to all users.</p>
@@ -50,7 +49,6 @@
         <p class="text-sm text-gray-600 mb-4">Enable or disable maintenance mode.</p>
         <button onclick="toggleMaintenance()" id="maintenanceBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Enable Mode</button>
       </div>
-
     </div>
   </main>
 
@@ -101,7 +99,7 @@
         showNotification("Please enter a message before sending.", true);
         return;
       }
-      console.log("Broadcast:", message); // Simulated send
+      console.log("Broadcast:", message);
       showNotification("Broadcast message sent.");
       closeBroadcastModal();
     }

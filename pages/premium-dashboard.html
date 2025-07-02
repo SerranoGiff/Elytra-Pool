@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elytra Pool | Crypto Asset Wallet</title>
+  <title>Elytra Pool | Asset Wallet</title>
   <link rel="stylesheet" href="../assets/css/style.css" />
   <link rel="stylesheet" href="../assets/css/user.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
@@ -20,20 +20,26 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.html" class="flex items-center">
+        <a href="premium-dashboard.html" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
             <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
-          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-            Pool</span>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-2">
+  Elytra Pool
+  <span class="bg-yellow-400 text-black text-xs font-semibold px-2 py-0.5 rounded-full animate-pulse">
+    Premium
+    <span class="ml-2 text-green-500 text-sm">✔ Active</span>
+  </span>
+</span>
+
         </a>
       </div>
 
       <!-- Desktop Nav Links -->
 <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+  <a href="premium-dashboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
     <span class="text-white hover:text-purple-300 transition">Home</span>
     <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
   </a>
@@ -114,10 +120,27 @@
 
     <!-- Wallet Card -->
 <div class="relative bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
-  <!-- Last Activity top-right -->
-  <p class="absolute top-4 right-6 text-sm text-gray-400 font-semibold">
-    Last Activity: 2h ago
-  </p>
+  <!-- Last Activity + Premium Features -->
+<div class="absolute top-4 right-6 text-sm text-right space-y-1">
+  <p class="text-gray-400 font-semibold">Last Activity: 2h ago</p>
+  
+  <!-- Premium Feature: Hashrate -->
+  <div class="text-blue-300 font-bold flex items-center justify-end gap-2 animate-pulse">
+    <i class="fas fa-bolt text-blue-400"></i>
+    <span class="text-xs bg-blue-900/50 px-2 py-1 rounded-full border border-blue-500 shadow-md shadow-blue-500/30">
+      1 TH/s Hashrate
+    </span>
+  </div>
+
+  <!-- Premium Feature: Pool Fee -->
+  <div class="text-green-300 font-bold flex items-center justify-end gap-2 animate-pulse">
+    <i class="fas fa-percentage text-green-400"></i>
+    <span class="text-xs bg-green-900/50 px-2 py-1 rounded-full border border-green-500 shadow-md shadow-green-500/30">
+      1.9% Pool Fee
+    </span>
+  </div>
+</div>
+
 
   <p class="text-white font-semibold text-lg mb-1">
     Wallet Balance (Total)
@@ -125,7 +148,7 @@
   <p class="text-4xl font-bold text-[#c084fc]">$5,000</p>
 
   <div class="text-sm text-slate-400 mb-4">
-    Secure and ready to use
+    Enhanced features and priority access
   </div>
 
   <div class="grid grid-cols-2 gap-4 text-sm mb-4">
@@ -162,6 +185,12 @@
       <i class="fas fa-sync-alt"></i> Convert
     </a>
   </div>
+</div>
+
+<!-- Earnings Chart -->
+<div class="mt-8 bg-[#1a1f36] border border-purple-600 p-6 rounded-xl shadow-md">
+  <h2 class="text-purple-300 text-lg font-bold mb-4">Earnings Overview</h2>
+  <canvas id="earningsChart" height="100"></canvas>
 </div>
 
 <!-- Referral Card -->
@@ -232,7 +261,7 @@
             <li class="flex items-center"><i class="fas fa-times text-red-400 mr-2"></i>Unlimited Staking</li>
           </ul>
         </div>
-        <p class="text-center text-xs text-gray-400 mt-6">You're currently on this plan</p>
+        <p class="text-center text-xs text-gray-400 mt-6">Thank you for purchasing premium</p>
       </div>
 
       <!-- PREMIUM PLAN -->
@@ -253,15 +282,15 @@
             <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>Exclusive Beta Access</li>
           </ul>
         </div>
-        <a href="upgrade.html" class="mt-8 block text-center bg-yellow-400 text-black font-semibold py-2 rounded-lg hover:bg-yellow-300 transition duration-300">
-          Upgrade Now
+        <p class="mt-8 text-center bg-green-500 text-white font-semibold py-2 rounded-lg shadow-md animate-pulse">
+  You're on Premium
+</p>
         </a>
       </div>
 
     </div>
   </div>
 </section>
-
 
  <!-- Section: My Assets Table -->
 <section id="my-assets" class="mt-12 bg-[#1a1f36] rounded-lg shadow-lg border border-purple-500 overflow-hidden">
@@ -397,6 +426,33 @@
       });
     }
   </script>
+<script>
+  const ctx = document.getElementById('earningsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Earnings (ELTR)',
+        data: [120, 150, 180, 130, 200, 220, 250],
+        fill: true,
+        backgroundColor: 'rgba(192, 132, 252, 0.1)',
+        borderColor: '#c084fc',
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#c084fc' } }
+      },
+      scales: {
+        x: { ticks: { color: '#a78bfa' }, grid: { color: '#2e2b4a' } },
+        y: { ticks: { color: '#a78bfa' }, grid: { color: '#2e2b4a' } }
+      }
+    }
+  });
+</script>
 
   <script src="../assets/js/script.js"></script>
   <script src="../assets/js/randomizer.js"></script>

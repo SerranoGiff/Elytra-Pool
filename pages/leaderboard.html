@@ -15,6 +15,32 @@
     font-family: 'Inter', sans-serif;
   }
 </style>
+<style>
+@keyframes glow-pulse {
+  0%, 100% { background-color: rgba(124, 58, 237, 0.05); }
+  50% { background-color: rgba(124, 58, 237, 0.2); }
+}
+
+.glow-update {
+  animation: glow-pulse 1s ease-in-out 2;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  border: 2px solid transparent;
+  border-top: 2px solid #7c3aed;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+</style>
 
 </head>
 
@@ -108,65 +134,93 @@
         </div>
     </nav>
 
-    <!-- Main Section -->
-    <!-- Main Section -->
-<main class="flex flex-col items-center justify-center px-4 pt-28 pb-20 bg-[#0f172a]">
-  <!-- Stats Summary -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10 w-full max-w-5xl mx-auto">
-    
-    <!-- Yesterday’s Profit -->
-    <div class="bg-[#1e293b] border border-[#7c3aed] rounded-xl p-5 text-white">
-      <p class="text-sm text-slate-400 mb-1">Yesterday’s Profit</p>
-      <p class="text-3xl font-bold text-[#c084fc]">+1,000 ELTR</p>
-      <p class="text-xs text-slate-500 mt-1">Platform-wide earnings</p>
-    </div>
-
-    <!-- 30 Days Cumulative -->
-    <div class="bg-[#1e293b] border border-[#7c3aed] rounded-xl p-5 text-white">
-      <p class="text-sm text-slate-400 mb-1">30 Days Cumulative Income</p>
-      <p class="text-3xl font-bold text-[#c084fc]">+18,420 ELTR</p>
-      <p class="text-xs text-slate-500 mt-1">Platform-wide earnings</p>
-    </div>
-
-    <!-- Total Active Users -->
-    <div class="bg-[#1e293b] border border-[#7c3aed] rounded-xl p-5 text-white">
-      <p class="text-sm text-slate-400 mb-1">Total Active Users</p>
-      <p class="text-3xl font-bold text-[#c084fc]">1,240 Users</p>
-      <p class="text-xs text-slate-500 mt-1">All-Time Participants</p>
-    </div>
-    
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto mt-24 px-4">
+  <!-- Yesterday's Profit -->
+  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+    <div class="text-sm text-gray-400 mb-1">Yesterday's Profit</div>
+    <div class="text-3xl font-bold">+1,000 <span class="text-purple-400">ELTR</span></div>
+    <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
   </div>
 
-   <section class="bg-[#1e293b] p-6 rounded-xl w-full max-w-4xl shadow-xl border border-[#7c3aed]">
-  <h2 class="text-3xl md:text-4xl font-bold text-[#c084fc] mb-4 text-center tracking-tight">
-    🏆 Top 10 Leaderboard
-  </h2>
-  <p class="text-sm text-slate-400 text-center mb-6">
-    Real-time  earnings.
-  </p>
+  <!-- 30 Days Cumulative Income -->
+  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+    <div class="text-sm text-gray-400 mb-1">30 Days Cumulative Income</div>
+    <div class="text-3xl font-bold">+18,420 <span class="text-purple-400">ELTR</span></div>
+    <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
+  </div>
 
-  <!-- Leaderboard Table -->
-  <div class="overflow-x-auto rounded-lg">
-    <table class="min-w-full divide-y divide-[#334155] text-sm text-white">
-      <thead class="bg-[#0f172a] text-[#c084fc">
+  <!-- Active Users -->
+  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+    <div class="text-sm text-gray-400 mb-1">Active Users</div>
+    <div class="text-3xl font-bold"><span id="activeUsers">--</span></div>
+    <div class="text-xs text-gray-500 mt-1">In the past hour</div>
+  </div>
+</div>
+
+<!-- Leaderboard Section -->
+<section class="bg-[#1e293b] px-4 sm:px-6 py-8 rounded-xl w-full max-w-5xl mx-auto shadow-xl border border-[#7c3aed] mt-10">
+  <h2 class="text-3xl md:text-4xl font-bold text-[#c084fc] mb-4 text-center tracking-tight">
+    🏆 Leaderboards
+  </h2>
+  <p class="text-sm text-slate-400 text-center mb-6">Real-time platform data for top contributors</p>
+
+  <!-- Tabs -->
+  <div class="flex flex-wrap justify-center gap-2 mb-6">
+    <button class="leaderboard-tab active-tab bg-[#7c3aed] text-white px-4 py-2 rounded-full text-sm font-medium transition" data-tab="stakers">Top Stakers</button>
+    <button class="leaderboard-tab bg-[#334155] text-white px-4 py-2 rounded-full text-sm font-medium transition" data-tab="holders">Top Holders</button>
+    <button class="leaderboard-tab bg-[#334155] text-white px-4 py-2 rounded-full text-sm font-medium transition" data-tab="earners">Top Earners</button>
+  </div>
+
+  <!-- Tables -->
+  <div class="w-full overflow-x-auto rounded-lg">
+    <!-- Top Stakers -->
+    <table id="tab-stakers" class="leaderboard-table min-w-full divide-y divide-[#334155] text-sm text-white">
+      <thead class="bg-[#0f172a] text-[#c084fc]">
         <tr>
           <th class="py-3 px-4 text-left">Rank</th>
           <th class="py-3 px-4 text-left">User</th>
           <th class="py-3 px-4 text-left">Total Staked</th>
         </tr>
       </thead>
-      <tbody id="leaderboardBody" class="divide-y divide-[#2e1065] bg-[#1e1b36] transition-all duration-500 ease-in-out">
-        <!-- JS will populate -->
-      </tbody>
+      <tbody id="tbody-stakers" class="divide-y divide-[#2e1065] bg-[#1e1b36]"></tbody>
+    </table>
+
+    <!-- Top Holders -->
+    <table id="tab-holders" class="leaderboard-table hidden min-w-full divide-y divide-[#334155] text-sm text-white">
+      <thead class="bg-[#0f172a] text-[#c084fc]">
+        <tr>
+          <th class="py-3 px-4 text-left">Rank</th>
+          <th class="py-3 px-4 text-left">User</th>
+          <th class="py-3 px-4 text-left">Balance</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-holders" class="divide-y divide-[#2e1065] bg-[#1e1b36]"></tbody>
+    </table>
+
+    <!-- Top Earners -->
+    <table id="tab-earners" class="leaderboard-table hidden min-w-full divide-y divide-[#334155] text-sm text-white">
+      <thead class="bg-[#0f172a] text-[#c084fc]">
+        <tr>
+          <th class="py-3 px-4 text-left">Rank</th>
+          <th class="py-3 px-4 text-left">User</th>
+          <th class="py-3 px-4 text-left">Rewards</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-earners" class="divide-y divide-[#2e1065] bg-[#1e1b36]"></tbody>
     </table>
   </div>
 
-  <!-- Your Stats Section -->
-  <div class="mt-10 bg-[#0f172a] border border-[#7c3aed] rounded-xl p-6 text-center">
-    <h3 class="text-xl font-semibold text-[#a78bfa] mb-2">Your Stats</h3>
-    <p class="mb-1">👑 <span id="yourRank" class="font-bold text-white">Rank: --</span></p>
-    <p>💰 <span id="yourEarnings" class="font-bold text-[#c084fc]">--</span> Total Staked</p>
+  <!-- Your Stats -->
+  <div class="mt-10 bg-[#0f172a] border border-[#7c3aed] rounded-xl p-6 sm:p-8 text-center">
+    <h3 class="text-xl font-semibold text-[#a78bfa] mb-4">Your Stats</h3>
+    <div class="grid sm:grid-cols-3 gap-4 text-sm sm:text-base">
+      <p>👑 Rank: <span id="yourRank" class="font-bold text-white">--</span></p>
+      <p>💰 Total Staked: <span id="yourEarnings" class="font-bold text-[#c084fc]">--</span></p>
+      <p>📦 ELTR Balance: <span id="yourBalance" class="font-bold text-[#c084fc]">--</span></p>
+    </div>
   </div>
+
 </section>
 
 
@@ -212,56 +266,7 @@
     </div>
   </footer>
 
-    <script>
-    const defaultUsers = [
-        { username: "CryptoKing", earnings: 200000000 },
-        { username: "ElytraWolf", earnings: 180000000 },
-        { username: "MoonMiner", earnings: 160000000 },
-        { username: "StakerX", earnings: 140000000 },
-        { username: "BlockBoi", earnings: 120000000 },
-        { username: "TokenTita", earnings: 100000000 },
-        { username: "MinerMark", earnings: 80000000 },
-        { username: "BitQueen", earnings: 60000000 },
-        { username: "ChainBoss", earnings: 40000000 },
-        { username: "HashHunter", earnings: 20000000 },
-    ];
-
-    let users = JSON.parse(localStorage.getItem("elytra_leaderboard_usd")) || defaultUsers;
-    const loggedInUser = "MoonMiner"; // Change this to dynamic session username
-
-    function updateLeaderboard() {
-        users.forEach(user => {
-            user.earnings += Math.floor(Math.random() * 900000) + 100000;
-        });
-
-        users.sort((a, b) => b.earnings - a.earnings);
-
-        const tbody = document.getElementById("leaderboardBody");
-        tbody.innerHTML = "";
-
-        users.forEach((user, index) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-  <td class="px-4 py-3 font-semibold text-[#c084fc]">${index + 1}</td>
-  <td class="px-4 py-3 text-blue-100">${user.username}</td>
-  <td class="px-4 py-3 font-medium text-purple-200">${user.earnings.toLocaleString()} ELTR</td>
-`;
-            tbody.appendChild(row);
-
-            if (user.username === loggedInUser) {
-                document.getElementById("yourRank").innerText = `Rank: ${index + 1}`;
-                document.getElementById("yourEarnings").innerText = `${user.earnings.toLocaleString()} ELTR`;
-            }
-        });
-
-        localStorage.setItem("elytra_leaderboard_usd", JSON.stringify(users));
-    }
-
-    updateLeaderboard();
-    setInterval(updateLeaderboard, 1000000);
-</script>
-
-
+    
     <!-- Navbar Toggle Script -->
     <script>
         const menuBtn = document.getElementById("menu-button");
@@ -301,7 +306,124 @@
             });
         }
     </script>
+<script>
+  // Generate 100 unique usernames
+  const usernames = Array.from({ length: 100 }, (_, i) => {
+    const adjectives = ["Swift", "Fuzzy", "Dark", "Neon", "Silent", "Crypto", "Shadow", "Golden", "Nova", "Iron"];
+    const animals = ["Tiger", "Wolf", "Bear", "Eagle", "Shark", "Hawk", "Falcon", "Fox", "Lion", "Panther"];
+    return (
+      adjectives[i % adjectives.length] +
+      animals[i % animals.length] +
+      Math.floor(Math.random() * 9999)
+    );
+  });
 
+  const generateUsers = () => {
+    return usernames.map(name => ({
+      username: name,
+      staked: Math.floor(Math.random() * 100000) + 1000,
+      balance: Math.floor(Math.random() * 100000) + 2000,
+      rewards: Math.floor(Math.random() * 20000) + 1000,
+      prevRank: {
+        staked: null,
+        balance: null,
+        rewards: null,
+      }
+    }));
+  };
+
+  let allUsers = JSON.parse(localStorage.getItem("elytra_users")) || generateUsers();
+  const loggedInUser = "GoldenFox3829"; // Replace with dynamic session
+
+  function getRankChangeIcon(prev, current) {
+    if (prev === null) return "🟢";
+    if (current < prev) return "🔺";
+    if (current > prev) return "🔻";
+    return "🟢"
+  }
+</script>
+<script>
+  const renderTable = (type, key, tbodyId) => {
+    const tbody = document.getElementById(tbodyId);
+    const sorted = [...allUsers].sort((a, b) => b[key] - a[key]).slice(0, 10);
+
+    tbody.innerHTML = "";
+
+    sorted.forEach((user, i) => {
+      const rank = i + 1;
+      const isLogged = user.username === loggedInUser;
+      const indicator = getRankChangeIcon(user.prevRank[type], rank);
+      const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
+      const value = user[key].toLocaleString();
+
+      const row = document.createElement("tr");
+      row.className = isLogged ? "bg-purple-800 bg-opacity-20" : "";
+      row.innerHTML = `
+        <td class="py-3 px-4 font-semibold text-[#c084fc]">${medal} <span class="ml-1">${indicator}</span></td>
+        <td class="py-3 px-4 text-white">${user.username}</td>
+        <td class="py-3 px-4 font-medium text-purple-200">${value} ELTR</td>
+      `;
+      tbody.appendChild(row);
+
+      user.prevRank[type] = rank;
+
+      if (isLogged && type === "staked") {
+        document.getElementById("yourRank").innerText = `#${rank}`;
+        document.getElementById("yourEarnings").innerText = `${user.staked.toLocaleString()} ELTR`;
+        document.getElementById("yourBalance").innerText = `${user.balance.toLocaleString()} ELTR`;
+      }
+    });
+  };
+
+  const updateLeaderboard = () => {
+    allUsers.forEach(user => {
+      user.staked += Math.floor(Math.random() * 5000);
+      user.balance += Math.floor(Math.random() * 2000);
+      user.rewards += Math.floor(Math.random() * 800);
+    });
+
+    renderTable("staked", "staked", "tbody-stakers");
+    renderTable("balance", "balance", "tbody-holders");
+    renderTable("rewards", "rewards", "tbody-earners");
+
+    localStorage.setItem("elytra_users", JSON.stringify(allUsers));
+  };
+
+  // Tabs toggle
+  const tabs = document.querySelectorAll(".leaderboard-tab");
+  const tables = {
+    stakers: document.getElementById("tab-stakers"),
+    holders: document.getElementById("tab-holders"),
+    earners: document.getElementById("tab-earners")
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active-tab", "bg-[#7c3aed]"));
+      tab.classList.add("active-tab", "bg-[#7c3aed]");
+      Object.values(tables).forEach(tbl => tbl.classList.add("hidden"));
+      tables[tab.dataset.tab].classList.remove("hidden");
+    });
+  });
+
+  updateLeaderboard();
+  setInterval(updateLeaderboard, 3600000); // 1 hour
+</script>
+
+
+
+
+ <!-- Floating Customer Service Button -->
+<div class="fixed bottom-6 right-6 z-50 group">
+  <a href="mailto:support@elytra.io" target="_blank"
+    class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+    <i class="fas fa-headset text-white text-xl"></i>
+  </a>
+  <div
+    class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    Customer Support
+  </div>
+</div>
 </body>
 
 </html>

@@ -150,6 +150,26 @@
   </section>
 </main>
 
+<!-- KYC Verification Modal (No Close Button) -->
+<div id="kycModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-[#1a1f36] border border-purple-500 rounded-lg shadow-2xl w-full max-w-md p-6 text-white relative animate-fade-in">
+    <div class="text-center">
+      <h2 class="text-2xl font-bold text-purple-400 mb-3">Verify Your Identity</h2>
+      <p class="text-sm text-slate-400 mb-5">
+        To continue using Elytra Pool’s features, please complete your KYC verification.
+        This ensures the security of your funds and unlocks withdrawals and staking.
+      </p>
+
+      <a href="kyc.html"
+         class="inline-block bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-semibold py-2 px-6 rounded shadow-md shadow-purple-700/30 transition">
+        Start Verification
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
   <!-- Footer -->
   <footer class="py-12 px-6 border-t border-gray-800">
     <div class="max-w-7xl mx-auto">
@@ -279,6 +299,29 @@
             });
         }
     </script>
+    <script>
+  // Show only if user is NOT verified
+  window.addEventListener('DOMContentLoaded', () => {
+    const isVerified = false; // 🔁 Change this based on your verification logic
+    if (isVerified) {
+      document.getElementById('kycModal').classList.add('hidden');
+    } else {
+      document.getElementById('kycModal').classList.remove('hidden');
+    }
+  });
+</script>
+
+     <!-- Floating Customer Service Button -->
+<div class="fixed bottom-6 right-6 z-50 group">
+  <a href="mailto:support@elytra.io" target="_blank"
+    class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+    <i class="fas fa-headset text-white text-xl"></i>
+  </a>
+  <div
+    class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    Customer Support
+  </div>
+</div>
 </body>
 
 </html>

@@ -1,107 +1,447 @@
 <!DOCTYPE html>
-<html lang="en" x-data="adminApp()">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crypto Master - Admin Tools</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Master - Support Tools</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    [x-cloak] { display: none !important; }
     .badge {
-      @apply px-2 py-1 rounded text-xs font-medium;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 500;
     }
-    .badge-active { @apply bg-green-100 text-green-800; }
-    .badge-inactive { @apply bg-gray-100 text-gray-800; }
-    .badge-error { @apply bg-red-100 text-red-800; }
-    .badge-warning { @apply bg-yellow-100 text-yellow-800; }
-    .badge-info { @apply bg-blue-100 text-blue-800; }
+    .badge-active {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .badge-inactive {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
     .status-indicator {
-      @apply inline-block w-3 h-3 rounded-full mr-1;
+      display: inline-block;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 9999px;
+      margin-right: 0.25rem;
     }
-    .status-active { @apply bg-green-500; }
-    .status-warning { @apply bg-yellow-500; }
-    .status-error { @apply bg-red-500; }
-    .status-maintenance { @apply bg-purple-500; }
-    .api-method-get { @apply bg-green-100 text-green-800; }
-    .api-method-post { @apply bg-blue-100 text-blue-800; }
-    .api-method-put { @apply bg-yellow-100 text-yellow-800; }
-    .api-method-delete { @apply bg-red-100 text-red-800; }
-    .monitor-card {
+    .status-active {
+      background-color: #10b981;
+    }
+    .status-warning {
+      background-color: #f59e0b;
+    }
+    .status-error {
+      background-color: #ef4444;
+    }
+    .api-method-get {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .api-method-post {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    .api-method-put {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .api-method-delete {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .log-entry {
+      border-left-width: 4px;
+      padding-left: 0.75rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .log-info {
+      border-color: #3b82f6;
+      background-color: #eff6ff;
+    }
+    .log-warning {
+      border-color: #f59e0b;
+      background-color: #fffbeb;
+    }
+    .log-error {
+      border-color: #ef4444;
+      background-color: #fef2f2;
+    }
+    .log-success {
+      border-color: #10b981;
+      background-color: #ecfdf5;
+    }
+    .priority-high {
+      border-left-width: 4px;
+      border-color: #ef4444;
+    }
+    .priority-medium {
+      border-left-width: 4px;
+      border-color: #f59e0b;
+    }
+    .priority-low {
+      border-left-width: 4px;
+      border-color: #6b7280;
+    }
+    .card-hover {
       transition: all 0.3s ease;
     }
-    .monitor-card:hover {
+    .card-hover:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-    .log-entry {
-      @apply border-l-4 pl-3 py-1;
+    .user-status-active {
+      background-color: #dcfce7;
+      color: #166534;
     }
-    .log-info { @apply border-blue-500 bg-blue-50; }
-    .log-warning { @apply border-yellow-500 bg-yellow-50; }
-    .log-error { @apply border-red-500 bg-red-50; }
-    .log-success { @apply border-green-500 bg-green-50; }
-    .log-debug { @apply border-gray-500 bg-gray-50; }
+    .user-status-suspended {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .user-status-pending {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .transaction-status-completed {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .transaction-status-pending {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .transaction-status-failed {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .grid-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
   </style>
 </head>
 
-<body class="bg-gray-50 min-h-screen" x-cloak>
-  <!-- Notification container -->
-  <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
-
-  <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center space-x-4">
-      <h1 class="text-lg lg:text-xl font-bold">Crypto Master - System Tools</h1>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Top Header -->
+  <header class="bg-white shadow-sm">
+    <div class="flex justify-between items-center px-6 py-4">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-800">Support Tools</h2>
+        <p class="text-sm text-gray-500">System monitoring and management utilities</p>
+      </div>
+      <div class="flex space-x-3">
+        <a href="dashboard.html" class="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 flex items-center">
+          <i class="fas fa-arrow-left mr-2 text-gray-600"></i>
+          Back to Dashboard
+        </a>
+        <a href="logout.php" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center">
+          <i class="fas fa-sign-out-alt mr-2"></i>
+          Logout
+        </a>
+      </div>
     </div>
-    <div class="flex items-center space-x-4">
-      <button @click="refreshAll()" class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-        </svg>
-        <span>Refresh All</span>
-      </button>
-    </div>
-  </nav>
+  </header>
 
   <!-- Main Content -->
-  <main class="flex-1 p-4 lg:p-6">
+  <main class="flex-1 p-6 bg-gray-50">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       <!-- System Status Overview -->
       <div class="bg-white rounded-lg shadow p-6 lg:col-span-3">
         <h2 class="text-xl font-bold mb-4">System Status</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <div class="border rounded-lg p-4 text-center">
             <div class="flex justify-center items-center mb-2">
               <span class="status-indicator status-active"></span>
               <span class="font-medium">API Services</span>
             </div>
-            <p class="text-2xl font-bold" x-text="apiStatus.online"></p>
+            <p class="text-2xl font-bold">8/10</p>
             <p class="text-sm text-gray-500">Online Endpoints</p>
           </div>
           <div class="border rounded-lg p-4 text-center">
             <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator" :class="systemStatus === 'active' ? 'status-active' : systemStatus === 'warning' ? 'status-warning' : 'status-error'"></span>
+              <span class="status-indicator status-active"></span>
               <span class="font-medium">System Health</span>
             </div>
-            <p class="text-2xl font-bold capitalize" x-text="systemStatus"></p>
-            <p class="text-sm text-gray-500" x-text="systemMessage"></p>
+            <p class="text-2xl font-bold capitalize">Active</p>
+            <p class="text-sm text-gray-500">All systems operational</p>
           </div>
           <div class="border rounded-lg p-4 text-center">
             <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator" :class="databaseStatus === 'active' ? 'status-active' : 'status-error'"></span>
+              <span class="status-indicator status-active"></span>
               <span class="font-medium">Database</span>
             </div>
-            <p class="text-2xl font-bold capitalize" x-text="databaseStatus"></p>
-            <p class="text-sm text-gray-500" x-text="'Latency: ' + databaseLatency + 'ms'"></p>
+            <p class="text-2xl font-bold capitalize">Active</p>
+            <p class="text-sm text-gray-500">Latency: 24ms</p>
           </div>
           <div class="border rounded-lg p-4 text-center">
             <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator" :class="lastCronRun.status === 'success' ? 'status-active' : lastCronRun.status === 'running' ? 'status-warning' : 'status-error'"></span>
+              <span class="status-indicator status-active"></span>
+              <span class="font-medium">Users</span>
+            </div>
+            <p class="text-2xl font-bold">1,842</p>
+            <p class="text-sm text-gray-500">24 active now</p>
+          </div>
+          <div class="border rounded-lg p-4 text-center">
+            <div class="flex justify-center items-center mb-2">
+              <span class="status-indicator status-active"></span>
+              <span class="font-medium">Transactions</span>
+            </div>
+            <p class="text-2xl font-bold">342</p>
+            <p class="text-sm text-gray-500">Today</p>
+          </div>
+          <div class="border rounded-lg p-4 text-center">
+            <div class="flex justify-center items-center mb-2">
+              <span class="status-indicator status-active"></span>
               <span class="font-medium">Last Cron Job</span>
             </div>
-            <p class="text-2xl font-bold capitalize" x-text="lastCronRun.status"></p>
-            <p class="text-sm text-gray-500" x-text="'Ran ' + formatTimeAgo(lastCronRun.time)"></p>
+            <p class="text-2xl font-bold capitalize">Success</p>
+            <p class="text-sm text-gray-500">Ran 15 minutes ago</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Management -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">User Management</h2>
+          <div class="flex space-x-2">
+            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
+              <i class="fas fa-plus mr-1"></i>
+              New User
+            </button>
+            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
+              <i class="fas fa-download mr-1"></i>
+              Export
+            </button>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Balance</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Last Login</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>crypto_trader</div>
+                  <div class="text-xs text-gray-500">trader@cryptomaster.com</div>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge user-status-active">
+                    Active
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">$12,450.75</td>
+                <td class="px-4 py-2 text-sm text-gray-500">2 hours ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
+                  <button class="text-red-600 hover:text-red-800">Terminate</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>bitcoin_miner</div>
+                  <div class="text-xs text-gray-500">miner@cryptomaster.com</div>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge user-status-suspended">
+                    Suspended
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">$8,200.00</td>
+                <td class="px-4 py-2 text-sm text-gray-500">3 days ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
+                  <button class="text-green-600 hover:text-green-800">Activate</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>eth_investor</div>
+                  <div class="text-xs text-gray-500">investor@cryptomaster.com</div>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge user-status-active">
+                    Active
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">$24,780.30</td>
+                <td class="px-4 py-2 text-sm text-gray-500">5 minutes ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
+                  <button class="text-red-600 hover:text-red-800">Terminate</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>newbie_crypto</div>
+                  <div class="text-xs text-gray-500">newbie@cryptomaster.com</div>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge user-status-pending">
+                    Pending
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">$500.00</td>
+                <td class="px-4 py-2 text-sm text-gray-500">Never</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
+                  <button class="text-green-600 hover:text-green-800">Approve</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Transaction Monitoring -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Transaction Monitoring</h2>
+          <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
+            <i class="fas fa-filter mr-1"></i>
+            Filter
+          </button>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Transaction</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>BTC Purchase</div>
+                  <div class="text-xs text-gray-500">crypto_trader</div>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">+0.25 BTC</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge transaction-status-completed">
+                    Completed
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">10 min ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800">View</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>ETH Withdrawal</div>
+                  <div class="text-xs text-gray-500">eth_investor</div>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">-5.72 ETH</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge transaction-status-pending">
+                    Pending
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">25 min ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800">View</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>USDT Transfer</div>
+                  <div class="text-xs text-gray-500">bitcoin_miner</div>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">-1,200 USDT</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge transaction-status-failed">
+                    Failed
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">1 hour ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800">View</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                  <div>LTC Deposit</div>
+                  <div class="text-xs text-gray-500">crypto_trader</div>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">+42.8 LTC</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge transaction-status-completed">
+                    Completed
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">2 hours ago</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Security Logs -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Security Logs</h2>
+          <button class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+        
+        <div class="space-y-2 max-h-96 overflow-y-auto">
+          <div class="log-entry log-info">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">INFO</span>
+              <span class="text-xs text-gray-500">Just now</span>
+            </div>
+            <p class="text-sm">User session started for admin_user</p>
+          </div>
+          <div class="log-entry log-warning">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">WARNING</span>
+              <span class="text-xs text-gray-500">5 min ago</span>
+            </div>
+            <p class="text-sm">Multiple failed login attempts from IP 192.168.1.25</p>
+          </div>
+          <div class="log-entry log-success">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">SUCCESS</span>
+              <span class="text-xs text-gray-500">15 min ago</span>
+            </div>
+            <p class="text-sm">User eth_investor completed KYC verification</p>
+          </div>
+          <div class="log-entry log-error">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">ERROR</span>
+              <span class="text-xs text-gray-500">30 min ago</span>
+            </div>
+            <p class="text-sm">Transaction verification failed for TX-4892-EFG</p>
+          </div>
+          <div class="log-entry log-info">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">INFO</span>
+              <span class="text-xs text-gray-500">2 hours ago</span>
+            </div>
+            <p class="text-sm">System backup completed successfully</p>
           </div>
         </div>
       </div>
@@ -110,7 +450,7 @@
       <div class="bg-white rounded-lg shadow p-6">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold">API Endpoints</h2>
-          <button @click="modals.apiCreate = true" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+          <button class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
             Add Endpoint
           </button>
         </div>
@@ -127,70 +467,62 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <template x-for="endpoint in apiEndpoints" :key="endpoint.id">
-                <tr>
-                  <td class="px-4 py-2 text-sm font-medium text-gray-900" x-text="endpoint.path"></td>
-                  <td class="px-4 py-2 text-sm">
-                    <span class="badge" 
-                          :class="'api-method-' + endpoint.method.toLowerCase()" 
-                          x-text="endpoint.method"></span>
-                  </td>
-                  <td class="px-4 py-2 text-sm">
-                    <span class="badge" 
-                          :class="endpoint.active ? 'badge-active' : 'badge-inactive'" 
-                          x-text="endpoint.active ? 'Active' : 'Inactive'"></span>
-                  </td>
-                  <td class="px-4 py-2 text-sm text-gray-500" x-text="endpoint.rateLimit + '/min'"></td>
-                  <td class="px-4 py-2 text-sm">
-                    <button @click="editApiEndpoint(endpoint.id)" class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
-                    <button @click="toggleApiStatus(endpoint.id)" class="text-gray-600 hover:text-gray-800">
-                      <span x-text="apiEndpoints.find(e => e.id === endpoint.id).active ? 'Disable' : 'Enable'"></span>
-                    </button>
-                  </td>
-                </tr>
-              </template>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">/api/v1/users</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge api-method-get">
+                    GET
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge badge-active">
+                    Active
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">100/min</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
+                  <button class="text-gray-600 hover:text-gray-800">Disable</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">/api/v1/wallet/balance</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge api-method-get">
+                    GET
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge badge-active">
+                    Active
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">200/min</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
+                  <button class="text-gray-600 hover:text-gray-800">Disable</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 text-sm font-medium text-gray-900">/api/v1/admin/transactions</td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge api-method-get">
+                    GET
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm">
+                  <span class="badge badge-inactive">
+                    Inactive
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-sm text-gray-500">30/min</td>
+                <td class="px-4 py-2 text-sm">
+                  <button class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
+                  <button class="text-green-600 hover:text-green-800">Enable</button>
+                </td>
+              </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <!-- Announcements Management -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">Announcements</h2>
-          <button @click="modals.announcementCreate = true" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
-            New Announcement
-          </button>
-        </div>
-        
-        <div class="space-y-3">
-          <template x-for="announcement in announcements" :key="announcement.id">
-            <div class="border rounded-lg p-4">
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="font-bold" x-text="announcement.title"></h3>
-                <span class="text-xs text-gray-500" x-text="formatDate(announcement.date)"></span>
-              </div>
-              <p class="text-sm text-gray-700 mb-3" x-text="announcement.content"></p>
-              <div class="flex justify-between items-center">
-                <span class="text-xs" 
-                      :class="announcement.priority === 'high' ? 'text-red-600' : announcement.priority === 'medium' ? 'text-yellow-600' : 'text-gray-600'"
-                      x-text="'Priority: ' + announcement.priority"></span>
-                <div class="flex gap-2">
-                  <button @click="editAnnouncement(announcement.id)" class="text-blue-600 hover:text-blue-800 text-xs">Edit</button>
-                  <button @click="deleteAnnouncement(announcement.id)" class="text-red-600 hover:text-red-800 text-xs">Delete</button>
-                </div>
-              </div>
-            </div>
-          </template>
-          
-          <template x-if="announcements.length === 0">
-            <div class="text-center py-6 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-              </svg>
-              <p>No announcements yet</p>
-            </div>
-          </template>
         </div>
       </div>
 
@@ -199,475 +531,149 @@
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold">System Logs</h2>
           <div class="flex items-center space-x-2">
-            <select x-model="logLevel" @change="filterLogs()" class="border rounded px-2 py-1 text-sm">
-              <option value="all">All Levels</option>
-              <option value="error">Errors</option>
-              <option value="warning">Warnings</option>
-              <option value="info">Info</option>
-            </select>
-            <button @click="clearLogs()" class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
+            <button class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
               Clear
             </button>
           </div>
         </div>
         
         <div class="space-y-2 max-h-96 overflow-y-auto">
-          <template x-for="log in filteredLogs" :key="log.id">
-            <div class="log-entry" :class="'log-' + log.level">
-              <div class="flex justify-between items-start">
-                <span class="text-xs font-medium" x-text="log.level.toUpperCase()"></span>
-                <span class="text-xs text-gray-500" x-text="formatTime(log.timestamp)"></span>
-              </div>
-              <p class="text-sm" x-text="log.message"></p>
-              <template x-if="log.details">
-                <p class="text-xs text-gray-600 mt-1" x-text="log.details"></p>
-              </template>
+          <div class="log-entry log-info">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">INFO</span>
+              <span class="text-xs text-gray-500">Just now</span>
             </div>
-          </template>
-          
-          <template x-if="filteredLogs.length === 0">
-            <div class="text-center py-6 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p>No logs available</p>
+            <p class="text-sm">System started successfully</p>
+          </div>
+          <div class="log-entry log-warning">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">WARNING</span>
+              <span class="text-xs text-gray-500">15 min ago</span>
             </div>
-          </template>
+            <p class="text-sm">API rate limit exceeded on endpoint /api/v1/users</p>
+          </div>
+          <div class="log-entry log-success">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">SUCCESS</span>
+              <span class="text-xs text-gray-500">30 min ago</span>
+            </div>
+            <p class="text-sm">Database optimization completed</p>
+          </div>
+          <div class="log-entry log-error">
+            <div class="flex justify-between items-start">
+              <span class="text-xs font-medium">ERROR</span>
+              <span class="text-xs text-gray-500">1 hour ago</span>
+            </div>
+            <p class="text-sm">Failed to connect to external API service</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="grid-stack mb-6">
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+        <div class="space-y-3">
+          <div class="flex items-center">
+            <div class="bg-blue-100 p-2 rounded-full mr-3">
+              <i class="fas fa-user-plus text-blue-600"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium">New user registered</p>
+              <p class="text-xs text-gray-500">crypto_newbie joined 10 minutes ago</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-green-100 p-2 rounded-full mr-3">
+              <i class="fas fa-exchange-alt text-green-600"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium">Large transaction</p>
+              <p class="text-xs text-gray-500">BTC purchase of 2.5 BTC completed</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-red-100 p-2 rounded-full mr-3">
+              <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium">Security alert</p>
+              <p class="text-xs text-gray-500">Suspicious login attempt blocked</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-4">System Resources</h3>
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-1">
+            <span>CPU Usage</span>
+            <span>42%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-blue-500" style="width: 42%"></div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-1">
+            <span>Memory</span>
+            <span>64%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-green-500" style="width: 64%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span>Disk Space</span>
+            <span>28%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-purple-500" style="width: 28%"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <button class="bg-blue-100 text-blue-700 p-3 rounded-lg hover:bg-blue-200 flex flex-col items-center justify-center">
+            <i class="fas fa-user-shield text-xl mb-2"></i>
+            <span class="text-sm">Security Scan</span>
+          </button>
+          <button class="bg-green-100 text-green-700 p-3 rounded-lg hover:bg-green-200 flex flex-col items-center justify-center">
+            <i class="fas fa-database text-xl mb-2"></i>
+            <span class="text-sm">Backup Now</span>
+          </button>
+          <button class="bg-purple-100 text-purple-700 p-3 rounded-lg hover:bg-purple-200 flex flex-col items-center justify-center">
+            <i class="fas fa-sync-alt text-xl mb-2"></i>
+            <span class="text-sm">Refresh Cache</span>
+          </button>
+          <button class="bg-yellow-100 text-yellow-700 p-3 rounded-lg hover:bg-yellow-200 flex flex-col items-center justify-center">
+            <i class="fas fa-file-export text-xl mb-2"></i>
+            <span class="text-sm">Export Data</span>
+          </button>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- API Endpoint Modal -->
-  <div x-show="modals.apiCreate || modals.apiEdit" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
-       @click.away="closeApiModal()" x-transition>
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-      <div class="p-6">
-        <h3 class="text-xl font-bold mb-4" x-text="modals.apiCreate ? 'Create API Endpoint' : 'Edit API Endpoint'"></h3>
-        
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Endpoint Path</label>
-            <input x-model="currentApi.path" type="text" class="w-full border rounded px-3 py-2" placeholder="/api/v1/endpoint">
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">HTTP Method</label>
-            <select x-model="currentApi.method" class="w-full border rounded px-3 py-2">
-              <option value="GET">GET</option>
-              <option value="POST">POST</option>
-              <option value="PUT">PUT</option>
-              <option value="DELETE">DELETE</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Rate Limit (per minute)</label>
-            <input x-model.number="currentApi.rateLimit" type="number" class="w-full border rounded px-3 py-2" min="1" max="1000">
-          </div>
-          
-          <div class="flex items-center">
-            <input x-model="currentApi.active" id="api-active" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-            <label for="api-active" class="ml-2 block text-sm text-gray-700">Active</label>
-          </div>
-          
-          <div x-show="!modals.apiCreate">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Last Modified</label>
-            <p class="text-sm text-gray-500" x-text="formatDate(currentApi.lastModified)"></p>
-          </div>
-        </div>
-
-        <div class="flex justify-end space-x-3 pt-4 mt-4 border-t">
-          <button @click="closeApiModal()" class="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button>
-          <button @click="saveApiEndpoint()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            <span x-text="modals.apiCreate ? 'Create' : 'Save'"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Announcement Modal -->
-  <div x-show="modals.announcementCreate || modals.announcementEdit" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
-       @click.away="closeAnnouncementModal()" x-transition>
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-      <div class="p-6">
-        <h3 class="text-xl font-bold mb-4" x-text="modals.announcementCreate ? 'Create Announcement' : 'Edit Announcement'"></h3>
-        
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-            <input x-model="currentAnnouncement.title" type="text" class="w-full border rounded px-3 py-2" placeholder="Important Update">
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-            <textarea x-model="currentAnnouncement.content" rows="4" class="w-full border rounded px-3 py-2" placeholder="Details about the announcement..."></textarea>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-            <select x-model="currentAnnouncement.priority" class="w-full border rounded px-3 py-2">
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-          
-          <div x-show="!modals.announcementCreate">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Created</label>
-            <p class="text-sm text-gray-500" x-text="formatDate(currentAnnouncement.date)"></p>
-          </div>
-        </div>
-
-        <div class="flex justify-end space-x-3 pt-4 mt-4 border-t">
-          <button @click="closeAnnouncementModal()" class="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button>
-          <button @click="saveAnnouncement()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            <span x-text="modals.announcementCreate ? 'Create' : 'Save'"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    function adminApp() {
-      return {
-        // App State
-        modals: {
-          apiCreate: false,
-          apiEdit: false,
-          announcementCreate: false,
-          announcementEdit: false
-        },
-        apiStatus: {
-          online: 12,
-          offline: 0,
-          limitReached: 2
-        },
-        systemStatus: 'active',
-        systemMessage: 'All systems operational',
-        databaseStatus: 'active',
-        databaseLatency: 24,
-        lastCronRun: {
-          status: 'success',
-          time: new Date(Date.now() - 3600000).toISOString() // 1 hour ago
-        },
-        logLevel: 'all',
-        currentApi: {
-          id: null,
-          path: '',
-          method: 'GET',
-          rateLimit: 60,
-          active: true,
-          lastModified: null
-        },
-        currentAnnouncement: {
-          id: null,
-          title: '',
-          content: '',
-          priority: 'medium',
-          date: null
-        },
-        
-        // Sample Data
-        apiEndpoints: [
-          {
-            id: 1,
-            path: '/api/v1/users',
-            method: 'GET',
-            rateLimit: 100,
-            active: true,
-            lastModified: '2023-11-20T09:15:22'
-          },
-          {
-            id: 2,
-            path: '/api/v1/users/create',
-            method: 'POST',
-            rateLimit: 50,
-            active: true,
-            lastModified: '2023-11-19T14:30:45'
-          },
-          {
-            id: 3,
-            path: '/api/v1/wallet/balance',
-            method: 'GET',
-            rateLimit: 200,
-            active: true,
-            lastModified: '2023-11-18T11:20:33'
-          },
-          {
-            id: 4,
-            path: '/api/v1/admin/transactions',
-            method: 'GET',
-            rateLimit: 30,
-            active: false,
-            lastModified: '2023-11-17T16:45:10'
-          },
-          {
-            id: 5,
-            path: '/api/v1/trading/pairs',
-            method: 'GET',
-            rateLimit: 150,
-            active: true,
-            lastModified: '2023-11-16T10:15:28'
-          }
-        ],
-        announcements: [
-          {
-            id: 1,
-            title: 'Scheduled Maintenance',
-            content: 'We will be performing system maintenance on November 25th from 2:00 AM to 4:00 AM UTC. The platform will be unavailable during this time.',
-            priority: 'high',
-            date: '2023-11-20T08:00:00'
-          },
-          {
-            id: 2,
-            title: 'New API Version Available',
-            content: 'API v2 is now available with improved performance and additional features. Please migrate from v1 as it will be deprecated next month.',
-            priority: 'medium',
-            date: '2023-11-18T14:30:00'
-          },
-          {
-            id: 3,
-            title: 'Holiday Trading Schedule',
-            content: 'Trading will continue as usual during the upcoming holidays, but support response times may be slightly delayed.',
-            priority: 'low',
-            date: '2023-11-15T10:15:00'
-          }
-        ],
-        systemLogs: [
-          {
-            id: 1,
-            level: 'info',
-            message: 'System started successfully',
-            details: 'All services initialized',
-            timestamp: new Date().toISOString()
-          },
-          {
-            id: 2,
-            level: 'warning',
-            message: 'API rate limit exceeded',
-            details: 'Endpoint: /api/v1/users from IP: 192.168.1.100',
-            timestamp: new Date(Date.now() - 300000).toISOString() // 5 mins ago
-          },
-          {
-            id: 3,
-            level: 'error',
-            message: 'Database connection timeout',
-            details: 'Retrying connection...',
-            timestamp: new Date(Date.now() - 1800000).toISOString() // 30 mins ago
-          },
-          {
-            id: 4,
-            level: 'info',
-            message: 'Cron job completed',
-            details: 'Daily backup created successfully',
-            timestamp: new Date(Date.now() - 3600000).toISOString() // 1 hour ago
-          },
-          {
-            id: 5,
-            level: 'success',
-            message: 'New user registered',
-            details: 'User ID: 12345, Email: newuser@example.com',
-            timestamp: new Date(Date.now() - 7200000).toISOString() // 2 hours ago
-          }
-        ],
-
-        // Computed Properties
-        get filteredLogs() {
-          if (this.logLevel === 'all') return this.systemLogs;
-          return this.systemLogs.filter(log => log.level === this.logLevel);
-        },
-
-        // Methods
-        refreshAll() {
-          // Simulate refreshing data
-          this.databaseLatency = Math.floor(Math.random() * 50) + 10;
-          this.apiStatus.online = Math.floor(Math.random() * 5) + 10;
-          this.showNotification('System data refreshed');
-        },
-        
-        filterLogs() {
-          // Handled by computed property
-        },
-        
-        clearLogs() {
-          this.systemLogs = [];
-          this.showNotification('Logs cleared');
-        },
-        
-        // API Endpoint Methods
-        createApiEndpoint() {
-          this.currentApi = {
-            id: null,
-            path: '',
-            method: 'GET',
-            rateLimit: 60,
-            active: true,
-            lastModified: null
-          };
-          this.modals.apiCreate = true;
-        },
-        
-        editApiEndpoint(id) {
-          const endpoint = this.apiEndpoints.find(e => e.id === id);
-          if (endpoint) {
-            this.currentApi = JSON.parse(JSON.stringify(endpoint));
-            this.modals.apiEdit = true;
-          }
-        },
-        
-        toggleApiStatus(id) {
-          const endpoint = this.apiEndpoints.find(e => e.id === id);
-          if (endpoint) {
-            endpoint.active = !endpoint.active;
-            endpoint.lastModified = new Date().toISOString();
-            const status = endpoint.active ? 'enabled' : 'disabled';
-            this.showNotification(`API endpoint ${status}`);
-          }
-        },
-        
-        saveApiEndpoint() {
-          if (!this.currentApi.path || !this.currentApi.method) {
-            this.showNotification('Please fill all required fields', 'error');
-            return;
-          }
-          
-          if (this.modals.apiCreate) {
-            // Create new endpoint
-            const newId = Math.max(...this.apiEndpoints.map(e => e.id)) + 1;
-            this.apiEndpoints.push({
-              ...this.currentApi,
-              id: newId,
-              lastModified: new Date().toISOString()
-            });
-            this.showNotification('API endpoint created');
-          } else {
-            // Update existing endpoint
-            const index = this.apiEndpoints.findIndex(e => e.id === this.currentApi.id);
-            if (index !== -1) {
-              this.apiEndpoints[index] = {
-                ...this.currentApi,
-                lastModified: new Date().toISOString()
-              };
-              this.showNotification('API endpoint updated');
-            }
-          }
-          
-          this.closeApiModal();
-        },
-        
-        closeApiModal() {
-          this.modals.apiCreate = false;
-          this.modals.apiEdit = false;
-        },
-        
-        // Announcement Methods
-        createAnnouncement() {
-          this.currentAnnouncement = {
-            id: null,
-            title: '',
-            content: '',
-            priority: 'medium',
-            date: null
-          };
-          this.modals.announcementCreate = true;
-        },
-        
-        editAnnouncement(id) {
-          const announcement = this.announcements.find(a => a.id === id);
-          if (announcement) {
-            this.currentAnnouncement = JSON.parse(JSON.stringify(announcement));
-            this.modals.announcementEdit = true;
-          }
-        },
-        
-        deleteAnnouncement(id) {
-          if (confirm('Are you sure you want to delete this announcement?')) {
-            this.announcements = this.announcements.filter(a => a.id !== id);
-            this.showNotification('Announcement deleted');
-          }
-        },
-        
-        saveAnnouncement() {
-          if (!this.currentAnnouncement.title || !this.currentAnnouncement.content) {
-            this.showNotification('Please fill all required fields', 'error');
-            return;
-          }
-          
-          if (this.modals.announcementCreate) {
-            // Create new announcement
-            const newId = Math.max(...this.announcements.map(a => a.id)) + 1;
-            this.announcements.push({
-              ...this.currentAnnouncement,
-              id: newId,
-              date: new Date().toISOString()
-            });
-            this.showNotification('Announcement created');
-          } else {
-            // Update existing announcement
-            const index = this.announcements.findIndex(a => a.id === this.currentAnnouncement.id);
-            if (index !== -1) {
-              this.announcements[index] = this.currentAnnouncement;
-              this.showNotification('Announcement updated');
-            }
-          }
-          
-          this.closeAnnouncementModal();
-        },
-        
-        closeAnnouncementModal() {
-          this.modals.announcementCreate = false;
-          this.modals.announcementEdit = false;
-        },
-        
-        // Utility Methods
-        formatDate(isoString) {
-          if (!isoString) return '';
-          const date = new Date(isoString);
-          return date.toLocaleString();
-        },
-        
-        formatTime(isoString) {
-          if (!isoString) return '';
-          const date = new Date(isoString);
-          return date.toLocaleTimeString();
-        },
-        
-        formatTimeAgo(isoString) {
-          if (!isoString) return '';
-          const date = new Date(isoString);
-          const seconds = Math.floor((new Date() - date) / 1000);
-          
-          let interval = Math.floor(seconds / 31536000);
-          if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
-          
-          interval = Math.floor(seconds / 2592000);
-          if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
-          
-          interval = Math.floor(seconds / 86400);
-          if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
-          
-          interval = Math.floor(seconds / 3600);
-          if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
-          
-          interval = Math.floor(seconds / 60);
-          if (interval >= 1) return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
-          
-          return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
-        },
-        
-        showNotification(message, type = 'success') {
-          const container = document.getElementById('notification-container');
-          const note = document.createElement('div');
-          note.className = `bg-${type === 'success' ? 'green' : 'red'}-500 text-white px-4 py-2 rounded shadow`;
-          note.textContent = message;
-          container.appendChild(note);
-          setTimeout(() => note.remove(), 3000);
+    // Simulate system status updates
+    setInterval(() => {
+      const indicators = document.querySelectorAll('.status-indicator');
+      indicators.forEach(indicator => {
+        if (Math.random() > 0.95) {
+          indicator.classList.remove('status-active');
+          indicator.classList.add('status-warning');
+        } else {
+          indicator.classList.remove('status-warning');
+          indicator.classList.add('status-active');
         }
-      };
-    }
+      });
+    }, 5000);
   </script>
 </body>
 </html>

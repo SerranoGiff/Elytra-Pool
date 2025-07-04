@@ -1,187 +1,550 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="adminApp()">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KYC Verifications - Crypto Master Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Master Admin - KYC Verifications</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background-color: #888; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: #555; }
+    [x-cloak] { display: none !important; }
+    .badge {
+      @apply px-2 py-1 rounded text-xs font-medium;
+    }
+    .badge-pending { @apply bg-yellow-100 text-yellow-800; }
+    .badge-verified { @apply bg-green-100 text-green-800; }
+    .badge-rejected { @apply bg-red-100 text-red-800; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen relative">
 
-  <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
-    <h1 class="text-base font-bold flex-1">Crypto Master Admin - KYC Verifications</h1>
-    <a href="masterKey.html" class="bg-gray-600 px-3 py-1 text-sm rounded hover:bg-gray-700">Back to Dashboard</a>
-  </nav>
+<body class="bg-gray-100 min-h-screen" x-cloak>
+  <!-- Notification container -->
+  <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 
-  <!-- Main Content -->
-  <main class="p-6">
-    <h2 class="text-2xl font-bold mb-4">KYC Verification Requests</h2>
+  <!-- KYC Document Modal -->
+  <div x-show="modals.kycDocument" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.kycDocument = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4">KYC Document Verification</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div>
+            <h4 class="font-bold mb-2">User Information</h4>
+            <div class="space-y-2">
+              <p><strong>Name:</strong> <span x-text="currentKYC.name"></span></p>
+              <p><strong>Email:</strong> <span x-text="currentKYC.email"></span></p>
+              <p><strong>Username:</strong> <span x-text="currentKYC.username"></span></p>
+              <p><strong>ID Type:</strong> <span x-text="currentKYC.idType"></span></p>
+              <p><strong>ID Number:</strong> <span x-text="currentKYC.idNumber"></span></p>
+              <p><strong>Submitted:</strong> <span x-text="formatDate(currentKYC.submittedAt)"></span></p>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-bold mb-2">Documents</h4>
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <p class="text-sm font-medium mb-1">ID Document (Front)</p>
+                <img :src="currentKYC.documentFront" alt="ID Front" class="w-full rounded border cursor-pointer hover:shadow-md" 
+                     @click="openImageModal(currentKYC.documentFront)">
+              </div>
+              <div>
+                <p class="text-sm font-medium mb-1">ID Document (Back)</p>
+                <img :src="currentKYC.documentBack" alt="ID Back" class="w-full rounded border cursor-pointer hover:shadow-md" 
+                     @click="openImageModal(currentKYC.documentBack)">
+              </div>
+              <div x-show="currentKYC.selfie">
+                <p class="text-sm font-medium mb-1">Selfie with ID</p>
+                <img :src="currentKYC.selfie" alt="Selfie" class="w-full rounded border cursor-pointer hover:shadow-md" 
+                     @click="openImageModal(currentKYC.selfie)">
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div class="overflow-x-auto bg-white shadow rounded p-4">
-      <table class="min-w-full text-left text-sm">
-        <thead>
-          <tr class="border-b">
-            <th class="py-2">Email</th>
-            <th class="py-2">Username</th>
-            <th class="py-2">KYC Status</th>
-            <th class="py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="kyc-table-body"></tbody>
-      </table>
-    </div>
-  </main>
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">Verification Status</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="flex items-center">
+              <input x-model="kycStatus" id="kyc-pending" type="radio" value="pending" 
+                     class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300">
+              <label for="kyc-pending" class="ml-2 block text-sm text-gray-700">Pending Review</label>
+            </div>
+            <div class="flex items-center">
+              <input x-model="kycStatus" id="kyc-verified" type="radio" value="verified" 
+                     class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300">
+              <label for="kyc-verified" class="ml-2 block text-sm text-gray-700">Verified</label>
+            </div>
+            <div class="flex items-center">
+              <input x-model="kycStatus" id="kyc-rejected" type="radio" value="rejected" 
+                     class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300">
+              <label for="kyc-rejected" class="ml-2 block text-sm text-gray-700">Rejected</label>
+            </div>
+          </div>
+          
+          <div x-show="kycStatus === 'rejected'">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason</label>
+            <textarea x-model="rejectionReason" rows="3" class="w-full border rounded p-2" 
+                      placeholder="Specify reason for rejection..."></textarea>
+          </div>
+        </div>
 
-  <!-- Global Dropdown -->
-  <div id="globalDropdown" class="hidden fixed z-50 bg-white shadow-md rounded w-36 text-sm border"></div>
-
-  <!-- KYC Modal -->
-  <div id="kycModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
-      <h3 class="text-xl font-bold mb-4">KYC Details</h3>
-      <div id="kycDetails" class="text-sm space-y-2"></div>
-      <div class="flex justify-end mt-4">
-        <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button @click="modals.kycDocument = false" 
+                  class="px-4 py-2 border rounded hover:bg-gray-100">
+            Cancel
+          </button>
+          <button @click="saveKYCStatus()" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Save Changes
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <script>
-    const kycUsers = [
-      {
-        email: "user1@crypto.com",
-        username: "user1",
-        kycStatus: "requested",
-        name: "Juan Dela Cruz",
-        idType: "Passport",
-        idNumber: "P123456789",
-        documentUrl: "https://via.placeholder.com/300x180?text=Passport+Document"
-      },
-      {
-        email: "user2@crypto.com",
-        username: "user2",
-        kycStatus: "verified",
-        name: "Maria Santos",
-        idType: "Driver's License",
-        idNumber: "DL987654321",
-        documentUrl: "https://via.placeholder.com/300x180?text=Driver's+License"
-      },
-      {
-        email: "user3@crypto.com",
-        username: "user3",
-        kycStatus: "requested",
-        name: "Pedro Reyes",
-        idType: "National ID",
-        idNumber: "NID11223344",
-        documentUrl: "https://via.placeholder.com/300x180?text=National+ID"
-      }
-    ];
+  <!-- Image Preview Modal -->
+  <div x-show="modals.imagePreview" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" 
+       @click="modals.imagePreview = false" x-transition>
+    <div class="max-w-4xl max-h-[90vh] p-4">
+      <img :src="currentImage" alt="Document Preview" class="max-w-full max-h-full">
+    </div>
+  </div>
 
-    function renderKycTable() {
-      const tableBody = document.getElementById("kyc-table-body");
-      tableBody.innerHTML = "";
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <a href="masterKey.html" class="flex items-center text-blue-300 hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Back to Dashboard
+      </a>
+      <h1 class="text-lg lg:text-xl font-bold">Crypto Master Admin - KYC Verifications</h1>
+    </div>
+    <div class="relative group">
+      <button class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
+        <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.8 1.7-9.8 5v2.7h19.6V19.2c0-3.3-6.5-5-9.8-5z"/>
+        </svg>
+        <span class="hidden sm:inline">Profile</span>
+      </button>
+      <div class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden group-hover:block z-50">
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+      </div>
+    </div>
+  </nav>
 
-      kycUsers.forEach((user, index) => {
-        const row = document.createElement("tr");
-        row.classList.add("border-b");
+  <!-- Main Content -->
+  <main class="flex-1 p-4 lg:p-6 transition-all duration-300">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+      <h2 class="text-2xl font-bold mb-4 md:mb-0">KYC Verification Requests</h2>
+      
+      <!-- Filters -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <select x-model="kyc.filterStatus" @change="filterKYC()" class="p-2 border rounded text-sm">
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="verified">Verified</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <input type="text" x-model="kyc.searchQuery" @input="filterKYC()" placeholder="Search users..." 
+               class="p-2 border rounded text-sm flex-1">
+      </div>
+    </div>
 
-        const statusBadge = user.kycStatus === "verified"
-          ? '<span class="text-green-600 font-semibold">Verified</span>'
-          : '<span class="text-yellow-600 font-semibold">Pending</span>';
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white p-4 rounded border border-gray-200">
+        <div class="text-sm text-gray-500">Total Requests</div>
+        <div class="text-2xl font-bold" x-text="kyc.requests.length"></div>
+      </div>
+      <div class="bg-yellow-50 p-4 rounded border border-yellow-100">
+        <div class="text-sm text-gray-500">Pending Review</div>
+        <div class="text-2xl font-bold text-yellow-600" x-text="kyc.pendingCount"></div>
+      </div>
+      <div class="bg-green-50 p-4 rounded border border-green-100">
+        <div class="text-sm text-gray-500">Verified</div>
+        <div class="text-2xl font-bold text-green-600" x-text="kyc.verifiedCount"></div>
+      </div>
+      <div class="bg-red-50 p-4 rounded border border-red-100">
+        <div class="text-sm text-gray-500">Rejected</div>
+        <div class="text-2xl font-bold text-red-600" x-text="kyc.rejectedCount"></div>
+      </div>
+    </div>
 
-        const actionButton = `
-          <button data-index="${index}" class="dropdown-trigger bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none">
-            Actions
+    <!-- KYC Requests Table -->
+    <div class="bg-white shadow rounded p-4 mb-6 overflow-x-auto">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 text-left">User</th>
+            <th class="p-2 text-left hidden md:table-cell">ID Type</th>
+            <th class="p-2 text-left hidden lg:table-cell">Submitted</th>
+            <th class="p-2 text-left">Status</th>
+            <th class="p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="request in kyc.paginatedRequests" :key="request.id">
+            <tr class="border-b hover:bg-gray-50" :class="{'bg-blue-50': request.unread}">
+              <td class="p-2">
+                <div class="font-medium" x-text="request.email"></div>
+                <div class="text-xs text-gray-500 md:hidden" x-text="request.idType"></div>
+              </td>
+              <td class="p-2 hidden md:table-cell" x-text="request.idType"></td>
+              <td class="p-2 hidden lg:table-cell" x-text="formatDate(request.submittedAt)"></td>
+              <td class="p-2">
+                <span x-text="request.status" 
+                      :class="{
+                        'badge-pending': request.status === 'pending',
+                        'badge-verified': request.status === 'verified',
+                        'badge-rejected': request.status === 'rejected'
+                      }" 
+                      class="badge"></span>
+              </td>
+              <td class="p-2">
+                <div class="flex flex-wrap gap-1">
+                  <button @click="openKYCDetails(request.id)" 
+                          class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs">
+                    View
+                  </button>
+                  <button x-show="request.status === 'pending'" @click="verifyKYC(request.id)" 
+                          class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-xs">
+                    Verify
+                  </button>
+                  <button x-show="request.status === 'pending'" @click="rejectKYC(request.id)" 
+                          class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-xs">
+                    Reject
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <div class="flex justify-between items-center mt-4">
+        <div class="text-sm text-gray-500" 
+             x-text="`Showing ${(kyc.currentPage-1)*kyc.itemsPerPage+1} to ${Math.min(kyc.currentPage*kyc.itemsPerPage, kyc.filteredRequests.length)} of ${kyc.filteredRequests.length} requests`">
+        </div>
+        <div class="flex gap-2">
+          <button @click="kyc.prevPage()" :disabled="kyc.currentPage === 1" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="kyc.currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Previous
           </button>
-        `;
+          <button @click="kyc.nextPage()" :disabled="kyc.currentPage >= kyc.totalPages" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="kyc.currentPage >= kyc.totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
 
-        row.innerHTML = `
-          <td class="py-2">${user.email}</td>
-          <td class="py-2">${user.username}</td>
-          <td class="py-2">${statusBadge}</td>
-          <td class="py-2">${actionButton}</td>
-        `;
+    <!-- Recent KYC Activity -->
+    <div class="bg-white shadow rounded p-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold mb-2">Recent KYC Activity</h3>
+        <a href="#" class="text-blue-600 hover:underline">View All</a>
+      </div>
+      <div class="space-y-2 max-h-60 overflow-y-auto text-sm text-gray-700 pr-2">
+        <template x-for="log in kyc.recentActivity" :key="log.id">
+          <div class="border-b py-1">
+            <div class="flex flex-col sm:flex-row sm:items-baseline">
+              <span class="text-gray-500 text-xs sm:text-sm sm:mr-2" x-text="log.time"></span>
+              <span class="text-sm" 
+                    :class="{
+                      'text-green-600': log.type === 'kyc_verified',
+                      'text-red-600': log.type === 'kyc_rejected',
+                      'text-blue-600': log.type === 'kyc_submitted',
+                      'text-gray-600': log.type === 'system'
+                    }"
+                    x-text="log.message"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-1" x-text="'User: ' + log.user"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </main>
 
-        tableBody.appendChild(row);
-      });
+  <script>
+    function adminApp() {
+      return {
+        // App State
+        showPassword: false,
+        currentImage: '',
+        kycStatus: 'pending',
+        rejectionReason: '',
+        modals: {
+          kycDocument: false,
+          imagePreview: false
+        },
+        currentKYC: null,
+        
+        // KYC Verification State
+        kyc: {
+          currentPage: 1,
+          itemsPerPage: 10,
+          searchQuery: '',
+          filterStatus: 'all',
+          
+          // Sample KYC Requests Data
+          requests: [
+            {
+              id: 1,
+              email: "user1@crypto.com",
+              username: "user1",
+              name: "Juan Dela Cruz",
+              idType: "Passport",
+              idNumber: "P123456789",
+              documentFront: "https://via.placeholder.com/300x180?text=Passport+Front",
+              documentBack: "https://via.placeholder.com/300x180?text=Passport+Back",
+              selfie: "https://via.placeholder.com/300x180?text=Selfie+with+ID",
+              status: "pending",
+              submittedAt: "2023-11-18T09:30:22",
+              updatedAt: "2023-11-18T09:30:22",
+              unread: true
+            },
+            {
+              id: 2,
+              email: "user2@crypto.com",
+              username: "user2",
+              name: "Maria Santos",
+              idType: "Driver's License",
+              idNumber: "DL987654321",
+              documentFront: "https://via.placeholder.com/300x180?text=License+Front",
+              documentBack: "https://via.placeholder.com/300x180?text=License+Back",
+              selfie: "https://via.placeholder.com/300x180?text=Selfie+with+License",
+              status: "verified",
+              submittedAt: "2023-11-15T11:45:33",
+              updatedAt: "2023-11-16T15:30:00",
+              unread: false
+            },
+            {
+              id: 3,
+              email: "user3@crypto.com",
+              username: "user3",
+              name: "Pedro Reyes",
+              idType: "National ID",
+              idNumber: "NID11223344",
+              documentFront: "https://via.placeholder.com/300x180?text=National+ID+Front",
+              documentBack: "https://via.placeholder.com/300x180?text=National+ID+Back",
+              selfie: null,
+              status: "rejected",
+              submittedAt: "2023-11-10T08:15:45",
+              updatedAt: "2023-11-12T10:20:15",
+              rejectionReason: "ID document expired",
+              unread: false
+            },
+            {
+              id: 4,
+              email: "user4@crypto.com",
+              username: "user4",
+              name: "Anna Lopez",
+              idType: "Passport",
+              idNumber: "P987654321",
+              documentFront: "https://via.placeholder.com/300x180?text=Passport+Front",
+              documentBack: "https://via.placeholder.com/300x180?text=Passport+Back",
+              selfie: "https://via.placeholder.com/300x180?text=Selfie+with+Passport",
+              status: "pending",
+              submittedAt: "2023-11-20T14:30:10",
+              updatedAt: "2023-11-20T14:30:10",
+              unread: true
+            },
+            {
+              id: 5,
+              email: "user5@crypto.com",
+              username: "user5",
+              name: "Carlos Gomez",
+              idType: "Voter's ID",
+              idNumber: "V12345678",
+              documentFront: "https://via.placeholder.com/300x180?text=Voter's+ID+Front",
+              documentBack: "https://via.placeholder.com/300x180?text=Voter's+ID+Back",
+              selfie: null,
+              status: "pending",
+              submittedAt: "2023-11-19T16:20:30",
+              updatedAt: "2023-11-19T16:20:30",
+              unread: false
+            }
+          ],
 
-      // Add dropdown trigger functionality
-      document.querySelectorAll('.dropdown-trigger').forEach(button => {
-        button.addEventListener('click', function (e) {
-          e.stopPropagation();
-          const index = this.getAttribute("data-index");
-          const user = kycUsers[index];
-          const dropdown = document.getElementById("globalDropdown");
-
-          let items = `
-            <button onclick="viewKyc(${index})" class="block w-full text-left px-4 py-2 hover:bg-gray-100">View</button>
-          `;
-
-          if (user.kycStatus === "requested") {
-            items += `
-              <button onclick="verifyKyc(${index})" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Verify</button>
-              <button onclick="rejectKyc(${index})" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">Reject</button>
-            `;
+          // Computed Properties
+          get filteredRequests() {
+            let result = this.requests;
+            
+            // Apply search filter
+            if (this.searchQuery) {
+              const query = this.searchQuery.toLowerCase();
+              result = result.filter(request => 
+                request.email.toLowerCase().includes(query) ||
+                request.username.toLowerCase().includes(query) ||
+                request.name.toLowerCase().includes(query) ||
+                request.idType.toLowerCase().includes(query) ||
+                request.idNumber.toLowerCase().includes(query)
+              );
+            }
+            
+            // Apply status filter
+            if (this.filterStatus !== 'all') {
+              result = result.filter(request => request.status === this.filterStatus);
+            }
+            
+            return result.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+          },
+          
+          get paginatedRequests() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            return this.filteredRequests.slice(start, start + this.itemsPerPage);
+          },
+          
+          get totalPages() {
+            return Math.ceil(this.filteredRequests.length / this.itemsPerPage);
+          },
+          
+          get pendingCount() {
+            return this.requests.filter(r => r.status === 'pending').length;
+          },
+          
+          get verifiedCount() {
+            return this.requests.filter(r => r.status === 'verified').length;
+          },
+          
+          get rejectedCount() {
+            return this.requests.filter(r => r.status === 'rejected').length;
+          },
+          
+          get recentActivity() {
+            const activity = [];
+            
+            // Convert KYC requests to activity items
+            this.requests.slice(0, 5).forEach(request => {
+              activity.push({
+                id: 'kyc-' + request.id,
+                user: request.email,
+                time: this.formatDate(request.submittedAt),
+                message: `KYC ${request.status === 'verified' ? 'verified' : request.status === 'rejected' ? 'rejected' : 'submitted'}`,
+                type: request.status === 'verified' ? 'kyc_verified' : request.status === 'rejected' ? 'kyc_rejected' : 'kyc_submitted'
+              });
+            });
+            
+            return activity.sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
+          },
+          
+          // Methods
+          filterKYC() {
+            this.currentPage = 1;
+          },
+          
+          prevPage() {
+            if (this.currentPage > 1) this.currentPage--;
+          },
+          
+          nextPage() {
+            if (this.currentPage < this.totalPages) this.currentPage++;
+          },
+          
+          formatDate(isoString) {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            return date.toLocaleString();
           }
+        },
 
-          dropdown.innerHTML = items;
-
-          const rect = this.getBoundingClientRect();
-          const dropdownHeight = user.kycStatus === "requested" ? 130 : 60;
-          const windowHeight = window.innerHeight;
-
-          let top = rect.bottom;
-          if (rect.bottom + dropdownHeight > windowHeight) {
-            top = rect.top - dropdownHeight;
+        // Methods
+        openKYCDetails(requestId) {
+          const request = this.kyc.requests.find(r => r.id === requestId);
+          if (!request) return;
+          
+          // Mark as read when opened
+          if (request.unread) {
+            request.unread = false;
           }
+          
+          // Clone the request object to avoid direct mutation
+          this.currentKYC = JSON.parse(JSON.stringify(request));
+          this.kycStatus = this.currentKYC.status;
+          this.rejectionReason = this.currentKYC.rejectionReason || '';
+          this.modals.kycDocument = true;
+        },
+        
+        openImageModal(imageUrl) {
+          this.currentImage = imageUrl;
+          this.modals.imagePreview = true;
+        },
+        
+        verifyKYC(requestId) {
+          const request = this.kyc.requests.find(r => r.id === requestId);
+          if (!request) return;
+          
+          request.status = 'verified';
+          request.updatedAt = new Date().toISOString();
+          this.showNotification(`KYC for ${request.email} verified successfully`);
+          this.logActivity(`Verified KYC for ${request.email}`, 'kyc');
+        },
+        
+        rejectKYC(requestId) {
+          const request = this.kyc.requests.find(r => r.id === requestId);
+          if (!request) return;
+          
+          request.status = 'rejected';
+          request.rejectionReason = 'Manually rejected by admin';
+          request.updatedAt = new Date().toISOString();
+          this.showNotification(`KYC for ${request.email} rejected`);
+          this.logActivity(`Rejected KYC for ${request.email}`, 'kyc');
+        },
+        
+        saveKYCStatus() {
+          const index = this.kyc.requests.findIndex(r => r.id === this.currentKYC.id);
+          if (index === -1) return;
+          
+          this.kyc.requests[index].status = this.kycStatus;
+          this.kyc.requests[index].updatedAt = new Date().toISOString();
+          
+          if (this.kycStatus === 'rejected') {
+            this.kyc.requests[index].rejectionReason = this.rejectionReason;
+          }
+          
+          const action = this.kycStatus === 'verified' ? 'verified' : this.kycStatus === 'rejected' ? 'rejected' : 'updated';
+          this.showNotification(`KYC ${action} successfully`);
+          this.logActivity(`${action.charAt(0).toUpperCase() + action.slice(1)} KYC for ${this.kyc.requests[index].email}`, 'kyc');
+          this.modals.kycDocument = false;
+        },
+        
+        formatDate(isoString) {
+          if (!isoString) return '';
+          const date = new Date(isoString);
+          return date.toLocaleString();
+        },
+        
+        showNotification(message, type = 'success') {
+          const container = document.getElementById('notification-container');
+          const note = document.createElement('div');
+          note.className = `bg-${type === 'success' ? 'green' : 'red'}-500 text-white px-4 py-2 rounded shadow`;
+          note.textContent = message;
+          container.appendChild(note);
+          setTimeout(() => note.remove(), 3000);
+        },
+        
+        logActivity(message, type = 'system') {
+          const user = "MASTER ADMIN";
+          // In a real app, this would be added to the logs array
+          console.log(`[${new Date().toLocaleString()}] ${type.toUpperCase()}: ${message} (by ${user})`);
+        },
 
-          dropdown.style.top = `${top}px`;
-          dropdown.style.left = `${rect.left}px`;
-          dropdown.classList.remove("hidden");
-        });
-      });
-
-      document.addEventListener('click', () => {
-        document.getElementById("globalDropdown").classList.add("hidden");
-      });
+        // Initialize
+        init() {
+          // Any initialization code
+        }
+      };
     }
-
-    function viewKyc(index) {
-      const user = kycUsers[index];
-      const modal = document.getElementById("kycModal");
-      const details = document.getElementById("kycDetails");
-
-      details.innerHTML = `
-        <p><strong>Name:</strong> ${user.name}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Username:</strong> ${user.username}</p>
-        <p><strong>ID Type:</strong> ${user.idType}</p>
-        <p><strong>ID Number:</strong> ${user.idNumber}</p>
-        <p><strong>Document:</strong></p>
-        <img src="${user.documentUrl}" alt="KYC Document" class="w-full rounded border" />
-      `;
-
-      modal.classList.remove("hidden");
-    }
-
-    function closeModal() {
-      document.getElementById("kycModal").classList.add("hidden");
-    }
-
-    function verifyKyc(index) {
-      kycUsers[index].kycStatus = "verified";
-      alert(`KYC for ${kycUsers[index].email} verified!`);
-      renderKycTable();
-    }
-
-    function rejectKyc(index) {
-      kycUsers.splice(index, 1);
-      alert("KYC request rejected and removed.");
-      renderKycTable();
-    }
-
-    renderKycTable();
   </script>
 </body>
 </html>

@@ -1,108 +1,505 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="adminApp()">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Customer Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Master Admin - Customer Support</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background-color: #888; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: #555; }
+    [x-cloak] { display: none !important; }
+    .badge {
+      @apply px-2 py-1 rounded text-xs font-medium;
+    }
+    .badge-premium { @apply bg-yellow-100 text-yellow-800; }
+    .badge-staking { @apply bg-green-100 text-green-800; }
+    .badge-active { @apply bg-blue-100 text-blue-800; }
+    .badge-banned { @apply bg-red-100 text-red-800; }
+    .badge-kyc { @apply bg-purple-100 text-purple-800; }
+    .badge-open { @apply bg-red-100 text-red-800; }
+    .badge-pending { @apply bg-yellow-100 text-yellow-800; }
+    .badge-resolved { @apply bg-green-100 text-green-800; }
+    .badge-high { @apply bg-purple-100 text-purple-800; }
+    .badge-normal { @apply bg-blue-100 text-blue-800; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
 
-  <!-- Navbar -->
-  <nav class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
-    <h1 class="text-base font-bold">Customer Service</h1>
-    <a href="/masterKey.html" class="bg-gray-600 px-3 py-1 text-sm rounded hover:bg-gray-700">Back to Dashboard</a>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="p-6 max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4">Support Messages</h2>
-
-    <!-- Scrollable Card Container -->
-    <div id="message-list" class="space-y-4 h-[28rem] overflow-y-auto pr-2"></div>
-  </div>
+<body class="bg-gray-100 min-h-screen" x-cloak>
+  <!-- Notification container -->
+  <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 
   <!-- Reply Modal -->
-  <div id="reply-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white w-full max-w-md p-6 rounded shadow">
-      <h3 class="text-xl font-semibold mb-2">Reply to Message</h3>
-      <p class="text-sm text-gray-600 mb-1" id="modal-email"></p>
-      <p class="text-sm text-gray-500 mb-4" id="modal-subject"></p>
-      <textarea id="reply-text" rows="4" class="w-full border rounded p-2 mb-4" placeholder="Type your reply..."></textarea>
-      <div class="flex justify-end space-x-2">
-        <button onclick="closeModal()" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Cancel</button>
-        <button onclick="sendReply()" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Send</button>
+  <div x-show="modals.ticketReply" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+      @click.away="modals.ticketReply = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4">Reply to Ticket</h3>
+        <p class="text-sm text-gray-600 mb-1">From: <span x-text="currentTicket.email"></span></p>
+        <p class="text-sm text-gray-500 mb-4">Subject: <span x-text="currentTicket.subject"></span></p>
+        <textarea x-model="replyMessage" rows="4" class="w-full border rounded p-2 mb-4" placeholder="Type your reply..."></textarea>
+        <div class="flex justify-end space-x-2">
+          <button @click="modals.ticketReply = false" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Cancel</button>
+          <button @click="sendTicketReply()" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Send</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript -->
+  <!-- Navbar -->
+  <nav class="bg-gray-800 text-white px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <a href="masterKey.html" class="flex items-center text-blue-300 hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Back to Dashboard
+      </a>
+      <h1 class="text-lg lg:text-xl font-bold">Crypto Master Admin - Customer Support</h1>
+    </div>
+    <div class="relative group">
+      <button class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
+        <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.8 1.7-9.8 5v2.7h19.6V19.2c0-3.3-6.5-5-9.8-5z"/>
+        </svg>
+        <span class="hidden sm:inline">Profile</span>
+      </button>
+      <div class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden group-hover:block z-50">
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-4 lg:p-6 transition-all duration-300">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+      <h2 class="text-2xl font-bold mb-4 md:mb-0">Customer Support Tickets</h2>
+      
+      <!-- Filters -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <select x-model="support.filterStatus" @change="filterSupportTickets()" class="p-2 border rounded text-sm">
+          <option value="all">All Status</option>
+          <option value="open">Open</option>
+          <option value="pending">Pending</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <select x-model="support.filterPriority" @change="filterSupportTickets()" class="p-2 border rounded text-sm">
+          <option value="all">All Priorities</option>
+          <option value="high">High</option>
+          <option value="normal">Normal</option>
+          <option value="low">Low</option>
+        </select>
+        <input type="text" x-model="support.searchQuery" @input="filterSupportTickets()" placeholder="Search tickets..." 
+              class="p-2 border rounded text-sm flex-1">
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white p-4 rounded border border-gray-200">
+        <div class="text-sm text-gray-500">Total Tickets</div>
+        <div class="text-2xl font-bold" x-text="support.tickets.length"></div>
+      </div>
+      <div class="bg-white p-4 rounded border border-red-100">
+        <div class="text-sm text-gray-500">Open Tickets</div>
+        <div class="text-2xl font-bold text-red-600" x-text="support.openTicketsCount"></div>
+      </div>
+      <div class="bg-white p-4 rounded border border-yellow-100">
+        <div class="text-sm text-gray-500">Pending Response</div>
+        <div class="text-2xl font-bold text-yellow-600" x-text="support.pendingTicketsCount"></div>
+      </div>
+      <div class="bg-white p-4 rounded border border-green-100">
+        <div class="text-sm text-gray-500">Resolved Today</div>
+        <div class="text-2xl font-bold text-green-600" x-text="support.resolvedTodayCount"></div>
+      </div>
+    </div>
+
+    <!-- Support Tickets Table -->
+    <div class="bg-white shadow rounded p-4 mb-6 overflow-x-auto">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 text-left">Ticket ID</th>
+            <th class="p-2 text-left">Subject</th>
+            <th class="p-2 text-left">User</th>
+            <th class="p-2 text-left">Status</th>
+            <th class="p-2 text-left">Priority</th>
+            <th class="p-2 text-left">Last Updated</th>
+            <th class="p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="ticket in support.paginatedTickets" :key="ticket.id">
+            <tr class="border-b hover:bg-gray-50" :class="{'bg-blue-50': ticket.unread}">
+              <td class="p-2" x-text="'#' + ticket.id"></td>
+              <td class="p-2">
+                <span x-text="ticket.subject"></span>
+                <span x-show="ticket.unread" class="ml-2 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full">New</span>
+              </td>
+              <td class="p-2" x-text="ticket.email"></td>
+              <td class="p-2">
+                <span x-text="ticket.status" 
+                      :class="{
+                        'badge-open': ticket.status === 'open',
+                        'badge-pending': ticket.status === 'pending',
+                        'badge-resolved': ticket.status === 'resolved'
+                      }" 
+                      class="badge"></span>
+              </td>
+              <td class="p-2">
+                <span x-text="ticket.priority" 
+                      :class="{
+                        'badge-high': ticket.priority === 'high',
+                        'badge-normal': ticket.priority === 'normal',
+                        'bg-gray-100 text-gray-800': ticket.priority === 'low'
+                      }" 
+                      class="badge"></span>
+              </td>
+              <td class="p-2" x-text="formatDate(ticket.updatedAt)"></td>
+              <td class="p-2">
+                <div class="flex flex-wrap gap-1">
+                  <button @click="openTicketReply(ticket.id)" 
+                          class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs">
+                    Reply
+                  </button>
+                  <button @click="resolveTicket(ticket.id)" 
+                          class="px-2 py-1 rounded text-xs"
+                          :class="ticket.status === 'resolved' ? 'bg-gray-500 hover:bg-gray-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'"
+                          x-text="ticket.status === 'resolved' ? 'Reopen' : 'Resolve'">
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <div class="flex justify-between items-center mt-4">
+        <div class="text-sm text-gray-500" 
+            x-text="`Showing ${(support.currentPage-1)*support.itemsPerPage+1} to ${Math.min(support.currentPage*support.itemsPerPage, support.filteredTickets.length)} of ${support.filteredTickets.length} tickets`">
+        </div>
+        <div class="flex gap-2">
+          <button @click="support.prevPage()" :disabled="support.currentPage === 1" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="support.currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Previous
+          </button>
+          <button @click="support.nextPage()" :disabled="support.currentPage >= support.totalPages" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="support.currentPage >= support.totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Ticket Activity -->
+    <div class="bg-white shadow rounded p-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold mb-2">Recent Ticket Activity</h3>
+        <a href="#" class="text-blue-600 hover:underline">View All</a>
+      </div>
+      <div class="space-y-2 max-h-60 overflow-y-auto text-sm text-gray-700 pr-2">
+        <template x-for="log in support.recentActivity" :key="log.id">
+          <div class="border-b py-1">
+            <div class="flex flex-col sm:flex-row sm:items-baseline">
+              <span class="text-gray-500 text-xs sm:text-sm sm:mr-2" x-text="log.time"></span>
+              <span class="text-sm" 
+                    :class="{
+                      'text-blue-600': log.type === 'admin_reply',
+                      'text-red-600': log.type === 'ticket_opened',
+                      'text-green-600': log.type === 'ticket_resolved',
+                      'text-gray-600': log.type === 'system'
+                    }"
+                    x-text="log.message"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-1" x-text="'Ticket: #' + log.ticketId"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </main>
+
   <script>
-    const messages = [
-      { id: 1, email: 'user1@crypto.com', subject: 'Issue with withdrawal', message: 'I cannot withdraw my funds.', status: 'open' },
-      { id: 2, email: 'user3@crypto.com', subject: 'KYC stuck', message: 'My KYC is pending for days.', status: 'open' },
-      { id: 3, email: 'user4@crypto.com', subject: 'App crashing', message: 'The app keeps crashing when I open it.', status: 'open' },
-      { id: 4, email: 'user5@crypto.com', subject: 'Incorrect balance', message: 'My balance is showing 0 but I deposited.', status: 'open' },
-      { id: 5, email: 'user6@crypto.com', subject: 'Account suspended', message: 'Why is my account suspended without notice?', status: 'open' }
-    ];
+    function adminApp() {
+      return {
+        // App State
+        modals: {
+          ticketReply: false
+        },
+        replyMessage: '',
+        currentTicket: null,
+        
+        // Support System State
+        support: {
+          currentPage: 1,
+          itemsPerPage: 10,
+          searchQuery: '',
+          filterStatus: 'all',
+          filterPriority: 'all',
+          
+          // Sample Ticket Data
+          tickets: [
+            {
+              id: 1001,
+              email: 'user1@crypto.com',
+              subject: 'Withdrawal not processing',
+              message: 'I initiated a withdrawal 3 days ago but it still shows as pending. The transaction ID is TXN12345.',
+              status: 'open',
+              priority: 'high',
+              createdAt: '2023-11-18T09:30:22',
+              updatedAt: '2023-11-20T14:15:10',
+              unread: true,
+              replies: []
+            },
+            {
+              id: 1002,
+              email: 'premium_user@crypto.com',
+              subject: 'KYC verification stuck',
+              message: 'My KYC documents were submitted a week ago but still show as pending. Can you check the status?',
+              status: 'pending',
+              priority: 'normal',
+              createdAt: '2023-11-15T11:45:33',
+              updatedAt: '2023-11-19T10:20:15',
+              unread: false,
+              replies: [
+                {
+                  type: 'admin',
+                  message: 'We have escalated your KYC verification to our compliance team. Please allow 1-2 more business days for processing.',
+                  date: '2023-11-16T15:30:00'
+                },
+                {
+                  type: 'user',
+                  message: 'Thanks for the update. I\'ll wait to hear back.',
+                  date: '2023-11-17T09:15:00'
+                }
+              ]
+            },
+            {
+              id: 1003,
+              email: 'trader_john@crypto.com',
+              subject: 'Account security concern',
+              message: 'I received a login notification from a new device but it wasn\'t me. Please secure my account.',
+              status: 'open',
+              priority: 'high',
+              createdAt: '2023-11-20T08:15:45',
+              updatedAt: '2023-11-20T08:15:45',
+              unread: true,
+              replies: []
+            },
+            {
+              id: 1004,
+              email: 'investor_sarah@crypto.com',
+              subject: 'Staking rewards question',
+              message: 'The staking rewards I received this month seem lower than expected based on the advertised APY. Can you explain?',
+              status: 'open',
+              priority: 'normal',
+              createdAt: '2023-11-19T16:30:22',
+              updatedAt: '2023-11-19T16:30:22',
+              unread: false,
+              replies: []
+            },
+            {
+              id: 1005,
+              email: 'new_user@crypto.com',
+              subject: 'Verification email not received',
+              message: 'I signed up but didn\'t get the verification email. I checked spam folder too. Can you resend?',
+              status: 'resolved',
+              priority: 'low',
+              createdAt: '2023-11-14T10:20:15',
+              updatedAt: '2023-11-15T09:10:30',
+              unread: false,
+              replies: [
+                {
+                  type: 'admin',
+                  message: 'We\'ve resent the verification email. Please check your inbox and spam folder. Let us know if you still don\'t receive it.',
+                  date: '2023-11-14T14:45:00'
+                },
+                {
+                  type: 'user',
+                  message: 'Received it now, thanks! All set.',
+                  date: '2023-11-15T09:10:30'
+                }
+              ]
+            }
+          ],
 
-    let currentMessageId = null;
-
-    function renderMessages() {
-      const container = document.getElementById('message-list');
-      container.innerHTML = '';
-
-      messages.forEach(msg => {
-        const card = document.createElement('div');
-        card.className = `bg-white shadow p-4 rounded border transition-opacity duration-200 ${msg.status === 'read' ? 'opacity-60' : ''}`;
-
-        card.innerHTML = `
-          <div class="font-semibold text-lg mb-1">${msg.subject}</div>
-          <div class="text-sm text-gray-600 mb-2">From: ${msg.email}</div>
-          <p class="text-sm mb-3 text-gray-800">${msg.message}</p>
-          ${
-            msg.status === 'read'
-              ? `<span class="text-green-600 font-semibold text-sm">✔️ Marked as Read</span>`
-              : `<button onclick="openReply(${msg.id})" class="bg-blue-500 text-white px-3 py-1 text-sm rounded hover:bg-blue-600">Reply</button>`
+          // Computed Properties
+          get filteredTickets() {
+            let result = this.tickets;
+            
+            // Apply search filter
+            if (this.searchQuery) {
+              const query = this.searchQuery.toLowerCase();
+              result = result.filter(ticket => 
+                ticket.email.toLowerCase().includes(query) ||
+                ticket.subject.toLowerCase().includes(query) ||
+                ticket.message.toLowerCase().includes(query) ||
+                ticket.id.toString().includes(query)
+              );
+            }
+            
+            // Apply status filter
+            if (this.filterStatus !== 'all') {
+              result = result.filter(ticket => ticket.status === this.filterStatus);
+            }
+            
+            // Apply priority filter
+            if (this.filterPriority !== 'all') {
+              result = result.filter(ticket => ticket.priority === this.filterPriority);
+            }
+            
+            return result.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+          },
+          
+          get paginatedTickets() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            return this.filteredTickets.slice(start, start + this.itemsPerPage);
+          },
+          
+          get totalPages() {
+            return Math.ceil(this.filteredTickets.length / this.itemsPerPage);
+          },
+          
+          get openTicketsCount() {
+            return this.tickets.filter(t => t.status === 'open').length;
+          },
+          
+          get pendingTicketsCount() {
+            return this.tickets.filter(t => t.status === 'pending').length;
+          },
+          
+          get resolvedTodayCount() {
+            const today = new Date().toISOString().split('T')[0];
+            return this.tickets.filter(t => 
+              t.status === 'resolved' && 
+              t.updatedAt.includes(today)
+            ).length;
+          },
+          
+          get recentActivity() {
+            const activity = [];
+            
+            // Convert ticket updates to activity items
+            this.tickets.slice(0, 5).forEach(ticket => {
+              activity.push({
+                id: 'ticket-' + ticket.id,
+                ticketId: ticket.id,
+                time: this.formatDate(ticket.updatedAt),
+                message: `Ticket ${ticket.status === 'resolved' ? 'resolved' : 'updated'}: ${ticket.subject}`,
+                type: ticket.status === 'resolved' ? 'ticket_resolved' : 'ticket_opened'
+              });
+              
+              // Add admin replies as activity
+              ticket.replies.filter(r => r.type === 'admin').slice(0, 1).forEach(reply => {
+                activity.push({
+                  id: 'reply-' + ticket.id,
+                  ticketId: ticket.id,
+                  time: this.formatDate(reply.date),
+                  message: `Admin replied to: ${ticket.subject}`,
+                  type: 'admin_reply'
+                });
+              });
+            });
+            
+            return activity.sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
+          },
+          
+          // Methods
+          filterSupportTickets() {
+            this.currentPage = 1;
+          },
+          
+          prevPage() {
+            if (this.currentPage > 1) this.currentPage--;
+          },
+          
+          nextPage() {
+            if (this.currentPage < this.totalPages) this.currentPage++;
+          },
+          
+          formatDate(isoString) {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            return date.toLocaleString();
           }
-        `;
+        },
 
-        container.appendChild(card);
-      });
+        // Methods
+        openTicketReply(ticketId) {
+          const ticket = this.support.tickets.find(t => t.id === ticketId);
+          if (!ticket) return;
+          
+          this.currentTicket = JSON.parse(JSON.stringify(ticket));
+          this.replyMessage = '';
+          this.modals.ticketReply = true;
+        },
+        
+        sendTicketReply() {
+          if (!this.replyMessage.trim()) {
+            this.showNotification('Please enter a reply message', 'error');
+            return;
+          }
+          
+          // Find the original ticket
+          const index = this.support.tickets.findIndex(t => t.id === this.currentTicket.id);
+          if (index === -1) return;
+          
+          // Update the ticket
+          this.support.tickets[index].status = 'pending';
+          this.support.tickets[index].updatedAt = new Date().toISOString();
+          this.support.tickets[index].unread = false;
+          
+          // Add the reply
+          this.support.tickets[index].replies.push({
+            type: 'admin',
+            message: this.replyMessage.trim(),
+            date: new Date().toISOString()
+          });
+          
+          this.showNotification('Reply sent successfully');
+          this.modals.ticketReply = false;
+        },
+        
+        resolveTicket(ticketId) {
+          const ticket = this.support.tickets.find(t => t.id === ticketId);
+          if (!ticket) return;
+          
+          if (ticket.status === 'resolved') {
+            ticket.status = 'open';
+            this.showNotification('Ticket reopened');
+          } else {
+            ticket.status = 'resolved';
+            this.showNotification('Ticket marked as resolved');
+          }
+          
+          ticket.updatedAt = new Date().toISOString();
+        },
+        
+        formatDate(isoString) {
+          if (!isoString) return '';
+          const date = new Date(isoString);
+          return date.toLocaleString();
+        },
+        
+        showNotification(message, type = 'success') {
+          const container = document.getElementById('notification-container');
+          const note = document.createElement('div');
+          note.className = `bg-${type === 'success' ? 'green' : 'red'}-500 text-white px-4 py-2 rounded shadow`;
+          note.textContent = message;
+          container.appendChild(note);
+          setTimeout(() => note.remove(), 3000);
+        },
+
+        // Initialize
+        init() {
+          // Any initialization code
+        }
+      };
     }
-
-    function openReply(id) {
-      const msg = messages.find(m => m.id === id);
-      if (!msg) return;
-
-      currentMessageId = id;
-      document.getElementById('modal-email').innerText = `To: ${msg.email}`;
-      document.getElementById('modal-subject').innerText = `Subject: ${msg.subject}`;
-      document.getElementById('reply-text').value = '';
-      document.getElementById('reply-modal').classList.remove('hidden');
-    }
-
-    function closeModal() {
-      document.getElementById('reply-modal').classList.add('hidden');
-    }
-
-    function sendReply() {
-      const message = document.getElementById('reply-text').value.trim();
-      if (message === '') {
-        alert('Reply cannot be empty!');
-        return;
-      }
-
-      const index = messages.findIndex(m => m.id === currentMessageId);
-      if (index !== -1) {
-        messages[index].status = 'read';
-        alert(`Reply sent to ${messages[index].email}:\n\n${message}`);
-        renderMessages();
-        closeModal();
-      }
-    }
-
-    renderMessages();
   </script>
 </body>
 </html>

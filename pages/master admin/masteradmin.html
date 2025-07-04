@@ -1,32 +1,562 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" x-data="adminApp()">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crypto Master Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <style>
-    ::-webkit-scrollbar {
-      width: 6px;
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background-color: #888; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: #555; }
+    [x-cloak] { display: none !important; }
+    .badge {
+      @apply px-2 py-1 rounded text-xs font-medium;
     }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
+    .badge-premium { @apply bg-yellow-100 text-yellow-800; }
+    .badge-staking { @apply bg-green-100 text-green-800; }
+    .badge-active { @apply bg-blue-100 text-blue-800; }
+    .badge-banned { @apply bg-red-100 text-red-800; }
+    .badge-kyc { @apply bg-purple-100 text-purple-800; }
+    .badge-open { @apply bg-red-100 text-red-800; }
+    .badge-pending { @apply bg-yellow-100 text-yellow-800; }
+    .badge-resolved { @apply bg-green-100 text-green-800; }
+    .badge-high { @apply bg-purple-100 text-purple-800; }
+    .badge-normal { @apply bg-blue-100 text-blue-800; }
+    .staking-progress {
+      @apply w-full bg-gray-200 rounded-full h-2.5;
     }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: #888;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: #555;
+    .staking-progress-bar {
+      @apply bg-blue-600 h-2.5 rounded-full;
     }
   </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen" x-cloak>
+  <!-- Notification container -->
+  <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
+
+  <!-- User Edit Modal -->
+  <div x-show="modals.userEdit" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.userEdit = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4">Edit User: <span x-text="currentUser.email"></span></h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input x-model="currentUser.email" type="email" class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Username</label>
+            <input x-model="currentUser.username" type="text" class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">First Name</label>
+            <input x-model="currentUser.firstName" type="text" class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Last Name</label>
+            <input x-model="currentUser.lastName" type="text" class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Birthday</label>
+            <input x-model="currentUser.birthday" type="date" class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <div class="flex">
+              <input x-model="currentUser.password" :type="showPassword ? 'text' : 'password'" 
+                     class="mt-1 block w-full border rounded-l px-3 py-2">
+              <button @click="showPassword = !showPassword" 
+                      class="mt-1 px-3 py-2 border rounded-r bg-gray-100 hover:bg-gray-200">
+                <span x-text="showPassword ? 'Hide' : 'Show'"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wallet Balances -->
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">Wallet Balances</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Total Balance ($)</label>
+              <input x-model.number="currentUser.balance" type="number" step="0.01" 
+                     class="mt-1 block w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">ELTR</label>
+              <input x-model.number="currentUser.balances.eltr" type="number" step="0.000001" 
+                     class="mt-1 block w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">BTC</label>
+              <input x-model.number="currentUser.balances.btc" type="number" step="0.00000001" 
+                     class="mt-1 block w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">ETH</label>
+              <input x-model.number="currentUser.balances.eth" type="number" step="0.00000001" 
+                     class="mt-1 block w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">USDT</label>
+              <input x-model.number="currentUser.balances.usdt" type="number" step="0.01" 
+                     class="mt-1 block w-full border rounded px-3 py-2">
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Status -->
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">Account Status</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center">
+              <input x-model="currentUser.active" id="active-status" type="checkbox" 
+                     class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+              <label for="active-status" class="ml-2 block text-sm text-gray-700">Active Account</label>
+            </div>
+            <div class="flex items-center">
+              <input x-model="currentUser.isBanned" id="banned-status" type="checkbox" 
+                     class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+              <label for="banned-status" class="ml-2 block text-sm text-gray-700">Banned</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- KYC Status -->
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">KYC Verification</h4>
+          <div class="flex items-center space-x-4">
+            <span class="text-sm" x-text="currentUser.kycVerified ? '✅ Verified' : '❌ Not Verified'"></span>
+            <template x-if="!currentUser.kycVerified">
+              <button @click="verifyKYC(currentUser.id)" 
+                      class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-xs">
+                Verify KYC
+              </button>
+            </template>
+            <button @click="viewKYC(currentUser.id)" 
+                    class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-xs">
+              View KYC Docs
+            </button>
+          </div>
+        </div>
+
+        <!-- Premium Status -->
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">Premium Status</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center">
+              <input x-model="currentUser.isPremium" id="premium-status" type="checkbox" 
+                     class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded">
+              <label for="premium-status" class="ml-2 block text-sm text-gray-700">Premium User</label>
+            </div>
+            <div x-show="currentUser.isPremium">
+              <label class="block text-sm font-medium text-gray-700">Premium Expiry</label>
+              <input x-model="currentUser.premiumExpiry" type="date" 
+                     class="mt-1 block w-full border rounded px-3 py-2">
+            </div>
+          </div>
+        </div>
+
+        <!-- Staking Positions -->
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">Staking Positions</h4>
+          <div class="space-y-4">
+            <template x-for="(staking, index) in currentUser.stakingPositions" :key="index">
+              <div class="border rounded-lg p-4 bg-gray-50">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="font-medium" x-text="staking.coin + ' Staking'"></div>
+                  <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded" 
+                       x-text="staking.apy + '% APY'"></div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="text-gray-500">Amount Staked</span>
+                    <span x-text="staking.amount + ' ' + staking.coin"></span>
+                  </div>
+                  <div class="staking-progress">
+                    <div class="staking-progress-bar" :style="'width: ' + (staking.progress || 100) + '%'"></div>
+                  </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <div class="text-gray-500">Start Date</div>
+                    <div x-text="staking.startDate"></div>
+                  </div>
+                  <div>
+                    <div class="text-gray-500">End Date</div>
+                    <div x-text="staking.endDate"></div>
+                  </div>
+                </div>
+                
+                <div class="flex justify-end space-x-2 mt-3">
+                  <button @click="editStaking(index)" 
+                          class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-xs">
+                    Edit
+                  </button>
+                  <button @click="removeStaking(index)" 
+                          class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </template>
+            
+            <button @click="addStaking()" 
+                    class="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
+              Add Staking Position
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button @click="modals.userEdit = false" 
+                  class="px-4 py-2 border rounded hover:bg-gray-100">
+            Cancel
+          </button>
+          <button @click="saveUserChanges()" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staking Edit Modal -->
+  <div x-show="modals.stakingEdit" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.stakingEdit = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4" x-text="editingStakingIndex === null ? 'Add Staking' : 'Edit Staking'"></h3>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Coin</label>
+            <select x-model="currentStaking.coin" class="mt-1 block w-full border rounded px-3 py-2">
+              <option value="ELTR">Elytra (ELTR)</option>
+              <option value="BTC">Bitcoin (BTC)</option>
+              <option value="ETH">Ethereum (ETH)</option>
+              <option value="USDT">Tether (USDT)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Amount</label>
+            <input x-model.number="currentStaking.amount" type="number" step="0.000001" 
+                   class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">APY (%)</label>
+            <input x-model.number="currentStaking.apy" type="number" step="0.1" 
+                   class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Start Date</label>
+            <input x-model="currentStaking.startDate" type="date" 
+                   class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">End Date</label>
+            <input x-model="currentStaking.endDate" type="date" 
+                   class="mt-1 block w-full border rounded px-3 py-2">
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4 mt-4 border-t">
+          <button @click="modals.stakingEdit = false" 
+                  class="px-4 py-2 border rounded hover:bg-gray-100">
+            Cancel
+          </button>
+          <button @click="saveStaking()" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KYC Document Modal -->
+  <div x-show="modals.kycDocument" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.kycDocument = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4">KYC Document Verification</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div>
+            <h4 class="font-bold mb-2">User Information</h4>
+            <div class="space-y-2">
+              <p><strong>Name:</strong> <span x-text="currentKYC.name"></span></p>
+              <p><strong>Email:</strong> <span x-text="currentKYC.email"></span></p>
+              <p><strong>Username:</strong> <span x-text="currentKYC.username"></span></p>
+              <p><strong>ID Type:</strong> <span x-text="currentKYC.idType"></span></p>
+              <p><strong>ID Number:</strong> <span x-text="currentKYC.idNumber"></span></p>
+              <p><strong>Submitted:</strong> <span x-text="formatDate(currentKYC.submittedAt)"></span></p>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-bold mb-2">Documents</h4>
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <p class="text-sm font-medium mb-1">ID Document (Front)</p>
+                <img :src="currentKYC.documentFront" alt="ID Front" class="w-full rounded border cursor-pointer hover:shadow-md" 
+                     @click="openImageModal(currentKYC.documentFront)">
+              </div>
+              <div>
+                <p class="text-sm font-medium mb-1">ID Document (Back)</p>
+                <img :src="currentKYC.documentBack" alt="ID Back" class="w-full rounded border cursor-pointer hover:shadow-md" 
+                     @click="openImageModal(currentKYC.documentBack)">
+              </div>
+              <div x-show="currentKYC.selfie">
+                <p class="text-sm font-medium mb-1">Selfie with ID</p>
+                <img :src="currentKYC.selfie" alt="Selfie" class="w-full rounded border cursor-pointer hover:shadow-md" 
+                     @click="openImageModal(currentKYC.selfie)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t pt-4 mb-4">
+          <h4 class="font-bold mb-2">Verification Status</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="flex items-center">
+              <input x-model="kycStatus" id="kyc-pending" type="radio" value="pending" 
+                     class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300">
+              <label for="kyc-pending" class="ml-2 block text-sm text-gray-700">Pending Review</label>
+            </div>
+            <div class="flex items-center">
+              <input x-model="kycStatus" id="kyc-verified" type="radio" value="verified" 
+                     class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300">
+              <label for="kyc-verified" class="ml-2 block text-sm text-gray-700">Verified</label>
+            </div>
+            <div class="flex items-center">
+              <input x-model="kycStatus" id="kyc-rejected" type="radio" value="rejected" 
+                     class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300">
+              <label for="kyc-rejected" class="ml-2 block text-sm text-gray-700">Rejected</label>
+            </div>
+          </div>
+          
+          <div x-show="kycStatus === 'rejected'">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason</label>
+            <textarea x-model="rejectionReason" rows="3" class="w-full border rounded p-2" 
+                      placeholder="Specify reason for rejection..."></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button @click="modals.kycDocument = false" 
+                  class="px-4 py-2 border rounded hover:bg-gray-100">
+            Cancel
+          </button>
+          <button @click="saveKYCStatus()" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Preview Modal -->
+  <div x-show="modals.imagePreview" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" 
+       @click="modals.imagePreview = false" x-transition>
+    <div class="max-w-4xl max-h-[90vh] p-4">
+      <img :src="currentImage" alt="Document Preview" class="max-w-full max-h-full">
+    </div>
+  </div>
+
+  <!-- Reply Modal -->
+  <div x-show="modals.ticketReply" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.ticketReply = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4">Reply to Ticket</h3>
+        <p class="text-sm text-gray-600 mb-1">From: <span x-text="currentTicket.email"></span></p>
+        <p class="text-sm text-gray-500 mb-4">Subject: <span x-text="currentTicket.subject"></span></p>
+        <textarea x-model="replyMessage" rows="4" class="w-full border rounded p-2 mb-4" placeholder="Type your reply..."></textarea>
+        <div class="flex justify-end space-x-2">
+          <button @click="modals.ticketReply = false" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Cancel</button>
+          <button @click="sendTicketReply()" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Logs Modal -->
+  <div x-show="modals.activityLogs" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.activityLogs = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h3 class="text-xl font-bold">Activity Logs</h3>
+        <button @click="modals.activityLogs = false" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Filters -->
+      <div class="p-4 border-b bg-gray-50">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Log Type</label>
+            <select x-model="logFilterType" @change="filterLogs()" class="w-full p-2 border rounded">
+              <option value="all">All Types</option>
+              <option value="admin_action">Admin Actions</option>
+              <option value="staking">Staking</option>
+              <option value="kyc">KYC</option>
+              <option value="support">Support</option>
+              <option value="system">System</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+            <select x-model="logFilterDate" @change="filterLogs()" class="w-full p-2 border rounded">
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+            <input type="text" placeholder="Search logs..." x-model="logSearchQuery" @input="filterLogs()"
+              class="w-full p-2 border rounded">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Logs Table -->
+      <div class="flex-1 overflow-y-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50 sticky top-0">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <template x-for="log in paginatedLogs" :key="log.id">
+              <tr class="hover:bg-gray-50 cursor-pointer" @click="viewLogDetails(log)">
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500" x-text="log.time"></td>
+                <td class="px-4 py-2 whitespace-nowrap">
+                  <span class="px-2 py-1 text-xs rounded-full" 
+                        :class="{
+                          'bg-blue-100 text-blue-800': log.type === 'admin_action',
+                          'bg-green-100 text-green-800': log.type === 'staking',
+                          'bg-purple-100 text-purple-800': log.type === 'kyc',
+                          'bg-yellow-100 text-yellow-800': log.type === 'support',
+                          'bg-gray-100 text-gray-800': log.type === 'system'
+                        }"
+                        x-text="log.type.replace('_', ' ').toUpperCase()"></span>
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500" x-text="log.user"></td>
+                <td class="px-4 py-2 text-sm text-gray-500" x-text="log.message"></td>
+              </tr>
+            </template>
+            <template x-if="filteredLogs.length === 0">
+              <tr>
+                <td colspan="4" class="px-4 py-4 text-center text-sm text-gray-500">No logs found matching your criteria</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="p-4 border-t flex justify-between items-center">
+        <div class="text-sm text-gray-500" 
+             x-text="`Showing ${(logCurrentPage-1)*logItemsPerPage+1} to ${Math.min(logCurrentPage*logItemsPerPage, filteredLogs.length)} of ${filteredLogs.length} logs`">
+        </div>
+        <div class="flex gap-2">
+          <button @click="prevLogPage()" :disabled="logCurrentPage === 1" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="logCurrentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Previous
+          </button>
+          <button @click="nextLogPage()" :disabled="logCurrentPage >= logTotalPages" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="logCurrentPage >= logTotalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log Detail Modal -->
+  <div x-show="modals.logDetail" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+       @click.away="modals.logDetail = false" x-transition>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h3 class="text-xl font-bold">Log Details</h3>
+        <button @click="modals.logDetail = false" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <h4 class="text-sm font-medium text-gray-500">Timestamp</h4>
+            <p x-text="currentLog.time" class="mt-1 text-sm text-gray-900"></p>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-gray-500">Type</h4>
+            <p class="mt-1">
+              <span class="px-2 py-1 text-xs rounded-full" 
+                    :class="{
+                      'bg-blue-100 text-blue-800': currentLog.type === 'admin_action',
+                      'bg-green-100 text-green-800': currentLog.type === 'staking',
+                      'bg-purple-100 text-purple-800': currentLog.type === 'kyc',
+                      'bg-yellow-100 text-yellow-800': currentLog.type === 'support',
+                      'bg-gray-100 text-gray-800': currentLog.type === 'system'
+                    }"
+                    x-text="currentLog.type.replace('_', ' ').toUpperCase()"></span>
+            </p>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-gray-500">User</h4>
+            <p x-text="currentLog.user" class="mt-1 text-sm text-gray-900"></p>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-gray-500">Action</h4>
+            <p x-text="currentLog.action || 'N/A'" class="mt-1 text-sm text-gray-900"></p>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <h4 class="text-sm font-medium text-gray-500">Message</h4>
+          <p x-text="currentLog.message" class="mt-1 text-sm text-gray-900"></p>
+        </div>
+        
+        <div x-show="currentLog.details">
+          <h4 class="text-sm font-medium text-gray-500">Details</h4>
+          <pre x-text="JSON.stringify(currentLog.details, null, 2)" class="mt-1 text-xs p-2 bg-gray-50 rounded overflow-x-auto"></pre>
+        </div>
+      </div>
+      <div class="p-4 border-t flex justify-end">
+        <button @click="modals.logDetail = false" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Notification container -->
   <div id="notification-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
@@ -34,311 +564,1118 @@
   <!-- Navbar -->
   <nav class="bg-gray-800 text-white px-4 py-4 flex items-center justify-between">
     <div class="flex items-center space-x-4">
-      <button class="lg:hidden text-2xl" onclick="toggleSidebar()">☰</button>
       <h1 class="text-lg lg:text-xl font-bold">Crypto Master Admin</h1>
     </div>
-    <div class="relative group">
-      <button class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
-        <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
-          <path
-            d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.8 1.7-9.8 5v2.7h19.6V19.2c0-3.3-6.5-5-9.8-5z" />
+    <div class="flex items-center space-x-4">
+      <!-- KYC Verifications Link -->
+      <a href="pages/master admin/kyc-verifications.html" class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
+        <span>KYC Verifications</span>
+      </a>
+      
+      <!-- Customer Support Link -->
+      <a href="pages/master admin/customer-service.html" class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
+        <span>Customer Support</span>
+      </a>
+
+       <!-- Support Tools Support Link -->
+      <a href="pages/master admin/support.html" class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2">
+        <span>Support Tools</span>
+      </a>
+      
+      <!-- Logout Button -->
+      <a href="#" class="flex items-center bg-red-600 px-3 py-1 rounded hover:bg-red-700 space-x-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
         </svg>
-        <span class="hidden sm:inline">Profile</span>
-      </button>
-      <div class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden group-hover:block z-50">
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
-      </div>
+        <span>Logout</span>
+      </a>
     </div>
   </nav>
 
-  <!-- Sidebar Overlay -->
-  <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 lg:hidden" onclick="toggleSidebar()"></div>
-
-  <div class="flex">
-    <!-- Sidebar -->
-    <aside id="sidebar"
-      class="fixed top-0 left-0 w-64 bg-gray-900 text-white min-h-screen p-5 transform -translate-x-full transition-transform duration-300 z-50 lg:relative lg:translate-x-0 lg:block">
-      <div class="mt-6 space-y-4">
-        <a href="masterKey.html" class="block py-2 bg-gray-700 rounded">Dashboard</a>
-        <a href="all-user.html" class="block py-2 hover:bg-gray-700 rounded">All Users</a>
-        <a href="admin-view.html" class="block py-2 hover:bg-gray-700 rounded">Admins</a>
-        <a href="customer-service.html" class="block py-2 hover:bg-gray-700 rounded">Staking</a>
-        <a href="kyc-verifications.html" class="block py-2 hover:bg-gray-700 rounded">KYC Verifications</a>
-        <a href="support.html" class="block py-2 hover:bg-gray-700 rounded">Support Tools</a>
-        <a href="customer-service.html" class="block py-2 hover:bg-gray-700 rounded">Customer Service</a>
+  <!-- Main Content -->
+  <main class="flex-1 p-4 lg:p-6">
+    <!-- Dashboard Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="bg-blue-50 p-4 rounded border border-blue-100">
+        <h3 class="font-bold text-blue-800">Total Users</h3>
+        <p class="text-2xl" x-text="users.length"></p>
       </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 p-6">
-      <h2 class="text-2xl font-bold mb-4">Manage Accounts</h2>
-
-      <input type="text" placeholder="Search users..." oninput="searchUsers(this.value)"
-        class="p-2 border rounded mb-4 w-full">
-
-      <!-- Cards: Users & Admins -->
-      <div class="flex flex-col lg:flex-row gap-6">
-        <!-- User List -->
-        <div class="bg-white shadow p-4 rounded flex-1">
-          <h3 class="text-xl font-semibold mb-2">Users</h3>
-          <div class="max-h-[400px] overflow-y-auto pr-2">
-            <ul id="user-list" class="space-y-2"></ul>
-          </div>
-        </div>
-
-        <!-- Admin List -->
-        <div class="bg-white shadow p-4 rounded flex-1">
-          <h3 class="text-xl font-semibold mb-2">Admins</h3>
-          <div class="max-h-[400px] overflow-y-auto pr-2">
-            <ul id="admin-list" class="space-y-2"></ul>
-          </div>
-        </div>
+      <div class="bg-green-50 p-4 rounded border border-green-100">
+        <h3 class="font-bold text-green-800">Active Staking</h3>
+        <p class="text-2xl" x-text="activeStakingCount"></p>
       </div>
+      <div class="bg-yellow-50 p-4 rounded border border-yellow-100">
+        <h3 class="font-bold text-yellow-800">Premium Users</h3>
+        <p class="text-2xl" x-text="premiumUsersCount"></p>
+      </div>
+      <div class="bg-purple-50 p-4 rounded border border-purple-100">
+        <h3 class="font-bold text-purple-800">Pending KYC</h3>
+        <p class="text-2xl" x-text="pendingKYCCount"></p>
+      </div>
+    </div>
 
-      <!-- Activity Logs -->
-      <div class="mt-10 bg-white shadow p-4 rounded">
-        <div class="flex justify-between items-center">
-          <h3 class="text-xl font-semibold mb-2">Activity Logs</h3>
-          <button onclick="exportLogs()" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
-            Export Logs
+    <h2 class="text-2xl font-bold mb-4">Manage Accounts</h2>
+
+    <!-- Search and Filters -->
+    <div class="flex flex-col md:flex-row gap-4 mb-4">
+      <input type="text" placeholder="Search users..." x-model="searchQuery" @input="filterUsers()"
+        class="p-2 border rounded flex-1">
+      <select x-model="filterType" @change="filterUsers()" class="p-2 border rounded">
+        <option value="all">All Types</option>
+        <option value="standard">Standard</option>
+        <option value="premium">Premium</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select x-model="filterStatus" @change="filterUsers()" class="p-2 border rounded">
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="banned">Banned</option>
+        <option value="kyc_pending">KYC Pending</option>
+      </select>
+    </div>
+
+    <!-- User Management Table -->
+    <div class="bg-white shadow rounded p-4 mb-6 overflow-x-auto">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 text-left">Email</th>
+            <th class="p-2 text-left hidden md:table-cell">Name</th>
+            <th class="p-2 text-left">Balance</th>
+            <th class="p-2 text-left hidden sm:table-cell">Status</th>
+            <th class="p-2 text-left hidden lg:table-cell">KYC</th>
+            <th class="p-2 text-left hidden lg:table-cell">Staking</th>
+            <th class="p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="user in paginatedUsers" :key="user.id">
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-2">
+                <div class="font-medium" x-text="user.email"></div>
+                <div class="text-xs text-gray-500 md:hidden" x-text="user.firstName + ' ' + user.lastName"></div>
+              </td>
+              <td class="p-2 hidden md:table-cell" x-text="user.firstName + ' ' + user.lastName"></td>
+              <td class="p-2" x-text="'$' + user.balance.toFixed(2)"></td>
+              <td class="p-2 hidden sm:table-cell">
+                <span x-show="user.isBanned" class="badge badge-banned">Banned</span>
+                <span x-show="!user.isBanned && user.active" class="badge badge-active">Active</span>
+                <span x-show="!user.isBanned && !user.active" class="text-xs text-gray-500">Inactive</span>
+              </td>
+              <td class="p-2 hidden lg:table-cell">
+                <span x-show="user.kycVerified" class="badge badge-kyc">Verified</span>
+                <span x-show="!user.kycVerified && user.kycRequested" class="text-xs text-yellow-600">Pending</span>
+                <span x-show="!user.kycVerified && !user.kycRequested" class="text-xs text-gray-500">None</span>
+              </td>
+              <td class="p-2 hidden lg:table-cell">
+                <span x-show="user.stakingPositions.length > 0" 
+                      class="badge badge-staking" 
+                      x-text="user.stakingPositions.length + ' active'"></span>
+                <span x-show="user.stakingPositions.length === 0" class="text-xs text-gray-500">None</span>
+              </td>
+              <td class="p-2">
+                <div class="flex flex-wrap gap-1">
+                  <button @click="openUserEditModal(user.id)" 
+                          class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs">
+                    Edit
+                  </button>
+                  <button @click="toggleBanStatus(user.id)" 
+                          class="px-2 py-1 rounded text-xs"
+                          :class="user.isBanned ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-red-500 hover:bg-red-600 text-white'"
+                          x-text="user.isBanned ? 'Unban' : 'Ban'">
+                  </button>
+                  <button x-show="!user.isAdmin" @click="togglePremiumStatus(user.id)" 
+                          class="px-2 py-1 rounded text-xs"
+                          :class="user.isPremium ? 'bg-gray-500 hover:bg-gray-600 text-white' : 'bg-yellow-500 hover:bg-yellow-600 text-white'"
+                          x-text="user.isPremium ? 'Revoke Premium' : 'Make Premium'">
+                  </button>
+                  <button x-show="!user.isAdmin" @click="makeAdmin(user.id)" 
+                          class="bg-indigo-500 text-white px-2 py-1 rounded hover:bg-indigo-600 text-xs">
+                    Make Admin
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <div class="flex justify-between items-center mt-4">
+        <div class="text-sm text-gray-500" 
+             x-text="`Showing ${(currentPage-1)*itemsPerPage+1} to ${Math.min(currentPage*itemsPerPage, filteredUsers.length)} of ${filteredUsers.length} users`">
+        </div>
+        <div class="flex gap-2">
+          <button @click="prevPage()" :disabled="currentPage === 1" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Previous
+          </button>
+          <button @click="nextPage()" :disabled="currentPage >= totalPages" 
+                  class="px-3 py-1 border rounded text-xs"
+                  :class="currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'">
+            Next
           </button>
         </div>
-        <ul id="log-list" class="space-y-2 max-h-60 overflow-y-auto text-sm text-gray-700 pr-2"></ul>
       </div>
-    </main>
-  </div>
+    </div>
 
-  <!-- Scripts -->
+    <!-- Recent Activity Logs -->
+    <div class="bg-white shadow rounded p-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold mb-2">Recent Activity Logs</h3>
+        <a href="#" @click.prevent="openActivityLogs()" class="text-blue-600 hover:underline">View All</a>
+      </div>
+      <div class="space-y-2 max-h-60 overflow-y-auto text-sm text-gray-700 pr-2">
+        <template x-for="log in recentLogs" :key="log.id">
+          <div class="border-b py-1">
+            <div class="flex flex-col sm:flex-row sm:items-baseline">
+              <span class="text-gray-500 text-xs sm:text-sm sm:mr-2" x-text="log.time"></span>
+              <span class="text-sm" 
+                    :class="{
+                      'text-blue-600': log.type === 'admin_action',
+                      'text-green-600': log.type === 'staking',
+                      'text-purple-600': log.type === 'kyc',
+                      'text-gray-600': log.type === 'system'
+                    }"
+                    x-text="log.message"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-1" x-text="'User: ' + log.user"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </main>
+
   <script>
-    let users = [
-      { email: "user1@crypto.com", username: "user1", password: "pass123", kycRequested: true, kycVerified: false, active: true, balance: 150 },
-      { email: "user2@crypto.com", username: "user2", password: "pass456", kycRequested: false, kycVerified: false, active: true, balance: 230 },
-      { email: "user3@crypto.com", username: "user3", password: "pass789", kycRequested: true, kycVerified: true, active: true, balance: 85 }
-    ];
+    function adminApp() {
+      return {
+        // App State
+        showPassword: false,
+        currentPage: 1,
+        itemsPerPage: 10,
+        searchQuery: '',
+        filterType: 'all',
+        filterStatus: 'all',
+        editingStakingIndex: null,
+        modals: {
+          userEdit: false,
+          stakingEdit: false,
+          kycDocument: false,
+          imagePreview: false,
+          ticketReply: false,
+          kycDropdown: false,
+          supportDropdown: false,
+          activityLogs: false,
+          logDetail: false
+        },
+        currentUser: null,
+        currentStaking: {
+          coin: 'ELTR',
+          amount: 0,
+          apy: 5,
+          startDate: '',
+          endDate: ''
+        },
+        currentKYC: null,
+        currentImage: '',
+        kycStatus: 'pending',
+        rejectionReason: '',
+        currentTicket: null,
+        replyMessage: '',
+        logFilterType: 'all',
+        logFilterDate: 'all',
+        logSearchQuery: '',
+        logCurrentPage: 1,
+        logItemsPerPage: 10,
+        currentLog: {},
 
-    let admins = [
-      { email: "admin1@crypto.com", username: "admin1", password: "adminpass" }
-    ];
+        // Sample Data
+        users: [
+          {
+            id: 1,
+            email: "user1@crypto.com",
+            username: "user1",
+            password: "pass123",
+            firstName: "John",
+            lastName: "Doe",
+            birthday: "1990-05-15",
+            balance: 1500.50,
+            balances: {
+              eltr: 5000,
+              btc: 0.215,
+              eth: 1.75,
+              usdt: 3400
+            },
+            kycVerified: true,
+            kycRequested: true,
+            active: true,
+            isBanned: false,
+            isPremium: false,
+            isAdmin: false,
+            premiumExpiry: "",
+            stakingPositions: [
+              { 
+                coin: "ELTR", 
+                amount: 1000, 
+                apy: 5.2, 
+                startDate: "2023-11-01", 
+                endDate: "2023-12-01",
+                progress: 50
+              },
+              { 
+                coin: "BTC", 
+                amount: 0.1, 
+                apy: 6.5, 
+                startDate: "2023-11-10", 
+                endDate: "2023-12-10",
+                progress: 30
+              }
+            ],
+            lastActive: "2023-11-20 09:30:22"
+          },
+          {
+            id: 2,
+            email: "premium_user@crypto.com",
+            username: "premium1",
+            password: "premiumpass",
+            firstName: "Jane",
+            lastName: "Smith",
+            birthday: "1985-08-22",
+            balance: 8500.00,
+            balances: {
+              eltr: 12000,
+              btc: 0.5,
+              eth: 3.2,
+              usdt: 5000
+            },
+            kycVerified: true,
+            kycRequested: true,
+            active: true,
+            isBanned: false,
+            isPremium: true,
+            isAdmin: false,
+            premiumExpiry: "2024-05-20",
+            stakingPositions: [
+              { 
+                coin: "ELTR", 
+                amount: 5000, 
+                apy: 6.0, 
+                startDate: "2023-11-10", 
+                endDate: "2024-02-10",
+                progress: 25
+              },
+              { 
+                coin: "ETH", 
+                amount: 2.0, 
+                apy: 5.5, 
+                startDate: "2023-11-15", 
+                endDate: "2024-05-15",
+                progress: 10
+              }
+            ],
+            lastActive: "2023-11-20 10:05:45"
+          },
+          {
+            id: 3,
+            email: "admin1@crypto.com",
+            username: "admin1",
+            password: "adminpass",
+            firstName: "Admin",
+            lastName: "User",
+            birthday: "1980-01-10",
+            balance: 10000.00,
+            balances: {
+              eltr: 20000,
+              btc: 1.0,
+              eth: 5.0,
+              usdt: 10000
+            },
+            kycVerified: true,
+            kycRequested: true,
+            active: true,
+            isBanned: false,
+            isPremium: true,
+            isAdmin: true,
+            premiumExpiry: "2025-01-01",
+            stakingPositions: [],
+            lastActive: "2023-11-20 08:45:30"
+          },
+          {
+            id: 4,
+            email: "banned_user@crypto.com",
+            username: "banned1",
+            password: "bannedpass",
+            firstName: "Robert",
+            lastName: "Johnson",
+            birthday: "1978-11-03",
+            balance: 320.75,
+            balances: {
+              eltr: 500,
+              btc: 0.05,
+              eth: 0.2,
+              usdt: 200
+            },
+            kycVerified: false,
+            kycRequested: true,
+            active: false,
+            isBanned: true,
+            isPremium: false,
+            isAdmin: false,
+            premiumExpiry: "",
+            stakingPositions: [],
+            lastActive: "2023-11-15 14:30:10"
+          },
+          {
+            id: 5,
+            email: "kyc_pending@crypto.com",
+            username: "kycuser",
+            password: "kycpass",
+            firstName: "Alice",
+            lastName: "Williams",
+            birthday: "1992-04-18",
+            balance: 1200.00,
+            balances: {
+              eltr: 3000,
+              btc: 0.1,
+              eth: 0.5,
+              usdt: 1000
+            },
+            kycVerified: false,
+            kycRequested: true,
+            active: true,
+            isBanned: false,
+            isPremium: false,
+            isAdmin: false,
+            premiumExpiry: "",
+            stakingPositions: [
+              { 
+                coin: "USDT", 
+                amount: 500, 
+                apy: 3.5, 
+                startDate: "2023-11-18", 
+                endDate: "2024-02-18",
+                progress: 15
+              }
+            ],
+            lastActive: "2023-11-19 11:20:15"
+          }
+        ],
+        logs: [
+          { 
+            id: 1,
+            time: "2023-11-20 09:30:22", 
+            message: "Premium user staked 5000 ELTR at 6.0% APY",
+            type: "staking",
+            user: "premium_user@crypto.com",
+            details: {
+              amount: 5000,
+              coin: "ELTR",
+              apy: 6.0,
+              duration: "90 days"
+            }
+          },
+          { 
+            id: 2,
+            time: "2023-11-20 09:15:10", 
+            message: "Admin approved withdrawal of 0.5 BTC",
+            type: "admin_action",
+            user: "admin1@crypto.com",
+            details: {
+              amount: 0.5,
+              coin: "BTC",
+              wallet: "3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5",
+              status: "completed"
+            }
+          },
+          { 
+            id: 3,
+            time: "2023-11-20 08:45:30", 
+            message: "KYC verified for user1@crypto.com",
+            type: "kyc",
+            user: "admin1@crypto.com",
+            details: {
+              name: "John Doe",
+              idType: "Passport",
+              idNumber: "P123456789"
+            }
+          },
+          { 
+            id: 4,
+            time: "2023-11-19 15:20:00", 
+            message: "User banned_user@crypto.com was banned for violation of terms",
+            type: "admin_action",
+            user: "admin1@crypto.com",
+            details: {
+              reason: "Multiple failed login attempts",
+              action: "Account suspended",
+              duration: "Permanent"
+            }
+          },
+          { 
+            id: 5,
+            time: "2023-11-18 14:10:45", 
+            message: "User kyc_pending@crypto.com submitted KYC documents",
+            type: "kyc",
+            user: "kyc_pending@crypto.com",
+            details: {
+              idType: "Driver's License",
+              status: "pending_review"
+            }
+          },
+          { 
+            id: 6,
+            time: "2023-11-18 10:30:15", 
+            message: "System maintenance completed",
+            type: "system",
+            user: "system",
+            details: {
+              duration: "2 hours",
+              components: ["Database", "API", "Frontend"],
+              status: "success"
+            }
+          },
+          { 
+            id: 7,
+            time: "2023-11-17 16:45:22", 
+            message: "Support ticket #1002 resolved",
+            type: "support",
+            user: "admin1@crypto.com",
+            details: {
+              ticketId: 1002,
+              subject: "KYC verification stuck",
+              resolution: "Documents verified"
+            }
+          },
+          { 
+            id: 8,
+            time: "2023-11-16 11:20:33", 
+            message: "User premium_user@crypto.com upgraded to Premium",
+            type: "admin_action",
+            user: "admin1@crypto.com",
+            details: {
+              plan: "Premium Annual",
+              expiry: "2024-11-16"
+            }
+          },
+          { 
+            id: 9,
+            time: "2023-11-15 09:10:05", 
+            message: "New user registered: trader_john@crypto.com",
+            type: "system",
+            user: "system",
+            details: {
+              referral: "google_ads",
+              verification: "pending"
+            }
+          },
+          { 
+            id: 10,
+            time: "2023-11-14 14:30:18", 
+            message: "Security alert: Unusual login attempt",
+            type: "system",
+            user: "system",
+            details: {
+              ip: "192.168.1.100",
+              location: "Unknown",
+              action: "Blocked"
+            }
+          }
+        ],
+        kycRequests: [
+          {
+            id: 1,
+            email: "user1@crypto.com",
+            username: "user1",
+            name: "Juan Dela Cruz",
+            idType: "Passport",
+            idNumber: "P123456789",
+            documentFront: "https://via.placeholder.com/300x180?text=Passport+Front",
+            documentBack: "https://via.placeholder.com/300x180?text=Passport+Back",
+            selfie: "https://via.placeholder.com/300x180?text=Selfie+with+ID",
+            status: "pending",
+            submittedAt: "2023-11-18T09:30:22",
+            updatedAt: "2023-11-18T09:30:22",
+            unread: true
+          },
+          {
+            id: 2,
+            email: "user2@crypto.com",
+            username: "user2",
+            name: "Maria Santos",
+            idType: "Driver's License",
+            idNumber: "DL987654321",
+            documentFront: "https://via.placeholder.com/300x180?text=License+Front",
+            documentBack: "https://via.placeholder.com/300x180?text=License+Back",
+            selfie: "https://via.placeholder.com/300x180?text=Selfie+with+License",
+            status: "verified",
+            submittedAt: "2023-11-15T11:45:33",
+            updatedAt: "2023-11-16T15:30:00",
+            unread: false
+          },
+          {
+            id: 3,
+            email: "user3@crypto.com",
+            username: "user3",
+            name: "Pedro Reyes",
+            idType: "National ID",
+            idNumber: "NID11223344",
+            documentFront: "https://via.placeholder.com/300x180?text=National+ID+Front",
+            documentBack: "https://via.placeholder.com/300x180?text=National+ID+Back",
+            selfie: null,
+            status: "rejected",
+            submittedAt: "2023-11-10T08:15:45",
+            updatedAt: "2023-11-12T10:20:15",
+            rejectionReason: "ID document expired",
+            unread: false
+          },
+          {
+            id: 4,
+            email: "user4@crypto.com",
+            username: "user4",
+            name: "Anna Lopez",
+            idType: "Passport",
+            idNumber: "P987654321",
+            documentFront: "https://via.placeholder.com/300x180?text=Passport+Front",
+            documentBack: "https://via.placeholder.com/300x180?text=Passport+Back",
+            selfie: "https://via.placeholder.com/300x180?text=Selfie+with+Passport",
+            status: "pending",
+            submittedAt: "2023-11-20T14:30:10",
+            updatedAt: "2023-11-20T14:30:10",
+            unread: true
+          },
+          {
+            id: 5,
+            email: "user5@crypto.com",
+            username: "user5",
+            name: "Carlos Gomez",
+            idType: "Voter's ID",
+            idNumber: "V12345678",
+            documentFront: "https://via.placeholder.com/300x180?text=Voter's+ID+Front",
+            documentBack: "https://via.placeholder.com/300x180?text=Voter's+ID+Back",
+            selfie: null,
+            status: "pending",
+            submittedAt: "2023-11-19T16:20:30",
+            updatedAt: "2023-11-19T16:20:30",
+            unread: false
+          }
+        ],
+        supportTickets: [
+          {
+            id: 1001,
+            email: 'user1@crypto.com',
+            subject: 'Withdrawal not processing',
+            message: 'I initiated a withdrawal 3 days ago but it still shows as pending. The transaction ID is TXN12345.',
+            status: 'open',
+            priority: 'high',
+            createdAt: '2023-11-18T09:30:22',
+            updatedAt: '2023-11-20T14:15:10',
+            unread: true,
+            replies: []
+          },
+          {
+            id: 1002,
+            email: 'premium_user@crypto.com',
+            subject: 'KYC verification stuck',
+            message: 'My KYC documents were submitted a week ago but still show as pending. Can you check the status?',
+            status: 'pending',
+            priority: 'normal',
+            createdAt: '2023-11-15T11:45:33',
+            updatedAt: '2023-11-19T10:20:15',
+            unread: false,
+            replies: [
+              {
+                type: 'admin',
+                message: 'We have escalated your KYC verification to our compliance team. Please allow 1-2 more business days for processing.',
+                date: '2023-11-16T15:30:00'
+              },
+              {
+                type: 'user',
+                message: 'Thanks for the update. I\'ll wait to hear back.',
+                date: '2023-11-17T09:15:00'
+              }
+            ]
+          },
+          {
+            id: 1003,
+            email: 'trader_john@crypto.com',
+            subject: 'Account security concern',
+            message: 'I received a login notification from a new device but it wasn\'t me. Please secure my account.',
+            status: 'open',
+            priority: 'high',
+            createdAt: '2023-11-20T08:15:45',
+            updatedAt: '2023-11-20T08:15:45',
+            unread: true,
+            replies: []
+          },
+          {
+            id: 1004,
+            email: 'investor_sarah@crypto.com',
+            subject: 'Staking rewards question',
+            message: 'The staking rewards I received this month seem lower than expected based on the advertised APY. Can you explain?',
+            status: 'open',
+            priority: 'normal',
+            createdAt: '2023-11-19T16:30:22',
+            updatedAt: '2023-11-19T16:30:22',
+            unread: false,
+            replies: []
+          },
+          {
+            id: 1005,
+            email: 'new_user@crypto.com',
+            subject: 'Verification email not received',
+            message: 'I signed up but didn\'t get the verification email. I checked spam folder too. Can you resend?',
+            status: 'resolved',
+            priority: 'low',
+            createdAt: '2023-11-14T10:20:15',
+            updatedAt: '2023-11-15T09:10:30',
+            unread: false,
+            replies: [
+              {
+                type: 'admin',
+                message: 'We\'ve resent the verification email. Please check your inbox and spam folder. Let us know if you still don\'t receive it.',
+                date: '2023-11-14T14:45:00'
+              },
+              {
+                type: 'user',
+                message: 'Received it now, thanks! All set.',
+                date: '2023-11-15T09:10:30'
+              }
+            ]
+          }
+        ],
 
-    let logs = [{ time: new Date().toLocaleString(), message: "System initialized." }];
+        // Computed Properties
+        get filteredUsers() {
+          let result = this.users;
+          
+          // Apply search filter
+          if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            result = result.filter(user => 
+              user.email.toLowerCase().includes(query) ||
+              user.username.toLowerCase().includes(query) ||
+              `${user.firstName} ${user.lastName}`.toLowerCase().includes(query)
+            );
+          }
+          
+          // Apply type filter
+          if (this.filterType !== 'all') {
+            if (this.filterType === 'admin') {
+              result = result.filter(user => user.isAdmin);
+            } else {
+              result = result.filter(user => 
+                !user.isAdmin && (this.filterType === 'premium' ? user.isPremium : !user.isPremium)
+              );
+            }
+          }
+          
+          // Apply status filter
+          if (this.filterStatus !== 'all') {
+            if (this.filterStatus === 'banned') {
+              result = result.filter(user => user.isBanned);
+            } else if (this.filterStatus === 'active') {
+              result = result.filter(user => !user.isBanned && user.active);
+            } else if (this.filterStatus === 'kyc_pending') {
+              result = result.filter(user => user.kycRequested && !user.kycVerified);
+            }
+          }
+          
+          return result;
+        },
+        
+        get paginatedUsers() {
+          const start = (this.currentPage - 1) * this.itemsPerPage;
+          return this.filteredUsers.slice(start, start + this.itemsPerPage);
+        },
+        
+        get totalPages() {
+          return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+        },
+        
+        get activeStakingCount() {
+          return this.users.reduce((count, user) => count + user.stakingPositions.length, 0);
+        },
+        
+        get premiumUsersCount() {
+          return this.users.filter(user => user.isPremium).length;
+        },
+        
+        get pendingKYCCount() {
+          return this.users.filter(user => user.kycRequested && !user.kycVerified).length;
+        },
+        
+        get recentLogs() {
+          return [...this.logs].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
+        },
 
-    function logActivity(message) {
-      logs.unshift({ time: new Date().toLocaleString(), message });
-      renderLogs();
+        get filteredLogs() {
+          let result = [...this.logs].sort((a, b) => new Date(b.time) - new Date(a.time));
+          
+          // Apply type filter
+          if (this.logFilterType !== 'all') {
+            result = result.filter(log => log.type === this.logFilterType);
+          }
+          
+          // Apply date filter
+          if (this.logFilterDate !== 'all') {
+            const now = new Date();
+            result = result.filter(log => {
+              const logDate = new Date(log.time);
+              
+              if (this.logFilterDate === 'today') {
+                return logDate.toDateString() === now.toDateString();
+              } else if (this.logFilterDate === 'week') {
+                const weekStart = new Date(now);
+                weekStart.setDate(now.getDate() - now.getDay());
+                return logDate >= weekStart;
+              } else if (this.logFilterDate === 'month') {
+                return logDate.getMonth() === now.getMonth() && logDate.getFullYear() === now.getFullYear();
+              }
+              return true;
+            });
+          }
+          
+          // Apply search filter
+          if (this.logSearchQuery) {
+            const query = this.logSearchQuery.toLowerCase();
+            result = result.filter(log => 
+              log.message.toLowerCase().includes(query) ||
+              log.user.toLowerCase().includes(query) ||
+              log.type.toLowerCase().includes(query)
+            );
+          }
+          
+          return result;
+        },
+        
+        get logTotalPages() {
+          return Math.ceil(this.filteredLogs.length / this.logItemsPerPage);
+        },
+        
+        get paginatedLogs() {
+          const start = (this.logCurrentPage - 1) * this.logItemsPerPage;
+          return this.filteredLogs.slice(start, start + this.logItemsPerPage);
+        },
+
+        // Methods
+        filterUsers() {
+          this.currentPage = 1;
+        },
+        
+        prevPage() {
+          if (this.currentPage > 1) this.currentPage--;
+        },
+        
+        nextPage() {
+          if (this.currentPage < this.totalPages) this.currentPage++;
+        },
+        
+        openUserEditModal(userId) {
+          const user = this.users.find(u => u.id === userId);
+          if (!user) return;
+          
+          // Clone the user object to avoid direct mutation
+          this.currentUser = JSON.parse(JSON.stringify(user));
+          this.modals.userEdit = true;
+        },
+        
+        saveUserChanges() {
+          const index = this.users.findIndex(u => u.id === this.currentUser.id);
+          if (index !== -1) {
+            this.users[index] = this.currentUser;
+            this.logActivity(`Updated user ${this.currentUser.email}`, 'admin_action');
+            this.showNotification('User updated successfully');
+            this.modals.userEdit = false;
+          }
+        },
+        
+        toggleBanStatus(userId) {
+          const user = this.users.find(u => u.id === userId);
+          if (!user) return;
+          
+          user.isBanned = !user.isBanned;
+          if (user.isBanned) user.active = false;
+          
+          const action = user.isBanned ? 'banned' : 'unbanned';
+          this.logActivity(`${action} user ${user.email}`, 'admin_action');
+          this.showNotification(`User ${action} successfully`);
+        },
+        
+        togglePremiumStatus(userId) {
+          const user = this.users.find(u => u.id === userId);
+          if (!user) return;
+          
+          user.isPremium = !user.isPremium;
+          if (user.isPremium) {
+            const expiry = new Date();
+            expiry.setFullYear(expiry.getFullYear() + 1); // 1 year premium
+            user.premiumExpiry = expiry.toISOString().split('T')[0];
+          } else {
+            user.premiumExpiry = '';
+          }
+          
+          const action = user.isPremium ? 'upgraded to Premium' : 'downgraded from Premium';
+          this.logActivity(`${action} user ${user.email}`, 'admin_action');
+          this.showNotification(`User ${action} successfully`);
+        },
+        
+        makeAdmin(userId) {
+          if (!confirm('Are you sure you want to make this user an admin?')) return;
+          
+          const user = this.users.find(u => u.id === userId);
+          if (!user) return;
+          
+          user.isAdmin = true;
+          this.logActivity(`Made ${user.email} an admin`, 'admin_action');
+          this.showNotification('User promoted to admin');
+        },
+        
+        verifyKYC(userId) {
+          const user = this.users.find(u => u.id === userId);
+          if (!user) return;
+          
+          user.kycVerified = true;
+          this.logActivity(`Verified KYC for ${user.email}`, 'kyc');
+          this.showNotification('KYC verified successfully');
+        },
+        
+        viewKYC(userId) {
+          const user = this.users.find(u => u.id === userId);
+          if (!user) return;
+          
+          const kycRequest = this.kycRequests.find(k => k.email === user.email);
+          if (!kycRequest) {
+            this.showNotification('No KYC documents found for this user', 'error');
+            return;
+          }
+          
+          this.currentKYC = JSON.parse(JSON.stringify(kycRequest));
+          this.kycStatus = this.currentKYC.status;
+          this.rejectionReason = this.currentKYC.rejectionReason || '';
+          this.modals.kycDocument = true;
+        },
+        
+        addStaking() {
+          this.editingStakingIndex = null;
+          const today = new Date().toISOString().split('T')[0];
+          const endDate = new Date();
+          endDate.setDate(endDate.getDate() + 30);
+          
+          this.currentStaking = {
+            coin: 'ELTR',
+            amount: 0,
+            apy: 5,
+            startDate: today,
+            endDate: endDate.toISOString().split('T')[0]
+          };
+          this.modals.stakingEdit = true;
+        },
+        
+        editStaking(index) {
+          this.editingStakingIndex = index;
+          this.currentStaking = JSON.parse(JSON.stringify(this.currentUser.stakingPositions[index]));
+          this.modals.stakingEdit = true;
+        },
+        
+        removeStaking(index) {
+          if (confirm('Are you sure you want to remove this staking position?')) {
+            this.currentUser.stakingPositions.splice(index, 1);
+            this.logActivity(`Removed staking position from ${this.currentUser.email}`, 'staking');
+            this.showNotification('Staking position removed');
+          }
+        },
+        
+        saveStaking() {
+          if (!this.currentStaking.amount || this.currentStaking.amount <= 0) {
+            alert('Please enter a valid amount');
+            return;
+          }
+          
+          if (!this.currentStaking.endDate) {
+            alert('Please select an end date');
+            return;
+          }
+          
+          if (this.editingStakingIndex === null) {
+            // Add new staking
+            this.currentUser.stakingPositions.push({
+              ...this.currentStaking,
+              progress: 0 // New staking starts at 0% progress
+            });
+            this.logActivity(`Added staking position to ${this.currentUser.email}`, 'staking');
+            this.showNotification('Staking position added');
+          } else {
+            // Update existing staking
+            this.currentUser.stakingPositions[this.editingStakingIndex] = {
+              ...this.currentStaking,
+              progress: this.currentUser.stakingPositions[this.editingStakingIndex].progress
+            };
+            this.logActivity(`Updated staking position for ${this.currentUser.email}`, 'staking');
+            this.showNotification('Staking position updated');
+          }
+          
+          this.modals.stakingEdit = false;
+        },
+        
+        saveKYCStatus() {
+          const userIndex = this.users.findIndex(u => u.email === this.currentKYC.email);
+          if (userIndex !== -1) {
+            this.users[userIndex].kycVerified = this.kycStatus === 'verified';
+          }
+          
+          const kycIndex = this.kycRequests.findIndex(k => k.id === this.currentKYC.id);
+          if (kycIndex !== -1) {
+            this.kycRequests[kycIndex].status = this.kycStatus;
+            this.kycRequests[kycIndex].updatedAt = new Date().toISOString();
+            
+            if (this.kycStatus === 'rejected') {
+              this.kycRequests[kycIndex].rejectionReason = this.rejectionReason;
+            }
+          }
+          
+          const action = this.kycStatus === 'verified' ? 'verified' : this.kycStatus === 'rejected' ? 'rejected' : 'updated';
+          this.showNotification(`KYC ${action} successfully`);
+          this.logActivity(`${action.charAt(0).toUpperCase() + action.slice(1)} KYC for ${this.currentKYC.email}`, 'kyc');
+          this.modals.kycDocument = false;
+        },
+        
+        openImageModal(imageUrl) {
+          this.currentImage = imageUrl;
+          this.modals.imagePreview = true;
+        },
+        
+        openTicketReply(ticketId) {
+          const ticket = this.supportTickets.find(t => t.id === ticketId);
+          if (!ticket) return;
+          
+          this.currentTicket = JSON.parse(JSON.stringify(ticket));
+          this.replyMessage = '';
+          this.modals.ticketReply = true;
+        },
+        
+        sendTicketReply() {
+          if (!this.replyMessage.trim()) {
+            this.showNotification('Please enter a reply message', 'error');
+            return;
+          }
+          
+          // Find the original ticket
+          const index = this.supportTickets.findIndex(t => t.id === this.currentTicket.id);
+          if (index === -1) return;
+          
+          // Update the ticket
+          this.supportTickets[index].status = 'pending';
+          this.supportTickets[index].updatedAt = new Date().toISOString();
+          this.supportTickets[index].unread = false;
+          
+          // Add the reply
+          this.supportTickets[index].replies.push({
+            type: 'admin',
+            message: this.replyMessage.trim(),
+            date: new Date().toISOString()
+          });
+          
+          this.showNotification('Reply sent successfully');
+          this.logActivity(`Replied to ticket #${this.currentTicket.id}`, 'support');
+          this.modals.ticketReply = false;
+        },
+        
+        resolveTicket(ticketId) {
+          const ticket = this.supportTickets.find(t => t.id === ticketId);
+          if (!ticket) return;
+          
+          if (ticket.status === 'resolved') {
+            ticket.status = 'open';
+            this.showNotification('Ticket reopened');
+            this.logActivity(`Reopened ticket #${ticketId}`, 'support');
+          } else {
+            ticket.status = 'resolved';
+            this.showNotification('Ticket marked as resolved');
+            this.logActivity(`Resolved ticket #${ticketId}`, 'support');
+          }
+          
+          ticket.updatedAt = new Date().toISOString();
+        },
+        
+        filterLogs() {
+          this.logCurrentPage = 1;
+        },
+        
+        prevLogPage() {
+          if (this.logCurrentPage > 1) this.logCurrentPage--;
+        },
+        
+        nextLogPage() {
+          if (this.logCurrentPage < this.logTotalPages) this.logCurrentPage++;
+        },
+        
+        viewLogDetails(log) {
+          this.currentLog = JSON.parse(JSON.stringify(log));
+          this.modals.logDetail = true;
+        },
+        
+        openActivityLogs() {
+          this.modals.activityLogs = true;
+          this.filterLogs();
+        },
+        
+        formatDate(isoString) {
+          if (!isoString) return '';
+          const date = new Date(isoString);
+          return date.toLocaleString();
+        },
+        
+        showNotification(message, type = 'success') {
+          const container = document.getElementById('notification-container');
+          const note = document.createElement('div');
+          note.className = `bg-${type === 'success' ? 'green' : 'red'}-500 text-white px-4 py-2 rounded shadow`;
+          note.textContent = message;
+          container.appendChild(note);
+          setTimeout(() => note.remove(), 3000);
+        },
+        
+        logActivity(message, type = 'system') {
+          const user = "MASTER ADMIN";
+          this.logs.push({
+            id: Date.now(),
+            time: new Date().toLocaleString(),
+            message,
+            type,
+            user
+          });
+        },
+
+        // Initialize
+        init() {
+          // Set default dates for new staking positions
+          const today = new Date().toISOString().split('T')[0];
+          const endDate = new Date();
+          endDate.setDate(endDate.getDate() + 30);
+          this.currentStaking.startDate = today;
+          this.currentStaking.endDate = endDate.toISOString().split('T')[0];
+          
+          // Set default premium expiry (1 year from now) for premium users
+          const defaultPremiumExpiry = new Date();
+          defaultPremiumExpiry.setFullYear(defaultPremiumExpiry.getFullYear() + 1);
+          
+          // Update sample users with default premium expiry if they're premium
+          this.users.forEach(user => {
+            if (user.isPremium && !user.premiumExpiry) {
+              user.premiumExpiry = defaultPremiumExpiry.toISOString().split('T')[0];
+            }
+            
+            // Initialize balances if not set
+            if (!user.balances) {
+              user.balances = {
+                eltr: 0,
+                btc: 0,
+                eth: 0,
+                usdt: 0
+              };
+            }
+          });
+        }
+      };
     }
-
-    function showNotification(message) {
-      const container = document.getElementById('notification-container');
-      const note = document.createElement("div");
-      note.className = "bg-green-500 text-white px-4 py-2 rounded shadow";
-      note.innerText = message;
-      container.appendChild(note);
-      setTimeout(() => note.remove(), 3000);
-    }
-
-    function renderLogs() {
-      const logList = document.getElementById('log-list');
-      logList.innerHTML = logs.map(log => `
-        <li class="border-b py-1">
-          <span class="text-gray-500">${log.time}</span> - ${log.message}
-        </li>
-      `).join('');
-    }
-
-    function refreshLists(filtered = null) {
-      const userList = document.getElementById('user-list');
-      const adminList = document.getElementById('admin-list');
-      const listToUse = filtered || users;
-
-      userList.innerHTML = '';
-      adminList.innerHTML = '';
-
-      listToUse.forEach(user => {
-        const kycStatus = user.kycVerified
-          ? `<span class="text-green-600 font-semibold">✅ Verified</span>`
-          : user.kycRequested
-            ? `<span class="text-yellow-500 font-semibold">Requested</span>`
-            : `<span class="text-gray-500">Not Requested</span>`;
-
-        userList.innerHTML += `
-          <li class="border-b py-2">
-            <div>
-              <div><strong>Email:</strong> ${user.email}</div>
-              <div class="text-sm">${kycStatus}</div>
-              <div class="text-sm text-gray-500">Username: ${user.username}</div>
-              <div class="text-sm text-gray-500">Password: ${user.password}</div>
-              <div class="text-sm text-blue-600 font-semibold">Balance: $${user.balance.toFixed(2)}</div>
-              <div class="text-sm text-${user.active ? 'green' : 'red'}-600 font-semibold">${user.active ? 'Active' : 'Inactive'}</div>
-            </div>
-            <div class="mt-2 flex flex-wrap gap-2">
-              <button onclick="grantAdmin('${user.email}')" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Grant Admin</button>
-              ${user.kycRequested && !user.kycVerified
-            ? `<button onclick="verifyKYC('${user.email}')" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Verify KYC</button>`
-            : `<button onclick="viewKYC('${user.email}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">View KYC</button>`}
-              <button onclick="toggleUserAccess('${user.email}')" class="bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600">${user.active ? 'Deactivate' : 'Activate'}</button>
-              <button onclick="editBalance('${user.email}')" class="bg-purple-500 text-white px-2 py-1 rounded hover:bg-purple-600">Edit Balance</button>
-              <button onclick="resetPassword('${user.email}', 'user')" class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">Reset Password</button>
-              <button onclick="deleteAccount('${user.email}', 'user')" class="bg-black text-white px-2 py-1 rounded hover:bg-gray-800">Delete</button>
-            </div>
-          </li>`;
-      });
-
-      admins.forEach(admin => {
-        adminList.innerHTML += `
-          <li class="border-b py-2">
-            <div>
-              <strong>Email:</strong> ${admin.email}<br />
-              <span class="text-sm text-gray-500">Username: ${admin.username}</span><br />
-              <span class="text-sm text-gray-500">Password: ${admin.password}</span>
-            </div>
-            <div class="mt-2 flex flex-wrap gap-2">
-              <button onclick="revokeAdmin('${admin.email}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove Admin</button>
-              <button onclick="resetPassword('${admin.email}', 'admin')" class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600">Reset Password</button>
-              <button onclick="deleteAccount('${admin.email}', 'admin')" class="bg-black text-white px-2 py-1 rounded hover:bg-gray-800">Delete</button>
-            </div>
-          </li>`;
-      });
-    }
-
-    function editBalance(email) {
-      const user = users.find(u => u.email === email);
-      if (!user) return;
-      const newBalance = prompt(`Enter new balance for ${email}`, user.balance);
-      if (newBalance !== null && !isNaN(newBalance) && parseFloat(newBalance) >= 0) {
-        user.balance = parseFloat(newBalance);
-        showNotification("Balance updated.");
-        logActivity(`Updated balance of ${email} to $${user.balance.toFixed(2)}`);
-        refreshLists();
-      } else {
-        alert("Invalid balance amount.");
-      }
-    }
-
-    function toggleSidebar() {
-      const sidebar = document.getElementById("sidebar");
-      const backdrop = document.getElementById("sidebar-backdrop");
-      const isOpen = sidebar.classList.contains("translate-x-0");
-
-      if (isOpen) {
-        sidebar.classList.remove("translate-x-0");
-        sidebar.classList.add("-translate-x-full");
-        backdrop.classList.add("hidden");
-      } else {
-        sidebar.classList.remove("-translate-x-full");
-        sidebar.classList.add("translate-x-0");
-        backdrop.classList.remove("hidden");
-      }
-    }
-
-    // Other supporting functions here...
-    function grantAdmin(email) {
-      const index = users.findIndex(u => u.email === email);
-      if (index !== -1) {
-        admins.push({
-          email: users[index].email,
-          username: users[index].username,
-          password: users[index].password
-        });
-        users.splice(index, 1);
-        showNotification("Admin granted!");
-        logActivity(`Granted admin access to ${email}`);
-        refreshLists();
-      }
-    }
-
-    function revokeAdmin(email) {
-      const index = admins.findIndex(a => a.email === email);
-      if (index !== -1) {
-        users.push({
-          email: admins[index].email,
-          username: admins[index].username,
-          password: admins[index].password,
-          kycRequested: false,
-          kycVerified: false,
-          active: true,
-          balance: 0
-        });
-        admins.splice(index, 1);
-        showNotification("Admin removed.");
-        logActivity(`Removed admin access from ${email}`);
-        refreshLists();
-      }
-    }
-
-    function verifyKYC(email) {
-      const user = users.find(u => u.email === email);
-      if (user) {
-        user.kycVerified = true;
-        user.kycRequested = false;
-        alert(`KYC verified for ${email}`);
-        logActivity(`Verified KYC for ${email}`);
-        refreshLists();
-      }
-    }
-
-    function viewKYC(email) {
-      alert("Viewing KYC info for " + email);
-      logActivity(`Viewed KYC info of ${email}`);
-    }
-
-    function toggleUserAccess(email) {
-      const user = users.find(u => u.email === email);
-      if (user) {
-        user.active = !user.active;
-        logActivity(`${user.active ? 'Activated' : 'Deactivated'} user ${email}`);
-        refreshLists();
-      }
-    }
-
-    function resetPassword(email, type) {
-      const newPassword = Math.random().toString(36).slice(-8);
-      if (type === 'user') {
-        const user = users.find(u => u.email === email);
-        if (user) user.password = newPassword;
-      } else {
-        const admin = admins.find(a => a.email === email);
-        if (admin) admin.password = newPassword;
-      }
-      showNotification("Password reset!");
-      logActivity(`Reset password for ${email}`);
-      refreshLists();
-    }
-
-    function deleteAccount(email, type) {
-      if (type === 'user') {
-        users = users.filter(u => u.email !== email);
-      } else {
-        admins = admins.filter(a => a.email !== email);
-      }
-      showNotification("Account deleted.");
-      logActivity(`Deleted ${type} account: ${email}`);
-      refreshLists();
-    }
-
-    function exportLogs() {
-      const content = logs.map(log => `${log.time} - ${log.message}`).join('\n');
-      const blob = new Blob([content], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'activity-logs.txt';
-      link.click();
-      logActivity("Exported activity logs");
-    }
-
-    function searchUsers(keyword) {
-      const trimmed = keyword.trim().toLowerCase();
-      if (trimmed === "") return refreshLists();
-      const filteredUsers = users.filter(user =>
-        user.email.toLowerCase().includes(trimmed) ||
-        user.username.toLowerCase().includes(trimmed)
-      );
-      refreshLists(filteredUsers);
-    }
-
-    refreshLists();
-    renderLogs();
   </script>
 </body>
-
 </html>

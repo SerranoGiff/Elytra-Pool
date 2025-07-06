@@ -1,679 +1,842 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crypto Master - Support Tools</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .badge {
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .badge-active {
-      background-color: #dcfce7;
-      color: #166534;
-    }
-    .badge-inactive {
-      background-color: #f3f4f6;
-      color: #374151;
-    }
-    .status-indicator {
-      display: inline-block;
-      width: 0.75rem;
-      height: 0.75rem;
-      border-radius: 9999px;
-      margin-right: 0.25rem;
-    }
-    .status-active {
-      background-color: #10b981;
-    }
-    .status-warning {
-      background-color: #f59e0b;
-    }
-    .status-error {
-      background-color: #ef4444;
-    }
-    .api-method-get {
-      background-color: #dcfce7;
-      color: #166534;
-    }
-    .api-method-post {
-      background-color: #dbeafe;
-      color: #1e40af;
-    }
-    .api-method-put {
-      background-color: #fef3c7;
-      color: #92400e;
-    }
-    .api-method-delete {
-      background-color: #fee2e2;
-      color: #991b1b;
-    }
-    .log-entry {
-      border-left-width: 4px;
-      padding-left: 0.75rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-      margin-bottom: 0.5rem;
-    }
-    .log-info {
-      border-color: #3b82f6;
-      background-color: #eff6ff;
-    }
-    .log-warning {
-      border-color: #f59e0b;
-      background-color: #fffbeb;
-    }
-    .log-error {
-      border-color: #ef4444;
-      background-color: #fef2f2;
-    }
-    .log-success {
-      border-color: #10b981;
-      background-color: #ecfdf5;
-    }
-    .priority-high {
-      border-left-width: 4px;
-      border-color: #ef4444;
-    }
-    .priority-medium {
-      border-left-width: 4px;
-      border-color: #f59e0b;
-    }
-    .priority-low {
-      border-left-width: 4px;
-      border-color: #6b7280;
-    }
-    .card-hover {
-      transition: all 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    .user-status-active {
-      background-color: #dcfce7;
-      color: #166534;
-    }
-    .user-status-suspended {
-      background-color: #fee2e2;
-      color: #991b1b;
-    }
-    .user-status-pending {
-      background-color: #fef3c7;
-      color: #92400e;
-    }
-    .transaction-status-completed {
-      background-color: #dcfce7;
-      color: #166534;
-    }
-    .transaction-status-pending {
-      background-color: #fef3c7;
-      color: #92400e;
-    }
-    .transaction-status-failed {
-      background-color: #fee2e2;
-      color: #991b1b;
-    }
-    .grid-stack {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Master - Support Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+      .badge-active {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      .badge-inactive {
+        background-color: #f3f4f6;
+        color: #374151;
+      }
+      .status-indicator {
+        display: inline-block;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 9999px;
+        margin-right: 0.25rem;
+      }
+      .status-active {
+        background-color: #10b981;
+      }
+      .status-warning {
+        background-color: #f59e0b;
+      }
+      .status-error {
+        background-color: #ef4444;
+      }
+      .api-method-get {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      .api-method-post {
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+      .api-method-put {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .api-method-delete {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+      .log-entry {
+        border-left-width: 4px;
+        padding-left: 0.75rem;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
+      }
+      .log-info {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+      }
+      .log-warning {
+        border-color: #f59e0b;
+        background-color: #fffbeb;
+      }
+      .log-error {
+        border-color: #ef4444;
+        background-color: #fef2f2;
+      }
+      .log-success {
+        border-color: #10b981;
+        background-color: #ecfdf5;
+      }
+      .priority-high {
+        border-left-width: 4px;
+        border-color: #ef4444;
+      }
+      .priority-medium {
+        border-left-width: 4px;
+        border-color: #f59e0b;
+      }
+      .priority-low {
+        border-left-width: 4px;
+        border-color: #6b7280;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .user-status-active {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      .user-status-suspended {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+      .user-status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .transaction-status-completed {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      .transaction-status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .transaction-status-failed {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+      .grid-stack {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+    </style>
+  </head>
 
-<body class="bg-gray-50 min-h-screen">
-  <!-- Top Header -->
-  <header class="bg-white shadow-sm">
-    <div class="flex justify-between items-center px-6 py-4">
-      <div>
-        <h2 class="text-xl font-semibold text-gray-800">Support Tools</h2>
-        <p class="text-sm text-gray-500">System monitoring and management utilities</p>
-      </div>
-      <div class="flex space-x-3">
-        <a href="dashboard.html" class="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 flex items-center">
-          <i class="fas fa-arrow-left mr-2 text-gray-600"></i>
-          Back to Dashboard
-        </a>
-        <a href="logout.php" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center">
-          <i class="fas fa-sign-out-alt mr-2"></i>
-          Logout
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="flex-1 p-6 bg-gray-50">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <!-- System Status Overview -->
-      <div class="bg-white rounded-lg shadow p-6 lg:col-span-3">
-        <h2 class="text-xl font-bold mb-4">System Status</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <div class="border rounded-lg p-4 text-center">
-            <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator status-active"></span>
-              <span class="font-medium">API Services</span>
-            </div>
-            <p class="text-2xl font-bold">8/10</p>
-            <p class="text-sm text-gray-500">Online Endpoints</p>
-          </div>
-          <div class="border rounded-lg p-4 text-center">
-            <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator status-active"></span>
-              <span class="font-medium">System Health</span>
-            </div>
-            <p class="text-2xl font-bold capitalize">Active</p>
-            <p class="text-sm text-gray-500">All systems operational</p>
-          </div>
-          <div class="border rounded-lg p-4 text-center">
-            <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator status-active"></span>
-              <span class="font-medium">Database</span>
-            </div>
-            <p class="text-2xl font-bold capitalize">Active</p>
-            <p class="text-sm text-gray-500">Latency: 24ms</p>
-          </div>
-          <div class="border rounded-lg p-4 text-center">
-            <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator status-active"></span>
-              <span class="font-medium">Users</span>
-            </div>
-            <p class="text-2xl font-bold">1,842</p>
-            <p class="text-sm text-gray-500">24 active now</p>
-          </div>
-          <div class="border rounded-lg p-4 text-center">
-            <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator status-active"></span>
-              <span class="font-medium">Transactions</span>
-            </div>
-            <p class="text-2xl font-bold">342</p>
-            <p class="text-sm text-gray-500">Today</p>
-          </div>
-          <div class="border rounded-lg p-4 text-center">
-            <div class="flex justify-center items-center mb-2">
-              <span class="status-indicator status-active"></span>
-              <span class="font-medium">Last Cron Job</span>
-            </div>
-            <p class="text-2xl font-bold capitalize">Success</p>
-            <p class="text-sm text-gray-500">Ran 15 minutes ago</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- User Management -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">User Management</h2>
-          <div class="flex space-x-2">
-            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
-              <i class="fas fa-plus mr-1"></i>
-              New User
-            </button>
-            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
-              <i class="fas fa-download mr-1"></i>
-              Export
-            </button>
-          </div>
-        </div>
-        
-        <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Balance</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Last Login</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>crypto_trader</div>
-                  <div class="text-xs text-gray-500">trader@cryptomaster.com</div>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge user-status-active">
-                    Active
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">$12,450.75</td>
-                <td class="px-4 py-2 text-sm text-gray-500">2 hours ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
-                  <button class="text-red-600 hover:text-red-800">Terminate</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>bitcoin_miner</div>
-                  <div class="text-xs text-gray-500">miner@cryptomaster.com</div>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge user-status-suspended">
-                    Suspended
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">$8,200.00</td>
-                <td class="px-4 py-2 text-sm text-gray-500">3 days ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
-                  <button class="text-green-600 hover:text-green-800">Activate</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>eth_investor</div>
-                  <div class="text-xs text-gray-500">investor@cryptomaster.com</div>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge user-status-active">
-                    Active
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">$24,780.30</td>
-                <td class="px-4 py-2 text-sm text-gray-500">5 minutes ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
-                  <button class="text-red-600 hover:text-red-800">Terminate</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>newbie_crypto</div>
-                  <div class="text-xs text-gray-500">newbie@cryptomaster.com</div>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge user-status-pending">
-                    Pending
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">$500.00</td>
-                <td class="px-4 py-2 text-sm text-gray-500">Never</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">View</button>
-                  <button class="text-green-600 hover:text-green-800">Approve</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Transaction Monitoring -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">Transaction Monitoring</h2>
-          <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
-            <i class="fas fa-filter mr-1"></i>
-            Filter
-          </button>
-        </div>
-        
-        <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Transaction</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>BTC Purchase</div>
-                  <div class="text-xs text-gray-500">crypto_trader</div>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">+0.25 BTC</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge transaction-status-completed">
-                    Completed
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">10 min ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800">View</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>ETH Withdrawal</div>
-                  <div class="text-xs text-gray-500">eth_investor</div>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">-5.72 ETH</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge transaction-status-pending">
-                    Pending
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">25 min ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800">View</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>USDT Transfer</div>
-                  <div class="text-xs text-gray-500">bitcoin_miner</div>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">-1,200 USDT</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge transaction-status-failed">
-                    Failed
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">1 hour ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800">View</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">
-                  <div>LTC Deposit</div>
-                  <div class="text-xs text-gray-500">crypto_trader</div>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">+42.8 LTC</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge transaction-status-completed">
-                    Completed
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">2 hours ago</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800">View</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Security Logs -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">Security Logs</h2>
-          <button class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
-            <i class="fas fa-sync-alt"></i>
-          </button>
-        </div>
-        
-        <div class="space-y-2 max-h-96 overflow-y-auto">
-          <div class="log-entry log-info">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">INFO</span>
-              <span class="text-xs text-gray-500">Just now</span>
-            </div>
-            <p class="text-sm">User session started for admin_user</p>
-          </div>
-          <div class="log-entry log-warning">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">WARNING</span>
-              <span class="text-xs text-gray-500">5 min ago</span>
-            </div>
-            <p class="text-sm">Multiple failed login attempts from IP 192.168.1.25</p>
-          </div>
-          <div class="log-entry log-success">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">SUCCESS</span>
-              <span class="text-xs text-gray-500">15 min ago</span>
-            </div>
-            <p class="text-sm">User eth_investor completed KYC verification</p>
-          </div>
-          <div class="log-entry log-error">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">ERROR</span>
-              <span class="text-xs text-gray-500">30 min ago</span>
-            </div>
-            <p class="text-sm">Transaction verification failed for TX-4892-EFG</p>
-          </div>
-          <div class="log-entry log-info">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">INFO</span>
-              <span class="text-xs text-gray-500">2 hours ago</span>
-            </div>
-            <p class="text-sm">System backup completed successfully</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- API Endpoints Management -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">API Endpoints</h2>
-          <button class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
-            Add Endpoint
-          </button>
-        </div>
-        
-        <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Endpoint</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Rate Limit</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">/api/v1/users</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge api-method-get">
-                    GET
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge badge-active">
-                    Active
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">100/min</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
-                  <button class="text-gray-600 hover:text-gray-800">Disable</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">/api/v1/wallet/balance</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge api-method-get">
-                    GET
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge badge-active">
-                    Active
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">200/min</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
-                  <button class="text-gray-600 hover:text-gray-800">Disable</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2 text-sm font-medium text-gray-900">/api/v1/admin/transactions</td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge api-method-get">
-                    GET
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm">
-                  <span class="badge badge-inactive">
-                    Inactive
-                  </span>
-                </td>
-                <td class="px-4 py-2 text-sm text-gray-500">30/min</td>
-                <td class="px-4 py-2 text-sm">
-                  <button class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
-                  <button class="text-green-600 hover:text-green-800">Enable</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- System Logs -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold">System Logs</h2>
-          <div class="flex items-center space-x-2">
-            <button class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
-              Clear
-            </button>
-          </div>
-        </div>
-        
-        <div class="space-y-2 max-h-96 overflow-y-auto">
-          <div class="log-entry log-info">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">INFO</span>
-              <span class="text-xs text-gray-500">Just now</span>
-            </div>
-            <p class="text-sm">System started successfully</p>
-          </div>
-          <div class="log-entry log-warning">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">WARNING</span>
-              <span class="text-xs text-gray-500">15 min ago</span>
-            </div>
-            <p class="text-sm">API rate limit exceeded on endpoint /api/v1/users</p>
-          </div>
-          <div class="log-entry log-success">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">SUCCESS</span>
-              <span class="text-xs text-gray-500">30 min ago</span>
-            </div>
-            <p class="text-sm">Database optimization completed</p>
-          </div>
-          <div class="log-entry log-error">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-medium">ERROR</span>
-              <span class="text-xs text-gray-500">1 hour ago</span>
-            </div>
-            <p class="text-sm">Failed to connect to external API service</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Quick Stats -->
-    <div class="grid-stack mb-6">
-      <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
-        <div class="space-y-3">
-          <div class="flex items-center">
-            <div class="bg-blue-100 p-2 rounded-full mr-3">
-              <i class="fas fa-user-plus text-blue-600"></i>
-            </div>
-            <div>
-              <p class="text-sm font-medium">New user registered</p>
-              <p class="text-xs text-gray-500">crypto_newbie joined 10 minutes ago</p>
-            </div>
-          </div>
-          <div class="flex items-center">
-            <div class="bg-green-100 p-2 rounded-full mr-3">
-              <i class="fas fa-exchange-alt text-green-600"></i>
-            </div>
-            <div>
-              <p class="text-sm font-medium">Large transaction</p>
-              <p class="text-xs text-gray-500">BTC purchase of 2.5 BTC completed</p>
-            </div>
-          </div>
-          <div class="flex items-center">
-            <div class="bg-red-100 p-2 rounded-full mr-3">
-              <i class="fas fa-exclamation-triangle text-red-600"></i>
-            </div>
-            <div>
-              <p class="text-sm font-medium">Security alert</p>
-              <p class="text-xs text-gray-500">Suspicious login attempt blocked</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">System Resources</h3>
-        <div class="mb-4">
-          <div class="flex justify-between text-sm mb-1">
-            <span>CPU Usage</span>
-            <span>42%</span>
-          </div>
-          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-blue-500" style="width: 42%"></div>
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="flex justify-between text-sm mb-1">
-            <span>Memory</span>
-            <span>64%</span>
-          </div>
-          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-green-500" style="width: 64%"></div>
-          </div>
-        </div>
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Top Header -->
+    <header class="bg-white shadow-sm">
+      <div class="flex justify-between items-center px-6 py-4">
         <div>
-          <div class="flex justify-between text-sm mb-1">
-            <span>Disk Space</span>
-            <span>28%</span>
-          </div>
-          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-purple-500" style="width: 28%"></div>
+          <h2 class="text-xl font-semibold text-gray-800">Support Tools</h2>
+          <p class="text-sm text-gray-500">
+            System monitoring and management utilities
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <a
+            href="masteradmin.html"
+            class="p-2 bg-gray-100 rounded-md hover:bg-gray-200 flex items-center justify-center"
+            title="Back to Dashboard"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-gray-600"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Back to Dashboard
+          </a>
+          <!-- Profile Dropdown -->
+          <div class="relative group">
+            <button
+              id="profileButton"
+              class="flex items-center bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 space-x-2"
+            >
+              <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                <path
+                  d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.8 1.7-9.8 5v2.7h19.6V19.2c0-3.3-6.5-5-9.8-5z"
+                />
+              </svg>
+              <span class="hidden sm:inline">Profile</span>
+            </button>
+            <div
+              id="profileDropdown"
+              class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg hidden group-hover:block z-50"
+            >
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100"
+                >View Profile</a
+              >
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            </div>
           </div>
         </div>
       </div>
-      
-      <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
-        <div class="grid grid-cols-2 gap-3">
-          <button class="bg-blue-100 text-blue-700 p-3 rounded-lg hover:bg-blue-200 flex flex-col items-center justify-center">
-            <i class="fas fa-user-shield text-xl mb-2"></i>
-            <span class="text-sm">Security Scan</span>
-          </button>
-          <button class="bg-green-100 text-green-700 p-3 rounded-lg hover:bg-green-200 flex flex-col items-center justify-center">
-            <i class="fas fa-database text-xl mb-2"></i>
-            <span class="text-sm">Backup Now</span>
-          </button>
-          <button class="bg-purple-100 text-purple-700 p-3 rounded-lg hover:bg-purple-200 flex flex-col items-center justify-center">
-            <i class="fas fa-sync-alt text-xl mb-2"></i>
-            <span class="text-sm">Refresh Cache</span>
-          </button>
-          <button class="bg-yellow-100 text-yellow-700 p-3 rounded-lg hover:bg-yellow-200 flex flex-col items-center justify-center">
-            <i class="fas fa-file-export text-xl mb-2"></i>
-            <span class="text-sm">Export Data</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
+    </header>
 
-  <script>
-    // Simulate system status updates
-    setInterval(() => {
-      const indicators = document.querySelectorAll('.status-indicator');
-      indicators.forEach(indicator => {
-        if (Math.random() > 0.95) {
-          indicator.classList.remove('status-active');
-          indicator.classList.add('status-warning');
-        } else {
-          indicator.classList.remove('status-warning');
-          indicator.classList.add('status-active');
-        }
-      });
-    }, 5000);
-  </script>
-</body>
+    <!-- Main Content -->
+    <main class="flex-1 p-6 bg-gray-50">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- System Status Overview -->
+        <div class="bg-white rounded-lg shadow p-6 lg:col-span-3">
+          <h2 class="text-xl font-bold mb-4">System Status</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="border rounded-lg p-4 text-center">
+              <div class="flex justify-center items-center mb-2">
+                <span class="status-indicator status-active"></span>
+                <span class="font-medium">API Services</span>
+              </div>
+              <p class="text-2xl font-bold">8/10</p>
+              <p class="text-sm text-gray-500">Online Endpoints</p>
+            </div>
+            <div class="border rounded-lg p-4 text-center">
+              <div class="flex justify-center items-center mb-2">
+                <span class="status-indicator status-active"></span>
+                <span class="font-medium">System Health</span>
+              </div>
+              <p class="text-2xl font-bold capitalize">Active</p>
+              <p class="text-sm text-gray-500">All systems operational</p>
+            </div>
+            <div class="border rounded-lg p-4 text-center">
+              <div class="flex justify-center items-center mb-2">
+                <span class="status-indicator status-active"></span>
+                <span class="font-medium">Database</span>
+              </div>
+              <p class="text-2xl font-bold capitalize">Active</p>
+              <p class="text-sm text-gray-500">Latency: 24ms</p>
+            </div>
+            <div class="border rounded-lg p-4 text-center">
+              <div class="flex justify-center items-center mb-2">
+                <span class="status-indicator status-active"></span>
+                <span class="font-medium">Users</span>
+              </div>
+              <p class="text-2xl font-bold">1,842</p>
+              <p class="text-sm text-gray-500">24 active now</p>
+            </div>
+            <div class="border rounded-lg p-4 text-center">
+              <div class="flex justify-center items-center mb-2">
+                <span class="status-indicator status-active"></span>
+                <span class="font-medium">Transactions</span>
+              </div>
+              <p class="text-2xl font-bold">342</p>
+              <p class="text-sm text-gray-500">Today</p>
+            </div>
+            <div class="border rounded-lg p-4 text-center">
+              <div class="flex justify-center items-center mb-2">
+                <span class="status-indicator status-active"></span>
+                <span class="font-medium">Last Cron Job</span>
+              </div>
+              <p class="text-2xl font-bold capitalize">Success</p>
+              <p class="text-sm text-gray-500">Ran 15 minutes ago</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">User Management</h2>
+            <div class="flex space-x-2">
+              <button
+                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center"
+              >
+                <i class="fas fa-plus mr-1"></i>
+                New User
+              </button>
+              <button
+                class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center"
+              >
+                <i class="fas fa-download mr-1"></i>
+                Export
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    User
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Balance
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Last Login
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>crypto_trader</div>
+                    <div class="text-xs text-gray-500">
+                      trader@cryptomaster.com
+                    </div>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge user-status-active"> Active </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">$12,450.75</td>
+                  <td class="px-4 py-2 text-sm text-gray-500">2 hours ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      View
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      Terminate
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>bitcoin_miner</div>
+                    <div class="text-xs text-gray-500">
+                      miner@cryptomaster.com
+                    </div>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge user-status-suspended"> Suspended </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">$8,200.00</td>
+                  <td class="px-4 py-2 text-sm text-gray-500">3 days ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      View
+                    </button>
+                    <button class="text-green-600 hover:text-green-800">
+                      Activate
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>eth_investor</div>
+                    <div class="text-xs text-gray-500">
+                      investor@cryptomaster.com
+                    </div>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge user-status-active"> Active </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">$24,780.30</td>
+                  <td class="px-4 py-2 text-sm text-gray-500">5 minutes ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      View
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      Terminate
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>newbie_crypto</div>
+                    <div class="text-xs text-gray-500">
+                      newbie@cryptomaster.com
+                    </div>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge user-status-pending"> Pending </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">$500.00</td>
+                  <td class="px-4 py-2 text-sm text-gray-500">Never</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      View
+                    </button>
+                    <button class="text-green-600 hover:text-green-800">
+                      Approve
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Transaction Monitoring -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Transaction Monitoring</h2>
+            <button
+              class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center"
+            >
+              <i class="fas fa-filter mr-1"></i>
+              Filter
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Transaction
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Amount
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Time
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>BTC Purchase</div>
+                    <div class="text-xs text-gray-500">crypto_trader</div>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">+0.25 BTC</td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge transaction-status-completed">
+                      Completed
+                    </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">10 min ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800">
+                      View
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>ETH Withdrawal</div>
+                    <div class="text-xs text-gray-500">eth_investor</div>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">-5.72 ETH</td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge transaction-status-pending">
+                      Pending
+                    </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">25 min ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800">
+                      View
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>USDT Transfer</div>
+                    <div class="text-xs text-gray-500">bitcoin_miner</div>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">-1,200 USDT</td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge transaction-status-failed">
+                      Failed
+                    </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">1 hour ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800">
+                      View
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    <div>LTC Deposit</div>
+                    <div class="text-xs text-gray-500">crypto_trader</div>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">+42.8 LTC</td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge transaction-status-completed">
+                      Completed
+                    </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">2 hours ago</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800">
+                      View
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Security Logs -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Security Logs</h2>
+            <button
+              class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300"
+            >
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+
+          <div class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="log-entry log-info">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">INFO</span>
+                <span class="text-xs text-gray-500">Just now</span>
+              </div>
+              <p class="text-sm">User session started for admin_user</p>
+            </div>
+            <div class="log-entry log-warning">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">WARNING</span>
+                <span class="text-xs text-gray-500">5 min ago</span>
+              </div>
+              <p class="text-sm">
+                Multiple failed login attempts from IP 192.168.1.25
+              </p>
+            </div>
+            <div class="log-entry log-success">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">SUCCESS</span>
+                <span class="text-xs text-gray-500">15 min ago</span>
+              </div>
+              <p class="text-sm">
+                User eth_investor completed KYC verification
+              </p>
+            </div>
+            <div class="log-entry log-error">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">ERROR</span>
+                <span class="text-xs text-gray-500">30 min ago</span>
+              </div>
+              <p class="text-sm">
+                Transaction verification failed for TX-4892-EFG
+              </p>
+            </div>
+            <div class="log-entry log-info">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">INFO</span>
+                <span class="text-xs text-gray-500">2 hours ago</span>
+              </div>
+              <p class="text-sm">System backup completed successfully</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Endpoints Management -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">API Endpoints</h2>
+            <button
+              class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600"
+            >
+              Add Endpoint
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Endpoint
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Method
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Rate Limit
+                  </th>
+                  <th
+                    class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    /api/v1/users
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge api-method-get"> GET </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge badge-active"> Active </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">100/min</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      Edit
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800">
+                      Disable
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    /api/v1/wallet/balance
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge api-method-get"> GET </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge badge-active"> Active </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">200/min</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      Edit
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800">
+                      Disable
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900">
+                    /api/v1/admin/transactions
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge api-method-get"> GET </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm">
+                    <span class="badge badge-inactive"> Inactive </span>
+                  </td>
+                  <td class="px-4 py-2 text-sm text-gray-500">30/min</td>
+                  <td class="px-4 py-2 text-sm">
+                    <button class="text-blue-600 hover:text-blue-800 mr-2">
+                      Edit
+                    </button>
+                    <button class="text-green-600 hover:text-green-800">
+                      Enable
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System Logs -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">System Logs</h2>
+            <div class="flex items-center space-x-2">
+              <button
+                class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="log-entry log-info">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">INFO</span>
+                <span class="text-xs text-gray-500">Just now</span>
+              </div>
+              <p class="text-sm">System started successfully</p>
+            </div>
+            <div class="log-entry log-warning">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">WARNING</span>
+                <span class="text-xs text-gray-500">15 min ago</span>
+              </div>
+              <p class="text-sm">
+                API rate limit exceeded on endpoint /api/v1/users
+              </p>
+            </div>
+            <div class="log-entry log-success">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">SUCCESS</span>
+                <span class="text-xs text-gray-500">30 min ago</span>
+              </div>
+              <p class="text-sm">Database optimization completed</p>
+            </div>
+            <div class="log-entry log-error">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-medium">ERROR</span>
+                <span class="text-xs text-gray-500">1 hour ago</span>
+              </div>
+              <p class="text-sm">Failed to connect to external API service</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid-stack mb-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+          <div class="space-y-3">
+            <div class="flex items-center">
+              <div class="bg-blue-100 p-2 rounded-full mr-3">
+                <i class="fas fa-user-plus text-blue-600"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium">New user registered</p>
+                <p class="text-xs text-gray-500">
+                  crypto_newbie joined 10 minutes ago
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="bg-green-100 p-2 rounded-full mr-3">
+                <i class="fas fa-exchange-alt text-green-600"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium">Large transaction</p>
+                <p class="text-xs text-gray-500">
+                  BTC purchase of 2.5 BTC completed
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="bg-red-100 p-2 rounded-full mr-3">
+                <i class="fas fa-exclamation-triangle text-red-600"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium">Security alert</p>
+                <p class="text-xs text-gray-500">
+                  Suspicious login attempt blocked
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">System Resources</h3>
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span>CPU Usage</span>
+              <span>42%</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-blue-500" style="width: 42%"></div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span>Memory</span>
+              <span>64%</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-green-500" style="width: 64%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span>Disk Space</span>
+              <span>28%</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-purple-500" style="width: 28%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              class="bg-blue-100 text-blue-700 p-3 rounded-lg hover:bg-blue-200 flex flex-col items-center justify-center"
+            >
+              <i class="fas fa-user-shield text-xl mb-2"></i>
+              <span class="text-sm">Security Scan</span>
+            </button>
+            <button
+              class="bg-green-100 text-green-700 p-3 rounded-lg hover:bg-green-200 flex flex-col items-center justify-center"
+            >
+              <i class="fas fa-database text-xl mb-2"></i>
+              <span class="text-sm">Backup Now</span>
+            </button>
+            <button
+              class="bg-purple-100 text-purple-700 p-3 rounded-lg hover:bg-purple-200 flex flex-col items-center justify-center"
+            >
+              <i class="fas fa-sync-alt text-xl mb-2"></i>
+              <span class="text-sm">Refresh Cache</span>
+            </button>
+            <button
+              class="bg-yellow-100 text-yellow-700 p-3 rounded-lg hover:bg-yellow-200 flex flex-col items-center justify-center"
+            >
+              <i class="fas fa-file-export text-xl mb-2"></i>
+              <span class="text-sm">Export Data</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Simulate system status updates
+      setInterval(() => {
+        const indicators = document.querySelectorAll(".status-indicator");
+        indicators.forEach((indicator) => {
+          if (Math.random() > 0.95) {
+            indicator.classList.remove("status-active");
+            indicator.classList.add("status-warning");
+          } else {
+            indicator.classList.remove("status-warning");
+            indicator.classList.add("status-active");
+          }
+        });
+      }, 5000);
+    </script>
+  </body>
 </html>

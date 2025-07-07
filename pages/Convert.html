@@ -14,14 +14,16 @@
 
 <body class="min-h-screen">
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+  <nav
+    class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
         <a href="user.html" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              class="w-full h-full rounded-full object-cover" />
           </div>
           <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
             Pool</span>
@@ -29,33 +31,40 @@
       </div>
 
       <!-- Desktop Nav Links -->
-<div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Home</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Staking</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="leaderboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Deposit</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="withdraw.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Convert</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-</div>
-
+      <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+        <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Home</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Staking</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="leaderboard.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Deposit</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="withdraw.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Convert</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </div>
 
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
@@ -98,47 +107,77 @@
     </div>
   </nav>
 
-<!-- Main Section -->
-<main class="flex items-center justify-center px-4 pt-28 pb-20">
-  <section class="bg-[#1a1f36] border border-purple-500 p-6 rounded-lg w-full max-w-md shadow-lg">
-    <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Convert Crypto</h2>
+  <!-- Main Section -->
+  <main class="flex items-center justify-center px-4 pt-28 pb-20">
+    <section class="bg-[#1a1f36] border border-purple-500 p-6 rounded-lg w-full max-w-md shadow-lg">
+      <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Convert Crypto</h2>
 
-    <!-- From Selector -->
-    <section class="mb-4">
-      <label class="block text-sm mb-2 text-purple-300">From</label>
-      <select id="fromSelect" onchange="updateToOptions()" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
-        <option value="">Select Coin</option>
-        <option value="USDT">USDT</option>
-        <option value="BTC">BTC</option>
-        <option value="ETH">ETH</option>
-        <option value="ELYTRA">ELYTRA</option>
-      </select>
+      <!-- From Selector -->
+      <section class="mb-4">
+        <label class="block text-sm mb-2 text-purple-300">From</label>
+        <select id="fromSelect" onchange="updateToOptions()"
+          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
+          <option value="">Select Coin</option>
+          <option value="USDT">USDT</option>
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
+          <option value="ELYTRA">ELYTRA</option>
+        </select>
+      </section>
+
+      <!-- To Selector -->
+      <section class="mb-4">
+        <label class="block text-sm mb-2 text-purple-300">To</label>
+        <select id="toSelect" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
+          <option value="">Select</option>
+        </select>
+      </section>
+
+      <!-- Amount Input -->
+      <section class="mb-6">
+        <label class="block text-sm mb-2 text-purple-300">Amount</label>
+        <input type="number" id="convertAmount"
+          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
+          placeholder="0.00" />
+      </section>
+
+      <!-- Confirm Button -->
+      <section>
+        <button onclick="convertNow()"
+          class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded w-full font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm">
+          Confirm
+        </button>
+      </section>
     </section>
 
-    <!-- To Selector -->
-    <section class="mb-4">
-      <label class="block text-sm mb-2 text-purple-300">To</label>
-      <select id="toSelect" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
-        <option value="">Select</option>
-      </select>
-    </section>
-
-    <!-- Amount Input -->
-    <section class="mb-6">
-      <label class="block text-sm mb-2 text-purple-300">Amount</label>
-      <input type="number" id="convertAmount" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
-        placeholder="0.00" />
-    </section>
-
-    <!-- Confirm Button -->
-    <section>
-      <button onclick="convertNow()" class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded w-full font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm">
-        Confirm
+    <!-- Floating Support Button + Chat -->
+    <div class="fixed bottom-6 right-6 z-50 group">
+      <button id="supportButton"
+        class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+        <i class="fas fa-headset text-white text-xl"></i>
       </button>
-    </section>
-  </section>
-</main>
 
+      <!-- Tooltip -->
+      <div
+        class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        Customer Support
+      </div>
+    </div>
+
+    <!-- Chatbox -->
+    <div id="chatBox"
+      class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
+        <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+      </div>
+      <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
+        <!-- AI messages appear here -->
+      </div>
+      <input type="text" placeholder="Type your message..."
+        class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
+    </div>
+  </main>
 
   <!-- Footer -->
   <footer class="py-12 px-6 border-t border-gray-800">
@@ -291,17 +330,69 @@
       });
     }
   </script>
- <!-- Floating Customer Service Button -->
-<div class="fixed bottom-6 right-6 z-50 group">
-  <a href="mailto:support@elytra.io" target="_blank"
-    class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
-    <i class="fas fa-headset text-white text-xl"></i>
-  </a>
-  <div
-    class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-    Customer Support
-  </div>
-</div>
+  
+   <script>
+    const supportButton = document.getElementById("supportButton");
+    const chatBox = document.getElementById("chatBox");
+    const closeChat = document.getElementById("closeChat");
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = chatBox.querySelector('input[type="text"]');
+
+    supportButton.addEventListener("click", () => {
+      chatBox.classList.remove("hidden");
+      showAIIntro();
+      userInput.focus();
+    });
+
+    closeChat.addEventListener("click", () => {
+      chatBox.classList.add("hidden");
+      chatMessages.innerHTML = "";
+      userInput.value = "";
+    });
+
+    function showAIIntro() {
+      if (chatMessages.children.length === 0) {
+        setTimeout(() => addBotMessage("👋 Hi there! I'm Elytra Support Bot."), 500);
+        setTimeout(() => addBotMessage("How can I help you today?"), 1500);
+        setTimeout(() => addBotMessage(`
+        • 💬 How to start staking?<br>
+        • 🔒 Wallet connection issue<br>
+        • 📊 View staking rewards<br>
+        • 📌 Report a bug
+      `), 2500);
+      }
+    }
+
+    function addBotMessage(message) {
+      const msg = document.createElement("div");
+      msg.className = "bg-gray-100 text-black p-2 rounded text-sm";
+      msg.innerHTML = message;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addUserMessage(message) {
+      const msg = document.createElement("div");
+      msg.className = "bg-purple-200 text-black p-2 rounded text-sm text-right";
+      msg.textContent = message;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Handle Enter key to send message
+    userInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter" && userInput.value.trim() !== "") {
+        const message = userInput.value.trim();
+        addUserMessage(message);
+        userInput.value = "";
+
+        // Simulated bot reply
+        setTimeout(() => {
+          addBotMessage("🤖 Got it! One of our team will get back to you soon.");
+        }, 1000);
+      }
+    });
+  </script>
 </body>
 
 </html>

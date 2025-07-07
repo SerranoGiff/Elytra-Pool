@@ -7,9 +7,9 @@
   <title>Elytra Pool | Settings</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/user.css">
+  <link rel="shortcut icon" href="../../assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/user.css">
 </head>
 
 <body class="min-h-screen bg-[#0D1B2A] text-white font-sans">
@@ -19,52 +19,64 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.html" class="flex items-center">
+        <a href="premium-dashboard.html" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+            <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
-          <span class="text-xl font-bold text-white hover:text-purple-400 transition-colors duration-200">Elytra
-            Pool</span>
+          <span
+            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-2">
+            Elytra Pool
+            <span class="bg-yellow-400 text-black text-xs font-semibold px-2 py-0.5 rounded-full animate-pulse">
+              Premium
+              <span class="ml-2 text-green-500 text-sm">✔ Active</span>
+            </span>
+          </span>
+
         </a>
       </div>
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-dashboard.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-staking.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="leaderboard.html"
+        <a href="premium-leaderboard.html"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-deposit.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="withdraw.html"
+        <a href="premium-withdraw.html"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-convert.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
       </div>
+
 
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
@@ -72,8 +84,9 @@
           <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="premium-settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -84,25 +97,25 @@
         </button>
         <div class="relative">
           <button id="mobileProfileBtn" class="focus:outline-none">
-            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="premium-settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Mobile Navigation Links -->
-    <div id="mobile-menu" class="hidden flex-col mt-4 space-y-2 md:hidden">
-      <a href="user.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Home</a>
-      <a href="staking.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Staking</a>
-      <a href="leaderboard.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Leaderboard</a>
-      <a href="deposit.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Deposit</a>
-      <a href="withdraw.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Withdraw</a>
-      <a href="Convert.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Convert</a>
+    <div id="mobile-menu" class="nav-links">
+      <a href="premium-dashboard.html" class="nav-link">Home</a>
+      <a href="premium-staking.html" class="nav-link">Staking</a>
+      <a href="premium-leaderboard.html" class="nav-link">Leaderboard</a>
+      <a href="premium-deposit.html" class="nav-link">Deposit</a>
+      <a href="premium-withdraw.html" class="nav-link">Withdraw</a>
+      <a href="premium-convert.html" class="nav-link">Convert</a>
     </div>
   </nav>
 
@@ -181,10 +194,9 @@
             </div>
             <div>
               <label class="text-sm text-gray-300 mb-1 block">Verification / KYC</label>
-              <button id="openKycModal" type="button"
-                class="bg-transparent border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-black font-semibold px-4 py-2 rounded-lg transition">
-                Start Verification
-              </button>
+              <button type="button"
+                class="bg-transparent border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-black font-semibold px-4 py-2 rounded-lg transition">Start
+                Verification</button>
             </div>
             <div class="text-right pt-4">
               <button type="submit"
@@ -193,122 +205,7 @@
             </div>
           </form>
         </div>
-
       </section>
-
-      <!-- KYC Modal (Dark Mode + Purple Buttons Only) -->
-      <div id="kycDocumentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center w-full h-full p-4">
-          <form action="submit_kyc.php" method="POST" enctype="multipart/form-data"
-            class="bg-gray-900 text-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative p-5 space-y-5">
-
-            <!-- Close Button -->
-            <button type="button" id="closeKycModal"
-              class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl font-bold">&times;</button>
-
-            <h3 class="text-lg font-bold text-white">KYC Document Verification</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- LEFT: USER INFO -->
-              <div class="space-y-3">
-                <!-- Full Name -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Full Name</label>
-                  <input type="text" name="full_name"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-
-                <!-- Email -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Email</label>
-                  <input type="email" name="email"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-
-                <!-- Username -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Username</label>
-                  <input type="text" name="username"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-
-                <!-- Country -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Country</label>
-                  <select name="country" id="kycCountry"
-                    class="w-full px-3 py-1.5 bg-gray-800 text-white border border-gray-600 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-
-                    <option value="">-- Select Country --</option>
-                    <!-- Sample countries -->
-                    <option value="PH">Philippines</option>
-                    <option value="US">United States</option>
-                    <option value="AE">United Arab Emirates</option>
-                    <!-- Add more as needed -->
-                  </select>
-                </div>
-
-                <!-- ID Type -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Type</label>
-                  <select name="id_type" id="kycIdType"
-                    class="w-full px-3 py-1.5 bg-gray-800 text-white border border-gray-600 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                    <option value="">-- Select ID Type --</option>
-                  </select>
-                </div>
-
-
-              </div>
-
-              <!-- RIGHT: FILE UPLOADS -->
-              <div class="space-y-3">
-                <!-- ID Number -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Number</label>
-                  <input type="text" name="id_number"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-                <!-- ID Front -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Document (Front)</label>
-                  <input type="file" name="id_front" accept="image/*"
-                    class="w-full file:bg-purple-700 file:text-white file:border-0 file:px-3 file:py-1.5 file:mr-3 border border-gray-600 rounded bg-transparent text-white text-sm"
-                    required>
-                </div>
-
-                <!-- ID Back -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Document (Back)</label>
-                  <input type="file" name="id_back" accept="image/*"
-                    class="w-full file:bg-purple-700 file:text-white file:border-0 file:px-3 file:py-1.5 file:mr-3 border border-gray-600 rounded bg-transparent text-white text-sm"
-                    required>
-                </div>
-
-                <!-- Selfie (Optional) -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Selfie with ID (Optional)</label>
-                  <input type="file" name="selfie" accept="image/*"
-                    class="w-full file:bg-purple-700 file:text-white file:border-0 file:px-3 file:py-1.5 file:mr-3 border border-gray-600 rounded bg-transparent text-white text-sm">
-                </div>
-              </div>
-            </div>
-
-            <!-- Submit -->
-            <div class="text-right pt-2">
-              <button type="submit"
-                class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-1.5 px-5 rounded text-sm transition">
-                Submit Verification
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
 
       <!-- Activity Logs -->
       <section class="bg-[#1B263B] p-6 rounded-2xl shadow-xl border border-gray-700">
@@ -484,7 +381,7 @@
     });
   </script>
 
-  <script>
+   <script>
     const supportButton = document.getElementById("supportButton");
     const chatBox = document.getElementById("chatBox");
     const closeChat = document.getElementById("closeChat");
@@ -546,62 +443,6 @@
       }
     });
   </script>
-
-  <script>
-    const openBtn = document.getElementById('openKycModal');
-    const closeBtn = document.getElementById('closeKycModal');
-    const modal = document.getElementById('kycDocumentModal');
-
-    openBtn.addEventListener('click', () => {
-      modal.classList.remove('hidden');
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.classList.add('hidden');
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
-      }
-    });
-  </script>
-
-  <script>
-    const idOptions = {
-      "PH": ["Passport", "Driver's License", "SSS ID", "UMID", "National ID", "Voter's ID"],
-      "US": ["Passport", "Driver's License", "State ID", "Social Security Card", "Military ID"],
-      "CA": ["Passport", "Driver's License", "Health Card", "Permanent Resident Card"],
-      "AU": ["Passport", "Driver's License", "Medicare Card", "Proof of Age Card"],
-      "IN": ["Passport", "Aadhar Card", "Voter ID", "Driving License"],
-      "GB": ["Passport", "Driving Licence", "National Insurance Card"],
-      "DE": ["Passport", "Personalausweis", "Führerschein"],
-      "FR": ["Passport", "Carte Nationale d'Identité", "Permis de Conduire"],
-      "BR": ["CPF", "RG", "CNH", "Passport"],
-      "ZA": ["Passport", "ID Book", "Driver's License"],
-      "DEFAULT": ["Passport", "Driver's License", "National ID"]
-    };
-
-    const countrySelect = document.getElementById('kycCountry');
-    const idTypeSelect = document.getElementById('kycIdType');
-
-    countrySelect.addEventListener('change', function () {
-      const selectedCountry = this.value;
-      const ids = idOptions[selectedCountry] || idOptions["DEFAULT"];
-
-      // Clear current options
-      idTypeSelect.innerHTML = '<option value="">-- Select ID Type --</option>';
-
-      // Populate new options
-      ids.forEach(id => {
-        const option = document.createElement('option');
-        option.value = id;
-        option.textContent = id;
-        idTypeSelect.appendChild(option);
-      });
-    });
-  </script>
-
 
 </body>
 

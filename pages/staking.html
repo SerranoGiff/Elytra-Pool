@@ -2,789 +2,882 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elytra Pool | Staking</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/user.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elytra Pool | Staking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/user.css">
   <style>
-  @keyframes slideIn {
-    0% {
-      opacity: 0;
-      transform: translateX(100%);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
+    @keyframes slideIn {
+      0% {
+        opacity: 0;
+        transform: translateX(100%);
+      }
 
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
-      transform: translateX(0);
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
-    100% {
-      opacity: 0;
-      transform: translateX(100%);
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateX(100%);
+      }
     }
-  }
 
-  .slide-in {
-    animation: slideIn 0.4s ease-out forwards;
-  }
+    .slide-in {
+      animation: slideIn 0.4s ease-out forwards;
+    }
 
-  .fade-out {
-    animation: fadeOut 0.5s ease-in forwards;
-  }
-</style>
+    .fade-out {
+      animation: fadeOut 0.5s ease-in forwards;
+    }
+  </style>
 
 
 </head>
 
 <body class="min-h-screen">
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+  <!-- Navigation -->
+  <nav
+    class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-            <!-- Logo -->
-            <div class="flex items-center space-x-2">
-                <a href="user.html" class="flex items-center">
-                    <div
-                        class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                        <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
-                            class="w-full h-full rounded-full object-cover" />
-                    </div>
-                    <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                        Pool</span>
-                </a>
-            </div>
-
-            <!-- Desktop Nav Links -->
-           <!-- Desktop Nav Links -->
-<div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-  <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Home</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Staking</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="leaderboard.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Deposit</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="withdraw.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-  <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-    <span class="text-white hover:text-purple-300 transition">Convert</span>
-    <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-  </a>
-</div>
-
-
-            <!-- Desktop Profile -->
-            <div class="relative hidden md:block">
-                <button id="profileBtn" class="focus:outline-none">
-                    <img src="/ella.jpg" alt="Profile"
-                        class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
-                </button>
-                <div id="profileMenu"
-                    class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-                    <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-                    <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
-                </div>
-            </div>
-
-            <!-- Mobile Menu & Profile -->
-            <div class="md:hidden flex items-center gap-4">
-                <button id="menu-button" aria-label="Toggle navigation">
-                    <i class="fas fa-bars text-xl text-white"></i>
-                </button>
-                <div class="relative">
-                    <button id="mobileProfileBtn" class="focus:outline-none">
-                        <img src="/ella.jpg" alt="Profile"
-                            class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
-                    </button>
-                    <div id="mobileProfileMenu"
-                        class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-                        <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-                        <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Links -->
-        <div id="mobile-menu" class="nav-links">
-            <a href="user.html" class="nav-link">Home</a>
-            <a href="staking.html" class="nav-link">Staking</a>
-            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-            <a href="deposit.html" class="nav-link">Deposit</a>
-            <a href="withdraw.html" class="nav-link">Withdraw</a>
-            <a href="Convert.html" class="nav-link">Convert</a>
-        </div>
-    </nav>
-
-
-    
-    <!-- Staking Section -->
-    <section id="staking" class="pt-32 pb-20 px-4 md:px-10">
-        <div class="max-w-[90rem] mx-auto">
-            <h2 class="text-4xl font-bold mb-4 text-center text-purple-400">Earn Rewards On Staking</h2>
-            <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg">
-            </p>
-<!-- Earnings Summary Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-  <!-- Yesterday's Profit -->
-  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
-    <div class="text-sm text-gray-400 mb-1">Yesterday's Profit</div>
-    <div class="text-3xl font-bold">+1,000 <span class="text-purple-400">ELTR</span></div>
-    <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
-  </div>
-
-  <!-- 30 Days Cumulative Income -->
-  <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
-    <div class="text-sm text-gray-400 mb-1">30 Days Cumulative Income</div>
-    <div class="text-3xl font-bold">+18,420 <span class="text-purple-400">ELTR</span></div>
-    <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
-  </div>
-</div>
-
-<!-- Tabs Navigation -->
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 w-full">
-  <button class="tab-btn w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white font-semibold hover:brightness-110 transition">Staking Cycles</button>
-  <button class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Active Stakes</button>
-  <button class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Staking History</button>
-</div>
-
-<!-- Section Containers -->
-<div id="stakingCyclesSection">
-  <!-- Keep your existing staking cards inside this div -->
-</div>
-
-<div class="hidden" id="activeStakesSection">
-  <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
-    <p class="text-lg">You have no active stakes yet.</p>
-  </div>
-</div>
-
-<div class="hidden" id="stakingHistorySection">
-  <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
-    <p class="text-lg">No staking history found.</p>
-  </div>
-</div>
-
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Bitcoin Staking -->
-               <div class="relative staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 1s">
-  <!-- 🏆 Hanging Best Option Badge -->
-  <div class="absolute -top-3 -right-3 z-10">
-    <div class="bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse ring-2 ring-purple-400">
-      🏆 Best Option
-    </div>
-  </div>
-
-  <div class="flex justify-between items-start mb-4">
-    <div class="flex items-center">
-      <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
-        <i class="fab fa-btc text-white"></i>
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <a href="user.html" class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              class="w-full h-full rounded-full object-cover" />
+          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+            Pool</span>
+        </a>
       </div>
-      <div>
-        <div class="font-semibold">Bitcoin</div>
-        <div class="text-sm text-gray-400">BTC Staking</div>
+
+      <!-- Desktop Nav Links -->
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+        <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Home</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Staking</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="leaderboard.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Deposit</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="withdraw.html"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Convert</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </div>
+
+
+      <!-- Desktop Profile -->
+      <div class="relative hidden md:block">
+        <button id="profileBtn" class="focus:outline-none">
+          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+        </button>
+        <div id="profileMenu"
+          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+        </div>
+      </div>
+
+      <!-- Mobile Menu & Profile -->
+      <div class="md:hidden flex items-center gap-4">
+        <button id="menu-button" aria-label="Toggle navigation">
+          <i class="fas fa-bars text-xl text-white"></i>
+        </button>
+        <div class="relative">
+          <button id="mobileProfileBtn" class="focus:outline-none">
+            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+          </button>
+          <div id="mobileProfileMenu"
+            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="btc-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">600.5% APY</div>
-  </div>
 
-  <div class="mb-6">
-    <div class="flex justify-between text-sm mb-1">
-      <span class="text-gray-400">Total Staked</span>
-      <span id="btc-staked">12,450 BTC</span>
+    <!-- Mobile Navigation Links -->
+    <div id="mobile-menu" class="nav-links">
+      <a href="user.html" class="nav-link">Home</a>
+      <a href="staking.html" class="nav-link">Staking</a>
+      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <a href="deposit.html" class="nav-link">Deposit</a>
+      <a href="withdraw.html" class="nav-link">Withdraw</a>
+      <a href="Convert.html" class="nav-link">Convert</a>
     </div>
-    <div class="w-full bg-gray-800 rounded-full h-2">
-      <div class="progress-bar" style="width: 65%"></div>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-2 gap-4 mb-6">
-    <div>
-      <div class="text-sm text-gray-400">Min. Stake</div>
-      <div id="btc-min" class="font-semibold">0.01 BTC</div>
-    </div>
-    <div>
-      <div class="text-sm text-gray-400">Lock Period</div>
-      <div id="btc-lock" class="font-semibold">30 Days</div>
-    </div>
-  </div>
-
-  <a href="#"
-    class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
-    data-title="Bitcoin" data-min="0.01 BTC" data-lock="30 Days">
-    Stake Now
-  </a>
-</div>
+  </nav>
 
 
-                <!-- Ethereum Staking -->
-                <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.2s">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center mr-3">
-                                <i class="fab fa-ethereum text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold">Ethereum</div>
-                                <div class="text-sm text-gray-400">ETH Staking</div>
-                            </div>
-                        </div>
-                        <div id="eth-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">500.2%
-                            APY</div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span id="eth-staked">245,000 ETH</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar" style="width: 78%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div id="eth-min" class="font-semibold">0.1 ETH</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div id="eth-lock" class="font-semibold">14 Days</div>
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
-                        data-title="Ethereum" data-min="0.1 ETH" data-lock="14 Days">Stake Now</a>
 
-                </div>
-
-                <!-- Solana Staking -->
-                <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.3s">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-bolt text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold">Solana</div>
-                                <div class="text-sm text-gray-400">SOL Staking</div>
-                            </div>
-                        </div>
-                        <div id="sol-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">800.7%
-                            APY</div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span>4,560,000 SOL</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar" style="width: 45%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div id="sol-min" class="font-semibold">1 SOL</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div id="sol-lock" class="font-semibold">7 Days</div>
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
-                        data-title="Solana" data-min="1 SOL" data-lock="7 Days">Stake Now</a>
-
-                </div>
-
-                <!-- Cardano -->
-                <div
-                    class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center">
-                            <div
-                                class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4 text-white text-xl font-bold">
-                                ₳</div>
-                            <div>
-                                <div class="text-lg font-semibold text-white">Cardano</div>
-                                <div class="text-sm text-gray-400">ADA Staking</div>
-                            </div>
-                        </div>
-                        <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">500% APY</div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1 text-white">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span>100,000 ADA</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar bg-blue-500 h-2 rounded-full" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6 text-white">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div class="font-semibold">10 ADA</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div class="font-semibold">14 Days</div>
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="stake-btn w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:brightness-110"
-                        data-title="Cardano" data-min="10 ADA" data-lock="14 Days">Stake Now</a>
-
-                </div>
-
-                <!-- Polkadot -->
-                <div
-                    class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center">
-                            <div
-                                class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mr-4 text-white text-xl font-bold">
-                                ●</div>
-                            <div>
-                                <div class="text-lg font-semibold text-white">Polkadot</div>
-                                <div class="text-sm text-gray-400">DOT Staking</div>
-                            </div>
-                        </div>
-                        <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">700% APY</div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="flex justify-between text-sm mb-1 text-white">
-                            <span class="text-gray-400">Total Staked</span>
-                            <span>500,000 DOT</span>
-                        </div>
-                        <div class="w-full bg-gray-800 rounded-full h-2">
-                            <div class="progress-bar bg-pink-500 h-2 rounded-full" style="width: 60%"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6 text-white">
-                        <div>
-                            <div class="text-sm text-gray-400">Min. Stake</div>
-                            <div class="font-semibold">5 DOT</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-400">Lock Period</div>
-                            <div class="font-semibold">28 Days</div>
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="stake-btn w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:brightness-110"
-                        data-title="Polkadot" data-min="5 DOT" data-lock="28 Days">Stake Now</a>
-
-                </div>
-            </div>
+  <!-- Staking Section -->
+  <section id="staking" class="pt-32 pb-20 px-4 md:px-10">
+    <div class="max-w-[90rem] mx-auto">
+      <h2 class="text-4xl font-bold mb-4 text-center text-purple-400">Earn Rewards On Staking</h2>
+      <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg">
+      </p>
+      <!-- Earnings Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <!-- Yesterday's Profit -->
+        <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+          <div class="text-sm text-gray-400 mb-1">Yesterday's Profit</div>
+          <div class="text-3xl font-bold">+1,000 <span class="text-purple-400">ELTR</span></div>
+          <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
         </div>
-<!-- Staking Modal -->
-<div id="stakingModal"
-    class="fixed inset-0 bg-black bg-opacity-60 modal-overlay flex items-center justify-center z-50 hidden">
-    <div class="bg-gray-900 rounded-2xl w-full max-w-md p-6 relative text-white shadow-lg fade-in-up">
+
+        <!-- 30 Days Cumulative Income -->
+        <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+          <div class="text-sm text-gray-400 mb-1">30 Days Cumulative Income</div>
+          <div class="text-3xl font-bold">+18,420 <span class="text-purple-400">ELTR</span></div>
+          <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
+        </div>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 w-full">
+        <button
+          class="tab-btn w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white font-semibold hover:brightness-110 transition">Staking
+          Cycles</button>
+        <button
+          class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Active
+          Stakes</button>
+        <button
+          class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Staking
+          History</button>
+      </div>
+
+      <!-- Section Containers -->
+      <div id="stakingCyclesSection">
+        <!-- Keep your existing staking cards inside this div -->
+      </div>
+
+      <div class="hidden" id="activeStakesSection">
+        <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
+          <p class="text-lg">You have no active stakes yet.</p>
+        </div>
+      </div>
+
+      <div class="hidden" id="stakingHistorySection">
+        <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
+          <p class="text-lg">No staking history found.</p>
+        </div>
+      </div>
+
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Bitcoin Staking -->
+        <div class="relative staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 1s">
+          <!-- 🏆 Hanging Best Option Badge -->
+          <div class="absolute -top-3 -right-3 z-10">
+            <div
+              class="bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse ring-2 ring-purple-400">
+              🏆 Best Option
+            </div>
+          </div>
+
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                <i class="fab fa-btc text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Bitcoin</div>
+                <div class="text-sm text-gray-400">BTC Staking</div>
+              </div>
+            </div>
+            <div id="btc-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">600.5% APY</div>
+          </div>
+
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="btc-staked">12,450 BTC</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 65%"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="btc-min" class="font-semibold">0.01 BTC</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="btc-lock" class="font-semibold">30 Days</div>
+            </div>
+          </div>
+
+          <a href="#"
+            class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
+            data-title="Bitcoin" data-min="0.01 BTC" data-lock="30 Days">
+            Stake Now
+          </a>
+        </div>
+
+
+        <!-- Ethereum Staking -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.2s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center mr-3">
+                <i class="fab fa-ethereum text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Ethereum</div>
+                <div class="text-sm text-gray-400">ETH Staking</div>
+              </div>
+            </div>
+            <div id="eth-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">500.2%
+              APY</div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="eth-staked">245,000 ETH</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 78%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="eth-min" class="font-semibold">0.1 ETH</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="eth-lock" class="font-semibold">14 Days</div>
+            </div>
+          </div>
+          <a href="#"
+            class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
+            data-title="Ethereum" data-min="0.1 ETH" data-lock="14 Days">Stake Now</a>
+
+        </div>
+
+        <!-- Solana Staking -->
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.3s">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-bolt text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Solana</div>
+                <div class="text-sm text-gray-400">SOL Staking</div>
+              </div>
+            </div>
+            <div id="sol-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">800.7%
+              APY</div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-400">Total Staked</span>
+              <span>4,560,000 SOL</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="sol-min" class="font-semibold">1 SOL</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="sol-lock" class="font-semibold">7 Days</div>
+            </div>
+          </div>
+          <a href="#"
+            class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
+            data-title="Solana" data-min="1 SOL" data-lock="7 Days">Stake Now</a>
+
+        </div>
+
+        <!-- Cardano -->
+        <div class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform">
+          <div class="flex justify-between items-start mb-6">
+            <div class="flex items-center">
+              <div
+                class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4 text-white text-xl font-bold">
+                ₳</div>
+              <div>
+                <div class="text-lg font-semibold text-white">Cardano</div>
+                <div class="text-sm text-gray-400">ADA Staking</div>
+              </div>
+            </div>
+            <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">500% APY</div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1 text-white">
+              <span class="text-gray-400">Total Staked</span>
+              <span>100,000 ADA</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar bg-blue-500 h-2 rounded-full" style="width: 50%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6 text-white">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div class="font-semibold">10 ADA</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div class="font-semibold">14 Days</div>
+            </div>
+          </div>
+          <a href="#"
+            class="stake-btn w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:brightness-110"
+            data-title="Cardano" data-min="10 ADA" data-lock="14 Days">Stake Now</a>
+
+        </div>
+
+        <!-- Polkadot -->
+        <div class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform">
+          <div class="flex justify-between items-start mb-6">
+            <div class="flex items-center">
+              <div
+                class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mr-4 text-white text-xl font-bold">
+                ●</div>
+              <div>
+                <div class="text-lg font-semibold text-white">Polkadot</div>
+                <div class="text-sm text-gray-400">DOT Staking</div>
+              </div>
+            </div>
+            <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">700% APY</div>
+          </div>
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1 text-white">
+              <span class="text-gray-400">Total Staked</span>
+              <span>500,000 DOT</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar bg-pink-500 h-2 rounded-full" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-6 text-white">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div class="font-semibold">5 DOT</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div class="font-semibold">28 Days</div>
+            </div>
+          </div>
+          <a href="#"
+            class="stake-btn w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:brightness-110"
+            data-title="Polkadot" data-min="5 DOT" data-lock="28 Days">Stake Now</a>
+
+        </div>
+      </div>
+    </div>
+    <!-- Staking Modal -->
+    <div id="stakingModal"
+      class="fixed inset-0 bg-black bg-opacity-60 modal-overlay flex items-center justify-center z-50 hidden">
+      <div class="bg-gray-900 rounded-2xl w-full max-w-md p-6 relative text-white shadow-lg fade-in-up">
         <!-- Close button -->
         <button id="closeModal"
-            class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+          class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
 
         <!-- Modal Title -->
         <h2 id="modalTitle" class="text-3xl font-bold mb-4 text-purple-400">Stake Now</h2>
         <p id="modalDescription" class="mb-4 text-sm text-gray-300">
-            Select a period and stake your crypto securely.
+          Select a period and stake your crypto securely.
         </p>
 
         <!-- Lock Period -->
         <div class="mb-4">
-            <label class="block text-sm text-gray-400 mb-1">Select Lock Period</label>
-            <select id="lockPeriodSelect"
-                class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600">
-                <option value="3">3 Days</option>
-                <option value="7">7 Days</option>
-                <option value="15">15 Days</option>
-                <option value="30">30 Days</option>
-                <option value="60">60 Days</option>
-                <option value="90">90 Days</option>
-            </select>
+          <label class="block text-sm text-gray-400 mb-1">Select Lock Period</label>
+          <select id="lockPeriodSelect"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600">
+            <option value="3">3 Days</option>
+            <option value="7">7 Days</option>
+            <option value="15">15 Days</option>
+            <option value="30">30 Days</option>
+            <option value="60">60 Days</option>
+            <option value="90">90 Days</option>
+          </select>
         </div>
 
         <!-- Min-Max Elytra -->
         <div class="mb-4">
-            <label class="block text-sm text-gray-400 mb-1">Allowed Elytra Range</label>
-            <div id="modalElytra" class="font-semibold text-white">Loading...</div>
+          <label class="block text-sm text-gray-400 mb-1">Allowed Elytra Range</label>
+          <div id="modalElytra" class="font-semibold text-white">Loading...</div>
         </div>
 
         <!-- USDT Reference -->
         <div class="mb-4">
-            <label class="block text-sm text-gray-400 mb-1">Amount in USDT (approx)</label>
-            <div id="modalUSDT" class="font-semibold text-white">Loading...</div>
+          <label class="block text-sm text-gray-400 mb-1">Amount in USDT (approx)</label>
+          <div id="modalUSDT" class="font-semibold text-white">Loading...</div>
         </div>
 
         <!-- Daily Average Earnings -->
         <div class="mb-4">
-            <label class="block text-sm text-gray-400 mb-1">DAE Range</label>
-            <div id="modalAPY" class="font-semibold text-white">Loading...</div>
+          <label class="block text-sm text-gray-400 mb-1">DAE Range</label>
+          <div id="modalAPY" class="font-semibold text-white">Loading...</div>
         </div>
 
         <!-- Amount Input -->
         <div class="mb-6">
-            <label for="stakeAmount" class="block text-sm text-gray-400 mb-1">Amount to Stake</label>
-            <input id="stakeAmount" type="number"
-                class="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
-                placeholder="Enter amount">
+          <label for="stakeAmount" class="block text-sm text-gray-400 mb-1">Amount to Stake</label>
+          <input id="stakeAmount" type="number"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            placeholder="Enter amount">
         </div>
 
         <!-- Confirm Button -->
         <button
-            class="staking-modal-btn bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 w-full py-3 rounded-lg font-semibold hover:brightness-110 transition-all flex items-center justify-center gap-2">
-            <i class="fas fa-lock text-sm"></i> Confirm Stake
+          class="staking-modal-btn bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 w-full py-3 rounded-lg font-semibold hover:brightness-110 transition-all flex items-center justify-center gap-2">
+          <i class="fas fa-lock text-sm"></i> Confirm Stake
         </button>
+      </div>
     </div>
-</div>
 
+    <!-- Floating Support Button + Chat -->
+    <div class="fixed bottom-6 right-6 z-50 group">
+      <button id="supportButton"
+        class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+        <i class="fas fa-headset text-white text-xl"></i>
+      </button>
 
-    </section>
+      <!-- Tooltip -->
+      <div
+        class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        Customer Support
+      </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="py-12 px-6 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div class="flex items-center space-x-2">
-                    <a href="index.html" class="flex items-center">
-                        <div
-                            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
-                                class="w-full h-full rounded-full object-cover" />
-                        </div>
-                        <span
-                            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                            Pool</span>
-                    </a>
-                </div>
+    <!-- Chatbox -->
+    <div id="chatBox"
+      class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
+        <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+      </div>
+      <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
+        <!-- AI messages appear here -->
+      </div>
+      <input type="text" placeholder="Type your message..."
+        class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
+    </div>
+  </section>
 
-                <div>
-                    <h4 class="font-semibold mb-4">Products</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#staking" class="hover:text-white">Staking</a></li>
-                        <li><a href="#mining" class="hover:text-white">Assets</a></li>
-                        <li>
-                            <a href="#earnings" class="hover:text-white">Leaderboard</a>
-                        </li>
-                        <li>
-                            <a href="pages/about.html" class="hover:text-white">FAQ</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Help Center</a></li>
-                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-white">Status</a></li>
-                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Follow Us</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Twitter</a></li>
-                        <li><a href="#" class="hover:text-white">Telegram</a></li>
-                        <li><a href="#" class="hover:text-white">Discord</a></li>
-                    </ul>
-                </div>
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="flex items-center space-x-2">
+          <a href="index.html" class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+                class="w-full h-full rounded-full object-cover" />
             </div>
-
-            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-                <div class="text-sm text-gray-400 mb-4 md:mb-0">
-                    © 2023 - 2025 Elytra Pool. All rights reserved.
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+              Pool</span>
+          </a>
         </div>
-    </footer>
 
- <!-- Success Toast Notification -->
-<div id="toastNotification" class="fixed top-6 right-6 z-50 hidden animate-slide-in-right">
-  <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-4 border border-purple-500">
-    <i class="fas fa-check-circle text-2xl text-green-300"></i>
-    <div>
-      <div class="font-bold text-white">Staking Confirmed!</div>
-      <div class="text-sm text-gray-200">Your crypto has been successfully staked.</div>
+        <div>
+          <h4 class="font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#staking" class="hover:text-white">Staking</a></li>
+            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li>
+              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+            </li>
+            <li>
+              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Follow Us</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Twitter</a></li>
+            <li><a href="#" class="hover:text-white">Telegram</a></li>
+            <li><a href="#" class="hover:text-white">Discord</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">
+          © 2023 - 2025 Elytra Pool. All rights reserved.
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Success Toast Notification -->
+  <div id="toastNotification" class="fixed top-6 right-6 z-50 hidden animate-slide-in-right">
+    <div
+      class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-4 border border-purple-500">
+      <i class="fas fa-check-circle text-2xl text-green-300"></i>
+      <div>
+        <div class="font-bold text-white">Staking Confirmed!</div>
+        <div class="text-sm text-gray-200">Your crypto has been successfully staked.</div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Error Toast Notification -->
-<div id="errorToast" class="fixed top-6 right-6 z-50 hidden animate-slide-in-right">
-  <div class="bg-gradient-to-r from-red-600 via-pink-600 to-red-500 text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-4 border border-red-400">
-    <i class="fas fa-exclamation-triangle text-2xl text-yellow-200"></i>
-    <div>
-      <div class="font-bold text-white">Missing Amount</div>
-      <div class="text-sm text-gray-200">Please enter a valid stake amount before confirming.</div>
+  <!-- Error Toast Notification -->
+  <div id="errorToast" class="fixed top-6 right-6 z-50 hidden animate-slide-in-right">
+    <div
+      class="bg-gradient-to-r from-red-600 via-pink-600 to-red-500 text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-4 border border-red-400">
+      <i class="fas fa-exclamation-triangle text-2xl text-yellow-200"></i>
+      <div>
+        <div class="font-bold text-white">Missing Amount</div>
+        <div class="text-sm text-gray-200">Please enter a valid stake amount before confirming.</div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  function showToast(toastId) {
-    const toast = document.getElementById(toastId);
-    toast.classList.remove("hidden", "animate-fade-out");
-    toast.classList.add("animate-slide-in-right");
+  <script>
+    function showToast(toastId) {
+      const toast = document.getElementById(toastId);
+      toast.classList.remove("hidden", "animate-fade-out");
+      toast.classList.add("animate-slide-in-right");
 
-    setTimeout(() => {
-      toast.classList.remove("animate-slide-in-right");
-      toast.classList.add("animate-fade-out");
-
-      // hide after animation ends
       setTimeout(() => {
-        toast.classList.add("hidden");
-      }, 600); // match fade-out duration
-    }, 2000); // display for 5s
-  }
+        toast.classList.remove("animate-slide-in-right");
+        toast.classList.add("animate-fade-out");
 
-  // Example usage:
-  // showToast("toastNotification"); // for success
-  // showToast("errorToast");        // for error
-</script>
+        // hide after animation ends
+        setTimeout(() => {
+          toast.classList.add("hidden");
+        }, 600); // match fade-out duration
+      }, 2000); // display for 5s
+    }
+
+    // Example usage:
+    // showToast("toastNotification"); // for success
+    // showToast("errorToast");        // for error
+  </script>
 
 
-    <script>
-        function calculateReturn() {
-            const amount = parseFloat(document.getElementById('amount').value) || 0;
-            const duration = parseInt(document.getElementById('duration').value);
+  <script>
+    function calculateReturn() {
+      const amount = parseFloat(document.getElementById('amount').value) || 0;
+      const duration = parseInt(document.getElementById('duration').value);
 
-            let apy = 0;
-            if (duration === 7) apy = 0.05;
-            else if (duration === 30) apy = 0.10;
-            else if (duration === 90) apy = 0.20;
+      let apy = 0;
+      if (duration === 7) apy = 0.05;
+      else if (duration === 30) apy = 0.10;
+      else if (duration === 90) apy = 0.20;
 
-            const estimated = amount + (amount * apy);
-            document.getElementById('estimatedReturn').textContent = `₱${estimated.toFixed(2)}`;
-        }
-    </script>
+      const estimated = amount + (amount * apy);
+      document.getElementById('estimatedReturn').textContent = `₱${estimated.toFixed(2)}`;
+    }
+  </script>
 
-    <!-- Navbar Toggle Script -->
-    <script>
-        const menuBtn = document.getElementById("menu-button");
-        const mobileMenu = document.getElementById("mobile-menu");
-        const profileBtn = document.getElementById("profileBtn");
-        const profileMenu = document.getElementById("profileMenu");
-        const mobileProfileBtn = document.getElementById("mobileProfileBtn");
-        const mobileProfileMenu = document.getElementById("mobileProfileMenu");
+  <!-- Navbar Toggle Script -->
+  <script>
+    const menuBtn = document.getElementById("menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const profileBtn = document.getElementById("profileBtn");
+    const profileMenu = document.getElementById("profileMenu");
+    const mobileProfileBtn = document.getElementById("mobileProfileBtn");
+    const mobileProfileMenu = document.getElementById("mobileProfileMenu");
 
-        menuBtn.addEventListener("click", () => {
-            mobileMenu.classList.toggle("active");
-        });
-
-        if (profileBtn) {
-            profileBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                profileMenu.classList.toggle("hidden");
-            });
-
-            window.addEventListener("click", (e) => {
-                if (!profileBtn.contains(e.target)) {
-                    profileMenu.classList.add("hidden");
-                }
-            });
-        }
-
-        if (mobileProfileBtn) {
-            mobileProfileBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                mobileProfileMenu.classList.toggle("hidden");
-            });
-
-            window.addEventListener("click", (e) => {
-                if (!mobileProfileBtn.contains(e.target)) {
-                    mobileProfileMenu.classList.add("hidden");
-                }
-            });
-        }
-    </script>
-
-   <script>
-  const stakingModal = document.getElementById("stakingModal");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalDescription = document.getElementById("modalDescription");
-  const stakeButtons = document.querySelectorAll(".stake-btn");
-  const toastNotification = document.getElementById("toastNotification");
-  const errorToast = document.getElementById("errorToast");
-  const confirmBtn = document.querySelector(".staking-modal-btn");
-  const stakeInput = document.getElementById("stakeAmount");
-
-  const lockPeriodSelect = document.getElementById('lockPeriodSelect');
-  const modalElytra = document.getElementById('modalElytra');
-  const modalUSDT = document.getElementById('modalUSDT');
-  const modalAPY = document.getElementById('modalAPY');
-
-  const minimums = {
-    3: 100,
-    7: 3000,
-    15: 7000,
-    30: 10000,
-    60: 30000,
-    90: 50000,
-  };
-
-  const maximums = {
-    3: 2999.99,
-    7: 6999.99,
-    15: 9999.99,
-    30: 29999.99,
-    60: 49999.99,
-    90: Infinity,
-  };
-
-  const dailyPercentRanges = {
-    3: [4.2, 4.5],
-    7: [4.5, 4.8],
-    15: [7.0, 8.0],
-    30: [8.5, 9.3],
-    60: [10.0, 14.0],
-    90: [16.0, 25.0]
-  };
-
-  // 2 ELYTRA = 1 USDT
-  function elytraToUSDT(elytraAmount) {
-    return elytraAmount / 2;
-  }
-
-  function updateModalInfo() {
-    const value = parseInt(lockPeriodSelect.value);
-    const min = minimums[value];
-    const max = maximums[value];
-    const [minDAE, maxDAE] = dailyPercentRanges[value];
-
-    modalElytra.textContent = `${min} ELTR – ${max === Infinity ? "∞" : max} ELTR`;
-
-    const minUSDT = elytraToUSDT(min).toFixed(2);
-    const maxUSDT = max === Infinity ? "∞" : elytraToUSDT(max).toFixed(2);
-    modalUSDT.textContent = `${minUSDT} USDT – ${maxUSDT} USDT`;
-
-    modalAPY.textContent = `${minDAE}% – ${maxDAE}%`;
-  }
-
-  lockPeriodSelect.addEventListener('change', updateModalInfo);
-  updateModalInfo();
-
-  stakeButtons.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const title = btn.getAttribute("data-title");
-      modalTitle.textContent = `Stake ${title}`;
-      modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
-      stakingModal.classList.remove("hidden");
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("active");
     });
-  });
 
-  confirmBtn.addEventListener("click", () => {
-    const value = parseInt(lockPeriodSelect.value);
-    const min = minimums[value];
-    const max = maximums[value];
-    const amount = parseFloat(stakeInput.value);
-
-    if (!amount || amount < min || amount > max) {
-      showToast("errorToast");
-      return;
-    }
-
-    stakingModal.classList.add("hidden");
-    stakeInput.value = "";
-    showToast("toastNotification");
-  });
-
-  const closeModal = document.getElementById("closeModal");
-  closeModal.addEventListener("click", () => {
-    stakingModal.classList.add("hidden");
-  });
-
-  window.addEventListener("click", (e) => {
-    if (e.target === stakingModal) {
-      stakingModal.classList.add("hidden");
-    }
-  });
-
-  // ✅ Toast animation function
-  function showToast(toastId) {
-    const toast = document.getElementById(toastId);
-    toast.classList.remove("hidden", "fade-out");
-    toast.classList.add("slide-in");
-
-    setTimeout(() => {
-      toast.classList.remove("slide-in");
-      toast.classList.add("fade-out");
-
-      setTimeout(() => {
-        toast.classList.add("hidden");
-      }, 500); // fade out time
-    }, 2000); // visible for 5 seconds
-  }
-</script>
-
-
-<script>
-  const tabs = document.querySelectorAll('.tab-btn');
-  const stakingCycles = document.getElementById('stakingCyclesSection');
-  const activeStakes = document.getElementById('activeStakesSection');
-  const stakingHistory = document.getElementById('stakingHistorySection');
-
-  tabs.forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      tabs.forEach(tab => {
-        tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
-        tab.classList.remove('bg-purple-700');
-        tab.classList.add('bg-gray-700');
+    if (profileBtn) {
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle("hidden");
       });
 
-      btn.classList.remove('bg-gray-700');
-      btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
+      window.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target)) {
+          profileMenu.classList.add("hidden");
+        }
+      });
+    }
 
-      stakingCycles.classList.add('hidden');
-      activeStakes.classList.add('hidden');
-      stakingHistory.classList.add('hidden');
+    if (mobileProfileBtn) {
+      mobileProfileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileProfileMenu.classList.toggle("hidden");
+      });
 
-      if (index === 0) stakingCycles.classList.remove('hidden');
-      else if (index === 1) activeStakes.classList.remove('hidden');
-      else if (index === 2) stakingHistory.classList.remove('hidden');
+      window.addEventListener("click", (e) => {
+        if (!mobileProfileBtn.contains(e.target)) {
+          mobileProfileMenu.classList.add("hidden");
+        }
+      });
+    }
+  </script>
+
+  <script>
+    const stakingModal = document.getElementById("stakingModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDescription = document.getElementById("modalDescription");
+    const stakeButtons = document.querySelectorAll(".stake-btn");
+    const toastNotification = document.getElementById("toastNotification");
+    const errorToast = document.getElementById("errorToast");
+    const confirmBtn = document.querySelector(".staking-modal-btn");
+    const stakeInput = document.getElementById("stakeAmount");
+
+    const lockPeriodSelect = document.getElementById('lockPeriodSelect');
+    const modalElytra = document.getElementById('modalElytra');
+    const modalUSDT = document.getElementById('modalUSDT');
+    const modalAPY = document.getElementById('modalAPY');
+
+    const minimums = {
+      3: 100,
+      7: 3000,
+      15: 7000,
+      30: 10000,
+      60: 30000,
+      90: 50000,
+    };
+
+    const maximums = {
+      3: 2999.99,
+      7: 6999.99,
+      15: 9999.99,
+      30: 29999.99,
+      60: 49999.99,
+      90: Infinity,
+    };
+
+    const dailyPercentRanges = {
+      3: [4.2, 4.5],
+      7: [4.5, 4.8],
+      15: [7.0, 8.0],
+      30: [8.5, 9.3],
+      60: [10.0, 14.0],
+      90: [16.0, 25.0]
+    };
+
+    // 2 ELYTRA = 1 USDT
+    function elytraToUSDT(elytraAmount) {
+      return elytraAmount / 2;
+    }
+
+    function updateModalInfo() {
+      const value = parseInt(lockPeriodSelect.value);
+      const min = minimums[value];
+      const max = maximums[value];
+      const [minDAE, maxDAE] = dailyPercentRanges[value];
+
+      modalElytra.textContent = `${min} ELTR – ${max === Infinity ? "∞" : max} ELTR`;
+
+      const minUSDT = elytraToUSDT(min).toFixed(2);
+      const maxUSDT = max === Infinity ? "∞" : elytraToUSDT(max).toFixed(2);
+      modalUSDT.textContent = `${minUSDT} USDT – ${maxUSDT} USDT`;
+
+      modalAPY.textContent = `${minDAE}% – ${maxDAE}%`;
+    }
+
+    lockPeriodSelect.addEventListener('change', updateModalInfo);
+    updateModalInfo();
+
+    stakeButtons.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const title = btn.getAttribute("data-title");
+        modalTitle.textContent = `Stake ${title}`;
+        modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
+        stakingModal.classList.remove("hidden");
+      });
     });
-  });
-</script>
- <!-- Floating Customer Service Button -->
-<div class="fixed bottom-6 right-6 z-50 group">
-  <a href="mailto:support@elytra.io" target="_blank"
-    class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
-    <i class="fas fa-headset text-white text-xl"></i>
-  </a>
-  <div
-    class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-    Customer Support
-  </div>
-</div>
+
+    confirmBtn.addEventListener("click", () => {
+      const value = parseInt(lockPeriodSelect.value);
+      const min = minimums[value];
+      const max = maximums[value];
+      const amount = parseFloat(stakeInput.value);
+
+      if (!amount || amount < min || amount > max) {
+        showToast("errorToast");
+        return;
+      }
+
+      stakingModal.classList.add("hidden");
+      stakeInput.value = "";
+      showToast("toastNotification");
+    });
+
+    const closeModal = document.getElementById("closeModal");
+    closeModal.addEventListener("click", () => {
+      stakingModal.classList.add("hidden");
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === stakingModal) {
+        stakingModal.classList.add("hidden");
+      }
+    });
+
+    // ✅ Toast animation function
+    function showToast(toastId) {
+      const toast = document.getElementById(toastId);
+      toast.classList.remove("hidden", "fade-out");
+      toast.classList.add("slide-in");
+
+      setTimeout(() => {
+        toast.classList.remove("slide-in");
+        toast.classList.add("fade-out");
+
+        setTimeout(() => {
+          toast.classList.add("hidden");
+        }, 500); // fade out time
+      }, 2000); // visible for 5 seconds
+    }
+  </script>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const stakingCycles = document.getElementById('stakingCyclesSection');
+    const activeStakes = document.getElementById('activeStakesSection');
+    const stakingHistory = document.getElementById('stakingHistorySection');
+
+    tabs.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(tab => {
+          tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
+          tab.classList.remove('bg-purple-700');
+          tab.classList.add('bg-gray-700');
+        });
+
+        btn.classList.remove('bg-gray-700');
+        btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
+
+        stakingCycles.classList.add('hidden');
+        activeStakes.classList.add('hidden');
+        stakingHistory.classList.add('hidden');
+
+        if (index === 0) stakingCycles.classList.remove('hidden');
+        else if (index === 1) activeStakes.classList.remove('hidden');
+        else if (index === 2) stakingHistory.classList.remove('hidden');
+      });
+    });
+  </script>
+
+  <script>
+    const supportButton = document.getElementById("supportButton");
+    const chatBox = document.getElementById("chatBox");
+    const closeChat = document.getElementById("closeChat");
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = chatBox.querySelector('input[type="text"]');
+
+    supportButton.addEventListener("click", () => {
+      chatBox.classList.remove("hidden");
+      showAIIntro();
+      userInput.focus();
+    });
+
+    closeChat.addEventListener("click", () => {
+      chatBox.classList.add("hidden");
+      chatMessages.innerHTML = "";
+      userInput.value = "";
+    });
+
+    function showAIIntro() {
+      if (chatMessages.children.length === 0) {
+        setTimeout(() => addBotMessage("👋 Hi there! I'm Elytra Support Bot."), 500);
+        setTimeout(() => addBotMessage("How can I help you today?"), 1500);
+        setTimeout(() => addBotMessage(`
+        • 💬 How to start staking?<br>
+        • 🔒 Wallet connection issue<br>
+        • 📊 View staking rewards<br>
+        • 📌 Report a bug
+      `), 2500);
+      }
+    }
+
+    function addBotMessage(message) {
+      const msg = document.createElement("div");
+      msg.className = "bg-gray-100 text-black p-2 rounded text-sm";
+      msg.innerHTML = message;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addUserMessage(message) {
+      const msg = document.createElement("div");
+      msg.className = "bg-purple-200 text-black p-2 rounded text-sm text-right";
+      msg.textContent = message;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Handle Enter key to send message
+    userInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter" && userInput.value.trim() !== "") {
+        const message = userInput.value.trim();
+        addUserMessage(message);
+        userInput.value = "";
+
+        // Simulated bot reply
+        setTimeout(() => {
+          addBotMessage("🤖 Got it! One of our team will get back to you soon.");
+        }, 1000);
+      }
+    });
+  </script>
+
 </body>
 
 </html>

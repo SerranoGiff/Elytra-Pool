@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crypto Deposit</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .wallet-box {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #4caf50;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Select Cryptocurrency to Deposit</h2>
+
+  <select id="crypto" onchange="showWallet()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+    <option value="bitcoin">Bitcoin (BTC)</option>
+    <option value="ethereum">Ethereum (ETH)</option>
+    <option value="solana">Solana (SOL)</option>
+    <option value="cardano">Cardano (ADA)</option>
+    <option value="polkadot">Polkadot (DOT)</option>
+  </select>
+
+  <div class="wallet-box" id="walletBox" style="display:none;">
+    <h3 id="cryptoName"></h3>
+    <canvas id="qrCanvas"></canvas>
+    <input type="text" id="walletAddress" readonly>
+    <button onclick="copyAddress()">Copy Address</button>
+  </div>
+
+  <script>
+    const walletAddresses = {
+      bitcoin: {
+        name: "Bitcoin (BTC)",
+        address: "bc1pdse4xuk2r8f0eg8ycfksupw6syq5gw8e4y28p29gdxyma57v5rnqh87jd5"
+      },
+      ethereum: {
+        name: "Ethereum (ETH)",
+        address: "0xYourEthereumAddressHere"
+      },
+      solana: {
+        name: "Solana (SOL)",
+        address: "YourSolanaWalletAddress"
+      },
+      cardano: {
+        name: "Cardano (ADA)",
+        address: "addr1YourCardanoAddressHere"
+      },
+      polkadot: {
+        name: "Polkadot (DOT)",
+        address: "1YourPolkadotAddressHere"
+      }
+    };
+
+    function showWallet() {
+      const selected = document.getElementById("crypto").value;
+      const walletInfo = walletAddresses[selected];
+
+      document.getElementById("cryptoName").innerText = walletInfo.name;
+      document.getElementById("walletAddress").value = walletInfo.address;
+
+      const uri = `${selected === "bitcoin" ? "bitcoin:" : ""}${walletInfo.address}`;
+      QRCode.toCanvas(document.getElementById("qrCanvas"), uri, { width: 180 });
+
+      document.getElementById("walletBox").style.display = "block";
+    }
+
+    function copyAddress() {
+      const copyText = document.getElementById("walletAddress");
+      copyText.select();
+      document.execCommand("copy");
+      alert("Address copied!");
+    }
+
+    // Auto-trigger on page load
+    window.onload = showWallet;
+  </script>
+
+</body>
+</html>

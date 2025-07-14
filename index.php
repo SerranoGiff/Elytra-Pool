@@ -1,3 +1,10 @@
+<?php
+session_start();
+include 'config/dbcon.php';
+
+date_default_timezone_set('Asia/Manila');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +21,10 @@
 
 <body class="min-h-screen bg-gray-950 text-white">
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+  <nav
+    class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-      
+
       <!-- Logo and Title -->
       <a href="index.html" class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform duration-300">
@@ -31,23 +39,29 @@
       <div class="hidden md:flex items-center space-x-8">
         <a href="#home" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
-          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#staking" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
-          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#mining" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Features</span>
-          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#earnings" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Calculator</span>
-          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="about.html#about" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="about.html#about"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">About</span>
-          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
       </div>
 
@@ -67,291 +81,282 @@
     </div>
   </nav>
 
-      <!-- Main Login Modal -->
-      <div id="loginModal"
-        class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-        <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-        <div
-          class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-          id="modalContent">
-          <div id="modalContentInner">
-            
-            <!-- Login Form -->
-            <div id="notification" class="hidden p-4 mb-4 text-sm text-white bg-green-600 rounded-lg text-center">
-              Successfully logged in!
+  <!-- Main Login Modal -->
+  <div id="loginModal"
+    class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+    <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+    <div
+      class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+      id="modalContent">
+      <div id="modalContentInner">
+
+        <!-- Login Form -->
+        <div id="notification" class="hidden p-4 mb-4 text-sm text-white bg-green-600 rounded-lg text-center">
+          Successfully logged in!
+        </div>
+        <div id="error-message" class="text-red-600 text-sm text-center mb-4"></div>
+
+        <div id="loginForm" class="form-section text-black">
+          <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+          <form>
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-medium">Email Address</label>
+              <input type="email" id="email"
+                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                required />
             </div>
-            <div id="error-message" class="text-red-600 text-sm text-center mb-4"></div>
+            <div class="mb-4">
+              <label for="password" class="block text-sm font-medium">Password</label>
+              <input type="password" id="password"
+                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                required />
+            </div>
+            <div class="flex items-center mb-4">
+              <input type="checkbox" id="rememberMe"
+                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+              <label for="rememberMe" class="ml-2 block text-sm cursor-pointer">Remember Me</label>
+            </div>
+            <div class="mb-4 text-right">
+              <button id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
+            </div>
 
-            <div id="loginForm" class="form-section text-black">
-              <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
-              <form>
-                <div class="mb-4">
-                  <label for="email" class="block text-sm font-medium">Email Address</label>
-                  <input type="email" id="email"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                    required />
-                </div>
-                <div class="mb-4">
-                  <label for="password" class="block text-sm font-medium">Password</label>
-                  <input type="password" id="password"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                    required />
-                </div>
-                <div class="flex items-center mb-4">
-                  <input type="checkbox" id="rememberMe"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                  <label for="rememberMe" class="ml-2 block text-sm cursor-pointer">Remember Me</label>
-                </div>
-                <div class="mb-4 text-right">
-                  <button id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
-                </div>
-
-                <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold 
+            <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold 
                     bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 
                     hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 
                     transition-all duration-500 ease-in-out">
-                  Login
-                </button>
-              </form>
-              <div class="mt-4 text-center">
-                <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign
-                  Up</button>
-              </div>
-            </div>
-
-            <!-- Forgot Password Modal -->
-            <div id="forgotPasswordModal"
-              class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-              <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-              <div
-                class="bg-white rounded-lg shadow-lg z-10 p-6 w-full max-w-md transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-                id="forgotPasswordContent">
-                <h2 class="text-lg font-bold mb-4 text-black">Reset Your Password</h2>
-                <p class="mb-4 text-sm text-gray-700">Enter your email address and we’ll send you a password reset link.
-                </p>
-                <form id="forgotPasswordForm">
-                  <input type="email" id="forgotEmail"
-                    class="w-full mb-4 border border-gray-300 rounded-md p-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Email address" required />
-                  <div class="flex justify-end gap-2">
-                    <button type="button" id="cancelForgot"
-                      class="px-4 py-2 text-sm bg-gray-300 hover:bg-gray-400 rounded-lg text-black">Cancel</button>
-                    <button type="submit" class="px-4 py-2 text-sm text-white rounded-lg
-         bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
-         hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
-         shadow-md hover:shadow-lg hover:shadow-purple-500/40
-         transition-all duration-700 ease-in-out">
-                      Send Reset Link
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- Sign Up Form -->
-            <div id="signUpForm" class="form-section hidden text-black">
-              <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
-              <form id="signUpActualForm">
-                <div class="mb-3">
-                  <label for="username" class="block text-sm font-medium text-gray-700 text-black">Username</label>
-                  <input type="text" id="username"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required />
-                </div>
-                <div class="mb-3">
-                  <label for="signUpEmail" class="block text-sm font-medium text-gray-700 text-black">Email
-                    Address</label>
-                  <input type="email" id="signUpEmail"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required />
-                </div>
-                <div class="mb-3">
-                  <label for="signUpPassword"
-                    class="block text-sm font-medium text-gray-700 text-black">Password</label>
-                  <input type="password" id="signUpPassword"
-                    class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required />
-                </div>
-                <div class="mb-3">
-                  <div class="flex items-center">
-                    <input type="checkbox" id="agreeTerms"
-                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-                    <label for="agreeTerms" class="ml-2 block text-sm text-gray-700 cursor-pointer">
-                      I agree to the <span class="text-blue-600 hover:underline">Terms and Conditions</span>
-                    </label>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="flex items-center">
-                    <input type="checkbox" id="agreePrivacy"
-                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-                    <label for="agreePrivacy" class="ml-2 block text-sm text-gray-700 cursor-pointer">
-                      I have read and agree to the <span class="text-blue-600 hover:underline">Privacy Policy</span>
-                    </label>
-                  </div>
-                </div>
-                <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold
-         bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
-         hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
-         shadow-md hover:shadow-lg hover:shadow-purple-500/40
-         transition-all duration-700 ease-in-out">
-                  Sign Up
-                </button>
-              </form>
-
-              <div class="mt-4 text-center">
-                <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an account? Login</button>
-              </div>
-            </div>
-
-          </div>
+              Login
+            </button>
+          </form>
           <div class="mt-4 text-center">
-            <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition duration-200">Close</button>
+            <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign
+              Up</button>
           </div>
         </div>
-      </div>
 
-      <!-- Terms and Conditions Modal -->
-      <div id="infoModal"
-        class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-        <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-        <div
-          class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-          id="infoModalContent">
-          <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Terms & Conditions</h2>
-          <div class="max-h-96 overflow-y-auto" id="termsContent">
-            <p id="modalContentText" class="text-gray-700 mb-4">
-              <strong>ELYTRA POOL TERMS OF SERVICE</strong><br />
-              <strong>Last Updated:</strong> June 22, 2025<br /><br />
-              <strong>1. Definitions</strong><br />
-              1.1. <strong>"Platform"</strong> refers to Elytra Pool, its affiliates, subsidiaries, and any associated
-              decentralized protocols.<br />
-              1.2. <strong>"User "</strong> ("you") means any entity interacting with the Platform, including but not
-              limited to stakers, referrers, and purchasers of digital assets.<br />
-              1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable incentives distributed at the Platform's
-              sole discretion, with no expectation of profit.<br /><br />
-              <strong>2. Acceptance of Terms</strong><br />
-              2.1. By accessing the Platform, you <strong>irrevocably consent</strong> to these Terms, our Privacy
-              Policy, and any future amendments (posted without notice).<br />
-              2.2. Continued use constitutes <strong>binding arbitration agreement</strong> (waiving class action rights
-              per Section 9.4).<br /><br />
-              <strong>3. Eligibility & Account Creation</strong><br />
-              3.1. Users affirm they are <strong>not</strong> a citizen/resident of prohibited jurisdictions (e.g., USA,
-              Cuba, North Korea) unless compliant with local regulations.<br />
-              3.2. <strong>No Guaranteed Access</strong>: Accounts may be terminated without explanation (Section
-              7.3).<br /><br />
-              <strong>4. Staking & Rewards (No Promises)</strong><br />
-              4.1. <strong>Variable Rewards</strong>: APY estimates are hypothetical, subject to smart contract risks,
-              slashing, and protocol changes.<br />
-              4.2. <strong>No Ownership</strong>: Staked assets remain User's property, but rewards are
-              <strong>unsecured claims</strong> until distributed.<br />
-              4.3. <strong>Tax Liability</strong>: Users alone are responsible for reporting rewards as income (consult
-              a tax advisor).<br /><br />
-              <strong>5. Referral Program (No Pyramid Schemes)</strong><br />
-              5.1. Referral rewards are <strong>limited to 10 levels deep</strong> to avoid regulatory classification as
-              a security/Ponzi.<br />
-              5.2. Platform reserves the right to <strong>withhold referrals</strong> deemed fraudulent (no
-              appeals).<br /><br />
-              <strong>6. NFT Avatars & Microtransactions</strong><br />
-              6.1. <strong>Non-Refundable</strong>: All purchases of digital assets (e.g., avatars, gems) are
-              final.<br />
-              6.2. <strong>No Financial Utility</strong>: Avatars confer no staking advantages—purely
-              cosmetic.<br /><br />
-              <strong>7. Termination & Fund Seizure</strong><br />
-              7.1. <strong>At-Will Suspension</strong>: We may freeze accounts for "suspicious activity"
-              (undefined).<br />
-              7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12 months may be <strong>repurposed as
-                protocol fees</strong>.<br /><br />
-              <strong>8. Disclaimers (No Liability)</strong><br />
-              8.1. <strong>As-Is Service</strong>: The Platform disclaims warranties of merchantability, fitness, or
-              non-infringement.<br />
-              8.2. <strong>Third-Party Risks</strong>: We are not liable for exploits in underlying blockchains (e.g.,
-              Ethereum, Solana).<br /><br />
-              <strong>9. Governing Law & Arbitration</strong><br />
-              9.1. <strong>Jurisdiction</strong>: Disputes resolved under [Cayman Islands law] (favors
-              arbitration).<br />
-              9.2. <strong>Class Action Waiver</strong>: Users may only pursue individual claims (no class
-              actions).<br /><br />
-              <strong>10. Amendments</strong><br />
-              10.1. <strong>Unilateral Changes</strong>: We may modify these Terms at any time; continued use =
-              acceptance.
+        <!-- Forgot Password Modal -->
+        <div id="forgotPasswordModal"
+          class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+          <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+          <div
+            class="bg-white rounded-lg shadow-lg z-10 p-6 w-full max-w-md transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+            id="forgotPasswordContent">
+            <h2 class="text-lg font-bold mb-4 text-black">Reset Your Password</h2>
+            <p class="mb-4 text-sm text-gray-700">Enter your email address and we’ll send you a password reset link.
             </p>
-          </div>
-          <div class="text-center mt-4">
-            <button id="confirmTerms"
-              class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>I
-              Accept</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Privacy Policy Modal -->
-      <div id="privacyModal"
-        class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-        <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-        <div
-          class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-          id="privacyModalContent">
-          <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Privacy Policy</h2>
-          <div class="max-h-96 overflow-y-auto" id="privacyContent">
-            <p id="modalContentText" class="text-gray-700 mb-4">
-              <strong>ELYTRA POOL PRIVACY POLICY</strong><br />
-              <strong>Last Updated:</strong> June 22, 2025<br /><br />
-
-              <strong>1. Information We Collect</strong><br />
-              1.1. We may collect personal information that you provide to us directly, such as your name, email
-              address, and any other information you choose to provide.<br />
-              1.2. We also collect wallet addresses, on-chain activity, IP addresses, browser/device information, and
-              technical metadata.<br /><br />
-
-              <strong>2. How We Use Your Information</strong><br />
-              2.1. We use your data to enable core services (staking, transactions).<br />
-              2.2. We use data to improve security, detect fraud, and comply with legal obligations.<br />
-              2.3. We may send updates or marketing messages (opt-out is available).<br /><br />
-
-              <strong>3. Sharing Your Information</strong><br />
-              3.1. We do not sell or rent your personal information.<br />
-              3.2. We may share data with third-party vendors (e.g., KYC providers), validators, cloud infrastructure,
-              or when legally required.<br /><br />
-
-              <strong>4. Data Retention</strong><br />
-              4.1. KYC data is stored for 5 years unless legally mandated otherwise.<br />
-              4.2. Wallet activity and public blockchain data are stored indefinitely.<br />
-              4.3. Cookies and session data may be retained for up to 30 days.<br /><br />
-
-              <strong>5. Security Measures</strong><br />
-              5.1. We implement encryption, secure wallets, and periodic audits.<br />
-              5.2. However, no system is 100% secure. Use the platform at your own risk.<br /><br />
-
-              <strong>6. Your Rights</strong><br />
-              6.1. Depending on your jurisdiction, you may access, update, or request deletion of your data.<br />
-              6.2. You may opt-out of marketing or withdraw consent, though some features may become
-              restricted.<br /><br />
-
-              <strong>7. Changes to This Policy</strong><br />
-              7.1. We may modify this policy from time to time.<br />
-              7.2. Continued use of the platform signifies acceptance of updates.<br /><br />
-
-              <strong>8. Contact Us</strong><br />
-              For privacy-related concerns:<br />
-              Email: privacy@elytrapool.com<br />
-              Website: https://elytrapool.com/contact<br /><br />
-
-              By using Elytra Pool, you acknowledge that you have read and agree to this Privacy Policy.
-            </p>
-          </div>
-          <div class="text-center mt-4">
-            <button id="confirmPrivacy"
-              class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>I
-              Accept</button>
+            <form id="forgotPasswordForm">
+              <input type="email" id="forgotEmail"
+                class="w-full mb-4 border border-gray-300 rounded-md p-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Email address" required />
+              <div class="flex justify-end gap-2">
+                <button type="button" id="cancelForgot"
+                  class="px-4 py-2 text-sm bg-gray-300 hover:bg-gray-400 rounded-lg text-black">Cancel</button>
+                <button type="submit" class="px-4 py-2 text-sm text-white rounded-lg
+         bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
+         hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
+         shadow-md hover:shadow-lg hover:shadow-purple-500/40
+         transition-all duration-700 ease-in-out">
+                  Send Reset Link
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      </div>
 
-      <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
-        <i class="fas fa-bars text-xl"></i>
-      </button>
+        <!-- Sign Up Form -->
+        <div id="signUpForm" class="form-section hidden text-black">
+          <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
+          <form action="config/registration.php" method="POST">
+            <!-- Update the action to your PHP registration script -->
+            <div class="mb-3">
+              <label for="username" class="block text-sm font-medium text-gray-700 text-black">Username</label>
+              <input type="text" id="username" name="username" required
+                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div class="mb-3">
+              <label for="signUpEmail" class="block text-sm font-medium text-gray-700 text-black">Email Address</label>
+              <input type="email" id="signUpEmail" name="email" required
+                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div class="mb-3">
+              <label for="signUpPassword" class="block text-sm font-medium text-gray-700 text-black">Password</label>
+              <input type="password" id="signUpPassword" name="password" required
+                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <p id="passwordStrength" class="mt-1 text-sm"></p>
+            </div>
+            <div class="mb-3">
+              <div class="flex items-center">
+                <input type="checkbox" id="agreeTerms" name="agreeTerms"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
+                <label for="agreeTerms" class="ml-2 block text-sm text-gray-700 cursor-pointer">I agree to the <span
+                    class="text-blue-600 hover:underline">Terms and Conditions</span></label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="flex items-center">
+                <input type="checkbox" id="agreePrivacy" name="agreePrivacy"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
+                <label for="agreePrivacy" class="ml-2 block text-sm text-gray-700 cursor-pointer">I have read and agree
+                  to the <span class="text-blue-600 hover:underline">Privacy Policy</span></label>
+              </div>
+            </div>
+            <button type="submit"
+              class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 shadow-md hover:shadow-lg hover:shadow-purple-500/40 transition-all duration-700 ease-in-out">Sign
+              Up</button>
+          </form>
+          <div class="mt-4 text-center">
+            <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an account? Login</button>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="mt-4 text-center">
+        <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition duration-200">Close</button>
+      </div>
     </div>
+  </div>
+
+  <!-- Terms and Conditions Modal -->
+  <div id="infoModal"
+    class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+    <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+    <div
+      class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+      id="infoModalContent">
+      <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Terms & Conditions</h2>
+      <div class="max-h-96 overflow-y-auto" id="termsContent">
+        <p id="modalContentText" class="text-gray-700 mb-4">
+          <strong>ELYTRA POOL TERMS OF SERVICE</strong><br />
+          <strong>Last Updated:</strong> June 22, 2025<br /><br />
+          <strong>1. Definitions</strong><br />
+          1.1. <strong>"Platform"</strong> refers to Elytra Pool, its affiliates, subsidiaries, and any associated
+          decentralized protocols.<br />
+          1.2. <strong>"User "</strong> ("you") means any entity interacting with the Platform, including but not
+          limited to stakers, referrers, and purchasers of digital assets.<br />
+          1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable incentives distributed at the Platform's
+          sole discretion, with no expectation of profit.<br /><br />
+          <strong>2. Acceptance of Terms</strong><br />
+          2.1. By accessing the Platform, you <strong>irrevocably consent</strong> to these Terms, our Privacy
+          Policy, and any future amendments (posted without notice).<br />
+          2.2. Continued use constitutes <strong>binding arbitration agreement</strong> (waiving class action rights
+          per Section 9.4).<br /><br />
+          <strong>3. Eligibility & Account Creation</strong><br />
+          3.1. Users affirm they are <strong>not</strong> a citizen/resident of prohibited jurisdictions (e.g., USA,
+          Cuba, North Korea) unless compliant with local regulations.<br />
+          3.2. <strong>No Guaranteed Access</strong>: Accounts may be terminated without explanation (Section
+          7.3).<br /><br />
+          <strong>4. Staking & Rewards (No Promises)</strong><br />
+          4.1. <strong>Variable Rewards</strong>: APY estimates are hypothetical, subject to smart contract risks,
+          slashing, and protocol changes.<br />
+          4.2. <strong>No Ownership</strong>: Staked assets remain User's property, but rewards are
+          <strong>unsecured claims</strong> until distributed.<br />
+          4.3. <strong>Tax Liability</strong>: Users alone are responsible for reporting rewards as income (consult
+          a tax advisor).<br /><br />
+          <strong>5. Referral Program (No Pyramid Schemes)</strong><br />
+          5.1. Referral rewards are <strong>limited to 10 levels deep</strong> to avoid regulatory classification as
+          a security/Ponzi.<br />
+          5.2. Platform reserves the right to <strong>withhold referrals</strong> deemed fraudulent (no
+          appeals).<br /><br />
+          <strong>6. NFT Avatars & Microtransactions</strong><br />
+          6.1. <strong>Non-Refundable</strong>: All purchases of digital assets (e.g., avatars, gems) are
+          final.<br />
+          6.2. <strong>No Financial Utility</strong>: Avatars confer no staking advantages—purely
+          cosmetic.<br /><br />
+          <strong>7. Termination & Fund Seizure</strong><br />
+          7.1. <strong>At-Will Suspension</strong>: We may freeze accounts for "suspicious activity"
+          (undefined).<br />
+          7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12 months may be <strong>repurposed as
+            protocol fees</strong>.<br /><br />
+          <strong>8. Disclaimers (No Liability)</strong><br />
+          8.1. <strong>As-Is Service</strong>: The Platform disclaims warranties of merchantability, fitness, or
+          non-infringement.<br />
+          8.2. <strong>Third-Party Risks</strong>: We are not liable for exploits in underlying blockchains (e.g.,
+          Ethereum, Solana).<br /><br />
+          <strong>9. Governing Law & Arbitration</strong><br />
+          9.1. <strong>Jurisdiction</strong>: Disputes resolved under [Cayman Islands law] (favors
+          arbitration).<br />
+          9.2. <strong>Class Action Waiver</strong>: Users may only pursue individual claims (no class
+          actions).<br /><br />
+          <strong>10. Amendments</strong><br />
+          10.1. <strong>Unilateral Changes</strong>: We may modify these Terms at any time; continued use =
+          acceptance.
+        </p>
+      </div>
+      <div class="text-center mt-4">
+        <button id="confirmTerms"
+          class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>I
+          Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacyModal"
+    class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+    <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
+    <div
+      class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+      id="privacyModalContent">
+      <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Privacy Policy</h2>
+      <div class="max-h-96 overflow-y-auto" id="privacyContent">
+        <p id="modalContentText" class="text-gray-700 mb-4">
+          <strong>ELYTRA POOL PRIVACY POLICY</strong><br />
+          <strong>Last Updated:</strong> June 22, 2025<br /><br />
+
+          <strong>1. Information We Collect</strong><br />
+          1.1. We may collect personal information that you provide to us directly, such as your name, email
+          address, and any other information you choose to provide.<br />
+          1.2. We also collect wallet addresses, on-chain activity, IP addresses, browser/device information, and
+          technical metadata.<br /><br />
+
+          <strong>2. How We Use Your Information</strong><br />
+          2.1. We use your data to enable core services (staking, transactions).<br />
+          2.2. We use data to improve security, detect fraud, and comply with legal obligations.<br />
+          2.3. We may send updates or marketing messages (opt-out is available).<br /><br />
+
+          <strong>3. Sharing Your Information</strong><br />
+          3.1. We do not sell or rent your personal information.<br />
+          3.2. We may share data with third-party vendors (e.g., KYC providers), validators, cloud infrastructure,
+          or when legally required.<br /><br />
+
+          <strong>4. Data Retention</strong><br />
+          4.1. KYC data is stored for 5 years unless legally mandated otherwise.<br />
+          4.2. Wallet activity and public blockchain data are stored indefinitely.<br />
+          4.3. Cookies and session data may be retained for up to 30 days.<br /><br />
+
+          <strong>5. Security Measures</strong><br />
+          5.1. We implement encryption, secure wallets, and periodic audits.<br />
+          5.2. However, no system is 100% secure. Use the platform at your own risk.<br /><br />
+
+          <strong>6. Your Rights</strong><br />
+          6.1. Depending on your jurisdiction, you may access, update, or request deletion of your data.<br />
+          6.2. You may opt-out of marketing or withdraw consent, though some features may become
+          restricted.<br /><br />
+
+          <strong>7. Changes to This Policy</strong><br />
+          7.1. We may modify this policy from time to time.<br />
+          7.2. Continued use of the platform signifies acceptance of updates.<br /><br />
+
+          <strong>8. Contact Us</strong><br />
+          For privacy-related concerns:<br />
+          Email: privacy@elytrapool.com<br />
+          Website: https://elytrapool.com/contact<br /><br />
+
+          By using Elytra Pool, you acknowledge that you have read and agree to this Privacy Policy.
+        </p>
+      </div>
+      <div class="text-center mt-4">
+        <button id="confirmPrivacy"
+          class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>I
+          Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
+    <i class="fas fa-bars text-xl"></i>
+  </button>
+  </div>
   </nav>
 
   <!-- Hero Section -->
@@ -362,19 +367,21 @@
         <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white">Earn Crypto <span class="text-purple-400">Through
             Staking</span></h1>
         <p class="text-lg text-gray-300 mb-8 max-w-xl">
-          <strong class="text-white">Earn up to 25% Daily Average Earning by staking crypto through secure, decentralized Web3
+          <strong class="text-white">Earn up to 25% Daily Average Earning by staking crypto through secure,
+            decentralized Web3
             protocols.</strong><br />
           Grow your portfolio with blockchain-based & User-friendly, Higher rewards, and no custodians. Join millions of
           Web3 users maximizing yields while staying in full control of your assets.
         </p>
         <div class="flex flex-wrap gap-4 mb-10">
-          <button
+          <button id="start-earning-button"
             class="bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg hover:brightness-110 transition duration-300 ease-in-out">
             Start Earning
           </button>
-          <button
-            class="border border-purple-500 text-purple-300 px-6 py-3 rounded-lg hover:bg-purple-600 hover:text-white hover:border-transparent transition duration-300 ease-in-out">How
-            It Works</button>
+          <a href="#howitworks"
+            class="border border-purple-500 text-purple-300 px-6 py-3 rounded-lg hover:bg-purple-600 hover:text-white hover:border-transparent transition duration-300 ease-in-out">
+            How It Works
+          </a>
         </div>
 
         <div class="mt-8 flex flex-wrap gap-6 text-gray-300">
@@ -507,9 +514,9 @@
               <div id="btc-lock" class="font-semibold">30 Days</div>
             </div>
           </div>
-          <a href="https://www.binance.com/en/earn/bitcoin" target="_blank"
+          <button id="btc-stake-button"
             class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
-            Now</a>
+            Now</button>
         </div>
 
         <!-- Ethereum Staking -->
@@ -545,9 +552,9 @@
               <div id="eth-lock" class="font-semibold">14 Days</div>
             </div>
           </div>
-          <a href="https://stake.lido.fi" target="_blank"
+          <button id="eth-stake-button"
             class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
-            Now</a>
+            Now</button>
         </div>
 
         <!-- Solana Staking -->
@@ -583,9 +590,9 @@
               <div id="sol-lock" class="font-semibold">7 Days</div>
             </div>
           </div>
-          <a href="https://solanabeach.io/staking" target="_blank"
+          <button id="sol-stake-button"
             class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
-            Now</a>
+            Now</button>
         </div>
       </div>
       <div class="mt-12 text-center">
@@ -627,9 +634,9 @@
               <div id="ada-lock" class="font-semibold">14 Days</div>
             </div>
           </div>
-          <a href="#"
+          <button id="ada-stake-button"
             class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
-            Now</a>
+            Now</button>
         </div>
 
         <!-- Card for Polkadot -->
@@ -665,9 +672,9 @@
               <div id="dot-lock" class="font-semibold">28 Days</div>
             </div>
           </div>
-          <a href="#"
+          <button id="dot-stake-button"
             class="btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700">Stake
-            Now</a>
+            Now</button>
         </div>
       </div>
 
@@ -717,7 +724,7 @@
             </div>
           </div>
 
-          <button
+          <button id="start-staking-button"
             class="btn-primary w-full py-2 rounded-lg mt-auto bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700 text-white font-semibold transition duration-200">Start
             Staking</button>
         </div>
@@ -749,9 +756,10 @@
                 Cycles</span></div>
             <div class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i><span>Advanced Analytics
                 Dashboard</span></div>
-            <div class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i><span>Exclusive Access</span></div>
+            <div class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i><span>Exclusive Access</span>
+            </div>
           </div>
-          <button
+          <button id="premium-stake-button"
             class="btn-primary w-full py-2 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg mt-auto">Start
             Staking</button>
         </div>
@@ -759,86 +767,96 @@
     </div>
   </section>
 
-<section id="earnings" class="py-20 px-4 sm:px-6 text-center">
-  <div class="max-w-2xl mx-auto">
-    <h2 class="text-3xl font-bold mb-4">Earnings Calculator</h2>
-    <p class="text-gray-400 mb-8">Estimate your staking rewards in USDT. Minimum amount depends on duration.</p>
+  <section id="earnings" class="py-20 px-4 sm:px-6 text-center">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-3xl font-bold mb-4">Earnings Calculator</h2>
+      <p class="text-gray-400 mb-8">Estimate your staking rewards in USDT. Minimum amount depends on duration.</p>
 
-    <div class="bg-gray-900 bg-opacity-60 p-6 sm:p-8 rounded-2xl shadow-xl text-left">
-      <!-- Staking Period -->
-      <div class="mb-6">
-        <label for="period" class="block text-sm text-gray-400 mb-2">Staking Period</label>
-        <select id="period" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-          <option value="3">3 Days</option>
-          <option value="7">7 Days</option>
-          <option value="15">15 Days</option>
-          <option value="30">30 Days</option>
-          <option value="60">60 Days</option>
-          <option value="90">90 Days</option>
-        </select>
+      <div class="bg-gray-900 bg-opacity-60 p-6 sm:p-8 rounded-2xl shadow-xl text-left">
+        <!-- Staking Period -->
+        <div class="mb-6">
+          <label for="period" class="block text-sm text-gray-400 mb-2">Staking Period</label>
+          <select id="period" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+            <option value="3">3 Days</option>
+            <option value="7">7 Days</option>
+            <option value="15">15 Days</option>
+            <option value="30">30 Days</option>
+            <option value="60">60 Days</option>
+            <option value="90">90 Days</option>
+          </select>
+        </div>
+
+        <!-- Crypto Selection -->
+        <div class="mb-6">
+          <label for="crypto" class="block text-sm text-gray-400 mb-2">Cryptocurrency</label>
+          <select id="crypto" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
+            <option value="bitcoin">Bitcoin (BTC)</option>
+            <option value="ethereum">Ethereum (ETH)</option>
+            <option value="solana">Solana (SOL)</option>
+            <option value="cardano">Cardano (ADA)</option>
+            <option value="polkadot">Polkadot (DOT)</option>
+          </select>
+        </div>
+
+        <!-- Amount Input -->
+        <div class="mb-2">
+          <label for="amount" class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+            Amount to Stake (USDT)
+            <span class="relative group cursor-pointer">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M18 10A8 8 0 112 10a8 8 0 0116 0zM9 7a1 1 0 112 0v1a1 1 0 01-2 0V7zm0 4a1 1 0 012 0v3a1 1 0 01-2 0v-3z" />
+              </svg>
+              <div
+                class="absolute z-10 hidden group-hover:block w-56 text-xs text-white bg-gray-700 p-2 rounded shadow-lg mt-2 left-1/2 -translate-x-1/2">
+                Minimum stake varies by duration:
+                <ul class="list-disc list-inside">
+                  <li>3D: 100</li>
+                  <li>7D: 3,000</li>
+                  <li>15D: 7,000</li>
+                  <li>30D: 10,000</li>
+                  <li>60D: 30,000</li>
+                  <li>90D: 50,000</li>
+                </ul>
+              </div>
+            </span>
+          </label>
+          <input id="amount" type="number" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2"
+            value="1000" />
+        </div>
+        <p id="min-note" class="text-sm text-yellow-400 mb-6"></p>
+
+        <!-- Calculate Button -->
+        <button id="calculateBtn" type="button"
+          class="relative w-full py-3 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg text-white flex items-center justify-center">
+          <span>Calculate Earnings</span>
+          <svg id="spinner" class="hidden ml-3 w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+          </svg>
+        </button>
+
+        <p id="error-msg" class="text-red-500 mt-4 text-sm"></p>
+
+        <!-- 2.5 Result Box -->
+        <div id="results" class="bg-gray-800 p-4 rounded-lg mt-6 space-y-3 hidden">
+          <div class="flex justify-between"><span class="text-gray-400">APY</span><span id="apy"
+              class="font-semibold text-white"></span></div>
+          <div class="flex justify-between"><span class="text-gray-400">Estimated Rewards</span><span id="rewards"
+              class="font-semibold text-white"></span></div>
+          <div class="flex justify-between"><span class="text-gray-400">Total Return</span><span id="total"
+              class="font-semibold text-white"></span></div>
+          <div class="flex justify-between"><span class="text-gray-400">Daily Earnings</span><span id="daily"
+              class="font-semibold text-white"></span></div>
+          <div class="flex justify-between border-t border-gray-700 pt-2"><span class="text-gray-400">Earnings (in
+              USDT)</span><span id="earnings-usdt" class="font-semibold text-green-400"></span></div>
+          <div class="flex justify-between border-t border-gray-700 pt-2"><span class="text-gray-400">Earnings (in
+              Elytra)</span><span id="earnings-elytra" class="font-semibold text-purple-400"></span></div>
+        </div>
+
       </div>
-
-      <!-- Crypto Selection -->
-      <div class="mb-6">
-        <label for="crypto" class="block text-sm text-gray-400 mb-2">Cryptocurrency</label>
-        <select id="crypto" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2">
-          <option value="bitcoin">Bitcoin (BTC)</option>
-          <option value="ethereum">Ethereum (ETH)</option>
-          <option value="solana">Solana (SOL)</option>
-          <option value="cardano">Cardano (ADA)</option>
-          <option value="polkadot">Polkadot (DOT)</option>
-        </select>
-      </div>
-
-      <!-- Amount Input -->
-      <div class="mb-2">
-        <label for="amount" class="flex items-center gap-2 text-sm text-gray-400 mb-2">
-          Amount to Stake (USDT)
-          <span class="relative group cursor-pointer">
-            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M18 10A8 8 0 112 10a8 8 0 0116 0zM9 7a1 1 0 112 0v1a1 1 0 01-2 0V7zm0 4a1 1 0 012 0v3a1 1 0 01-2 0v-3z" />
-            </svg>
-            <div class="absolute z-10 hidden group-hover:block w-56 text-xs text-white bg-gray-700 p-2 rounded shadow-lg mt-2 left-1/2 -translate-x-1/2">
-              Minimum stake varies by duration:
-              <ul class="list-disc list-inside">
-                <li>3D: 100</li><li>7D: 3,000</li><li>15D: 7,000</li>
-                <li>30D: 10,000</li><li>60D: 30,000</li><li>90D: 50,000</li>
-              </ul>
-            </div>
-          </span>
-        </label>
-        <input id="amount" type="number" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" value="1000" />
-      </div>
-      <p id="min-note" class="text-sm text-yellow-400 mb-6"></p>
-
-      <!-- Calculate Button -->
-      <button id="calculateBtn" type="button" class="relative w-full py-3 bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 rounded-lg text-white flex items-center justify-center">
-        <span>Calculate Earnings</span>
-        <svg id="spinner" class="hidden ml-3 w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-        </svg>
-      </button>
-
-      <p id="error-msg" class="text-red-500 mt-4 text-sm"></p>
-
-      <!-- 2.5 Result Box -->
-<div id="results" class="bg-gray-800 p-4 rounded-lg mt-6 space-y-3 hidden">
-  <div class="flex justify-between"><span class="text-gray-400">APY</span><span id="apy" class="font-semibold text-white"></span></div>
-  <div class="flex justify-between"><span class="text-gray-400">Estimated Rewards</span><span id="rewards" class="font-semibold text-white"></span></div>
-  <div class="flex justify-between"><span class="text-gray-400">Total Return</span><span id="total" class="font-semibold text-white"></span></div>
-  <div class="flex justify-between"><span class="text-gray-400">Daily Earnings</span><span id="daily" class="font-semibold text-white"></span></div>
-  <div class="flex justify-between border-t border-gray-700 pt-2"><span class="text-gray-400">Earnings (in USDT)</span><span id="earnings-usdt" class="font-semibold text-green-400"></span></div>
-  <div class="flex justify-between border-t border-gray-700 pt-2"><span class="text-gray-400">Earnings (in Elytra)</span><span id="earnings-elytra" class="font-semibold text-purple-400"></span></div>
-</div>
-
     </div>
-  </div>
-</section>
-
-
-
-
+  </section>
 
   <!-- How It Works -->
   <section id="howitworks" class="py-20 px-6 text-white">
@@ -902,10 +920,12 @@
     <div class="max-w-7xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-4">Ready to Start Earning with Elytra Pool?</h2>
       <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">Earn up to <span class="font-semibold text-white">25%
-          Daily Average Earnings</span> by staking crypto through secure, decentralized protocols. Grow your portfolio with high-yield
-       staking no middlemen, just full control and reliable rewards.</p>
+          Daily Average Earnings</span> by staking crypto through secure, decentralized protocols. Grow your portfolio
+        with high-yield
+        staking no middlemen, just full control and reliable rewards.</p>
 
-      <button class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">Get Started
+      <button id="get-started-button"
+        class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">Get Started
         Now</button>
     </div>
   </section>
@@ -1137,7 +1157,9 @@
     const cancelForgot = document.getElementById("cancelForgot");
     const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 
-    forgotPasswordBtn.addEventListener("click", () => {
+    // Show the forgot password modal when the button is clicked
+    forgotPasswordBtn.addEventListener("click", (e) => {
+      e.preventDefault(); // Prevent the default form submission
       forgotPasswordModal.classList.remove("hidden");
       setTimeout(() => {
         forgotPasswordContent.classList.remove("scale-95", "opacity-0");
@@ -1145,6 +1167,7 @@
       }, 10);
     });
 
+    // Close the forgot password modal
     cancelForgot.addEventListener("click", () => {
       forgotPasswordContent.classList.add("scale-95", "opacity-0");
       setTimeout(() => {
@@ -1152,12 +1175,49 @@
       }, 300);
     });
 
+    // Handle the forgot password form submission
     forgotPasswordForm.addEventListener("submit", (e) => {
-      e.preventDefault();
+      e.preventDefault(); // Prevent the default form submission
       const email = document.getElementById("forgotEmail").value;
       alert("Reset link sent to: " + email);
-      cancelForgot.click();
+      cancelForgot.click(); // Close the modal after submission
     });
+
+    // Password strength checker with special character validation
+    const signUpPassword = document.getElementById("signUpPassword");
+    const passwordStrengthText = document.createElement("p");
+    passwordStrengthText.classList.add("mt-1", "text-sm", "font-semibold");
+    signUpPassword.parentNode.appendChild(passwordStrengthText);
+
+    signUpPassword.addEventListener("input", () => {
+      const password = signUpPassword.value;
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      let strength = '';
+      let strengthColor = '';
+
+      if (password.length < 6) {
+        strength = 'Weak';
+        strengthColor = 'text-red-600';
+      } else if (password.length >= 6 && password.length < 10) {
+        strength = 'Medium';
+        strengthColor = 'text-yellow-600';
+      } else if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password) && hasSpecialChar) {
+        strength = 'Strong';
+        strengthColor = 'text-green-600';
+      } else {
+        strength = 'Medium';
+        strengthColor = 'text-yellow-600';
+      }
+
+      if (!hasSpecialChar) {
+        strength = 'Must include at least one special character';
+        strengthColor = 'text-red-600';
+      }
+
+      passwordStrengthText.textContent = strength;
+      passwordStrengthText.className = `mt-1 text-sm font-semibold ${strengthColor}`;
+    });
+
   </script>
 
   <script>
@@ -1431,6 +1491,42 @@
       } else {
         document.getElementById("error-message").innerText = "Invalid email or password.";
       }
+    });
+  </script>
+
+  <script>
+    // Connect buttons to the login modal
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginModal = document.getElementById("loginModal");
+      const closeModal = document.getElementById("closeModal");
+
+      // Function to show the login modal
+      function showLoginModal() {
+        loginModal.classList.remove("hidden");
+        setTimeout(() => {
+          loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
+          loginModal.querySelector("#modalContent").classList.add("scale-100", "opacity-100");
+        }, 10);
+      }
+
+      // Connect "Start Earning" button
+      document.getElementById("start-earning-button").addEventListener("click", showLoginModal);
+
+      // Connect "Stake Now" buttons
+      document.querySelectorAll("button[id$='-stake-button']").forEach(button => {
+        button.addEventListener("click", showLoginModal);
+      });
+
+      // Connect "Get Started Now" button
+      document.getElementById("get-started-button").addEventListener("click", showLoginModal);
+
+      // Close modal functionality
+      closeModal.addEventListener("click", () => {
+        loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          loginModal.classList.add("hidden");
+        }, 300);
+      });
     });
   </script>
 

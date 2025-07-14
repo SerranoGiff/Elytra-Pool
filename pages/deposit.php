@@ -58,6 +58,11 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <title>Elytra Pool | Deposit</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <!-- AlertifyJS CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <!-- Optional: Default theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
   <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/user.css">
@@ -81,7 +86,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         </a>
       </div>
 
-      <!-- Desktop Nav Links -->
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
         <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
@@ -168,43 +172,42 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
       <!-- Wallet Selector -->
       <section class="mb-4">
-        <label class="block text-sm mb-2 text-purple-300">Select Wallet</label>
+        <label for="walletSelect" class="block text-sm mb-2 text-purple-300">Select Wallet</label>
         <select id="walletSelect" onchange="updateWallet()"
           class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
-          <option>(Choose Wallet)</option>
-          <option>Gate</option>
-          <option>Binance</option>
-          <option>Bybit</option>
-          <option>Bitget</option>
-          <option>OKX</option>
-          <option>OTHERS</option>
+          <option value="">(Choose Wallet)</option>
+          <option value="Gate">Gate</option>
+          <option value="Binance">Binance</option>
+          <option value="Bybit">Bybit</option>
+          <option value="Bitget">Bitget</option>
+          <option value="OKX">OKX</option>
+          <option value="OTHERS">OTHERS</option>
         </select>
       </section>
 
       <!-- Network Selector -->
       <section class="mb-4">
-        <label class="block text-sm mb-2 text-purple-300">Select Network</label>
+        <label for="networkSelect" class="block text-sm mb-2 text-purple-300">Select Network</label>
         <select id="networkSelect" onchange="updateWallet()"
           class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
-          <option>USDT</option>
-          <option>BTC</option>
-          <option>ETH</option>
+          <option value="">(Choose Network)</option>
+          <option value="USDT">USDT</option>
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
         </select>
       </section>
 
       <!-- Amount -->
       <section class="mb-4">
         <label for="depositAmount" class="block text-sm mb-2 text-purple-300">Amount</label>
-        <input type="number" id="depositAmount"
-          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
-          placeholder="0.00" />
+        <input type="number" id="depositAmount" placeholder="0.00"
+          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400" />
       </section>
 
       <!-- Wallet Address & QR -->
       <section class="mb-4">
         <label class="block text-sm mb-2 text-purple-300">Wallet Address / QR</label>
-        <div
-          class="bg-[#0D1B2A] border border-purple-400 p-2 rounded flex justify-between items-center text-sm text-white">
+        <div class="bg-[#0D1B2A] border border-purple-400 p-2 rounded flex justify-between items-center text-sm text-white">
           <span id="walletAddress" class="truncate">---</span>
           <div class="flex gap-2">
             <button onclick="copyToClipboard()" class="text-yellow-400 hover:text-yellow-300 text-xs">📋</button>
@@ -235,35 +238,34 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           Confirm Deposit
         </button>
       </section>
-    </section>
 
-    <!-- Floating Support Button + Chat -->
-    <div class="fixed bottom-6 right-6 z-50 group">
-      <button id="supportButton"
-        class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
-        <i class="fas fa-headset text-white text-xl"></i>
-      </button>
+      <!-- Floating Support Button + Chat -->
+      <div class="fixed bottom-6 right-6 z-50 group">
+        <button id="supportButton"
+          class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+          <i class="fas fa-headset text-white text-xl"></i>
+        </button>
 
-      <!-- Tooltip -->
-      <div
-        class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        Customer Support
+        <!-- Tooltip -->
+        <div
+          class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          Customer Support
+        </div>
       </div>
-    </div>
 
-    <!-- Chatbox -->
-    <div id="chatBox"
-      class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
-        <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+      <!-- Chatbox -->
+      <div id="chatBox"
+        class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
+          <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+        </div>
+        <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
+          <!-- AI messages appear here -->
+        </div>
+        <input type="text" placeholder="Type your message..."
+          class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
       </div>
-      <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
-        <!-- AI messages appear here -->
-      </div>
-      <input type="text" placeholder="Type your message..."
-        class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
-    </div>
   </main>
 
   <!-- QR Code Popup -->
@@ -274,6 +276,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <img id="qrImage" src="" alt="QR Code" class="w-64 h-64 mx-auto" />
         <button onclick="closeQR()" class="mt-4 w-full text-sm text-purple-400 hover:underline">Close</button>
       </div>
+    </div>
   </section>
 
   <!-- Footer -->
@@ -344,8 +347,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     function copyToClipboard() {
       const address = document.getElementById("walletAddress").textContent;
       navigator.clipboard.writeText(address)
-        .then(() => alert("Wallet address copied!"))
-        .catch(() => alert("Failed to copy address."));
+        .then(() => alertify.success("Wallet address copied!"))
+        .catch(() => alertify.error("Failed to copy address."));
     }
 
     function confirmDeposit() {
@@ -354,21 +357,22 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       const receipt = document.getElementById("receiptUpload").files[0];
 
       if (!amount || amount <= 0) {
-        alert("Please enter a valid amount.");
+        alertify.warning("Please enter a valid amount.");
         return;
       }
 
       if (!receipt) {
-        alert("Please upload your receipt.");
+        alertify.warning("Please upload your receipt.");
         return;
       }
 
       if (!agreed) {
-        alert("You must agree before proceeding.");
+        alertify.warning("You must agree before proceeding.");
         return;
       }
 
-      alert("Your balance will update in 10–20 minutes.\nContact customer service if it’s not showing.\n\n📧 Email sent!");
+      alertify.success("Your balance will update in 10–20 minutes.");
+      alertify.message("📧 Email sent! Contact support if not reflected.");
     }
 
     function generateQRPopup() {
@@ -376,8 +380,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       const qrImage = document.getElementById("qrImage");
       const qrWalletText = document.getElementById("qrWalletText");
 
-      if (!address) {
-        alert("Invalid wallet address.");
+      if (!address || address === "---") {
+        alertify.error("Invalid wallet address.");
         return;
       }
 
@@ -439,71 +443,71 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       "Bitget": {
         "USDT": {
           address: "TDfNhM7zLR9MeQSGCNBCvW2NdBZPnhMcXy",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Bitget_USDT.png"
+          qr: "../assets/qr_codes/Bitget_USDT.png"
         },
         "BTC": {
           address: "bc1pdse4xuk2r8f0eg8ycfksupw6syq5gw8e4y28p29gdxyma57v5rnqh87jd5",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Bitget_BTC.png"
+          qr: "../assets/qr_codes/Bitget_BTC.png"
         },
         "ETH": {
           address: "0x13383459DF26E6ff19EcD27F748e29C302CD8e26",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Bitget_ETH.png"
+          qr: "../assets/qr_codes/Bitget_ETH.png"
         }
       },
       "OKX": {
         "USDT": {
           address: "TLZTcjWXdP57hx4NCZ1SdMuNvPE61gvLUo",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/OKX_USDT.png"
+          qr: "../assets/img/OKX_USDT.jpg"
         },
         "BTC": {
           address: "bc1q83f3shcnn9ufxrm4jjxtpajk0sh06uummkaww68uxd3279sulpvq4u6q34",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/OKX_BTC.png"
+          qr: "../assets/qr_codes/OKX_BTC.png"
         },
         "ETH": {
           address: "0x96b90389212dc3ef3bbf550d9d98be9feecd11dc",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/OKX_ETH.png"
+          qr: "../assets/qr_codes/OKX_ETH.png"
         }
       },
       "Bybit": {
         "USDT": {
           address: "TDPVkMkZsbxYhtH4yUrfV3nbDtfb6GPYAH",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Bybit_USDT.png"
+          qr: "../assets/qr_codes/Bybit_USDT.png"
         },
         "BTC": {
           address: "12kFVEtVxgt4GDjoz5uLY4xQyYPsNt1GsL",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Bybit_BTC.png"
+          qr: "../assets/qr_codes/Bybit_BTC.png"
         },
         "ETH": {
           address: "0x1fae81ab9ff51645e525d4000556250dc778444f",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Bybit_ETH.png"
+          qr: "../assets/qr_codes/Bybit_ETH.png"
         }
       },
       "Gate": {
         "USDT": {
           address: "TKpZDhHDAajPjfmfrQreyr3Sp5JysPZffE",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Gate_USDT.png"
+          qr: "../assets/qr_codes/Gate_USDT.png"
         },
         "BTC": {
           address: "1AWYeZ1QReaS5bu3T9gm4wAJP2i7iHtbaV",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Gate_BTC.png"
+          qr: "../assets/qr_codes/Gate_BTC.png"
         },
         "ETH": {
           address: "0x6c0e6426279F5b793B75B5cd592FAb93eA64638c",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Gate_ETH.png"
+          qr: "../assets/qr_codes/Gate_ETH.png"
         }
       },
       "Binance": {
         "USDT": {
           address: "TLFXrnUuDzHFnhf3Uk4snkVQBVgpzczg2L",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Binance_USDT.png"
+          qr: "../assets/qr_codes/Binance_USDT.png"
         },
         "BTC": {
           address: "12Pkd8jvQipC1kKAzWcUeEaFUWoBRMsTPR",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Binance_BTC.png"
+          qr: "../assets/qr_codes/Binance_BTC.png"
         },
         "ETH": {
           address: "0x85473395be671cef8a767af53bef0d89af5ec83c",
-          qr: "https://chat.openai.com/mnt/data/qr_codes/Binance_ETH.png"
+          qr: "../assets/qr_codes/Binance_ETH.png"
         }
       }
     };
@@ -515,42 +519,109 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       const network = document.getElementById("networkSelect").value;
       const addressSpan = document.getElementById("walletAddress");
 
+      if (!wallet || !network) {
+        addressSpan.textContent = "---";
+        currentQR = "";
+        alertify.error("Please select a wallet and network.");
+        return;
+      }
+
       if (addresses[wallet] && addresses[wallet][network]) {
         addressSpan.textContent = addresses[wallet][network].address;
         currentQR = addresses[wallet][network].qr;
       } else {
         addressSpan.textContent = "---";
         currentQR = "";
+        alertify.error("Wallet/network combination not supported.");
       }
     }
 
-    function copyToClipboard() {
-      const address = document.getElementById("walletAddress").textContent;
-      navigator.clipboard.writeText(address).then(() => {
-        alert("Wallet address copied!");
-      });
-    }
-
     function showQR() {
-      if (!currentQR) return alert("Select wallet & network first!");
+      if (!currentQR) {
+        alert("Select wallet & network first!");
+        return;
+      }
+
       document.getElementById("qrImage").src = currentQR;
       document.getElementById("qrModal").classList.remove("hidden");
       document.getElementById("qrModal").classList.add("flex");
     }
 
     function closeQR() {
-      document.getElementById("qrModal").classList.remove("flex");
       document.getElementById("qrModal").classList.add("hidden");
+      document.getElementById("qrModal").classList.remove("flex");
     }
 
     function confirmDeposit() {
-      const agreed = document.getElementById("agree").checked;
-      if (!agreed) {
-        alert("You must agree to the wallet terms.");
-        return;
+  const wallet = document.getElementById("walletSelect").value;
+  const network = document.getElementById("networkSelect").value;
+  const address = document.getElementById("walletAddress").textContent;
+  const amount = parseFloat(document.getElementById("depositAmount").value);
+  const agreed = document.getElementById("agree").checked;
+  const receipt = document.getElementById("receiptUpload").files[0];
+
+  if (!wallet || !network || address === "---") {
+    alertify.error("Please select a wallet and network.");
+    return;
+  }
+
+  if (isNaN(amount) || amount <= 0) {
+    alertify.error("Please enter a valid deposit amount.");
+    return;
+  }
+
+  if (!receipt) {
+    alertify.error("Please upload your deposit receipt.");
+    return;
+  }
+
+  if (!agreed) {
+    alertify.warning("You must agree to the wallet terms.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("wallet", wallet);
+  formData.append("network", network);
+  formData.append("address", address);
+  formData.append("amount", amount);
+  formData.append("receipt", receipt);
+  formData.append("agreed", agreed ? 1 : 0);
+
+  fetch("../config/submit_deposit.php", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Reset form
+        document.getElementById("depositAmount").value = '';
+        document.getElementById("receiptUpload").value = '';
+        document.getElementById("walletAddress").textContent = '---';
+        document.getElementById("walletSelect").selectedIndex = 0;
+        document.getElementById("networkSelect").selectedIndex = 0;
+        document.getElementById("agree").checked = false;
+
+        // Show confirmation
+        alertify.alert("Deposit Submitted", "Your deposit was submitted successfully. It will reflect in your wallet after 3 minutes.");
+
+        // Set flag to show delayed notification on user.php
+        sessionStorage.setItem("showDepositSuccess", "true");
+
+        // Redirect to user.php after short delay
+        setTimeout(() => {
+          window.location.href = "user.php";
+        }, 1500);
+      } else {
+        alertify.error(data.message);
       }
-      alert("Deposit confirmed!");
-    }
+    })
+    .catch(() => {
+      alertify.error("Something went wrong.");
+    });
+}
+
   </script>
 
   <script>
@@ -615,6 +686,10 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       }
     });
   </script>
+
+  <!-- AlertifyJS Script -->
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
 </body>
 
 </html>

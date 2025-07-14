@@ -59,8 +59,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <link rel="stylesheet" href="../assets/css/style.css" />
   <link rel="stylesheet" href="../assets/css/user.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -241,34 +241,13 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       <p id="copiedText" class="text-green-400 text-xs mt-2 hidden">Referral link copied!</p>
     </div>
 
-
-    <!-- Transactions -->
+    <!-- Transaction History -->
     <div class="bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
-      <p class="text-white font-semibold text-lg mb-4">
-        Transaction History
-      </p>
-      <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Deposit</span>
-          <span class="text-emerald-400 font-bold">+1,000 ELTR</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Withdraw</span>
-          <span class="text-red-400 font-bold">-200 USDT</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Stake</span>
-          <span class="text-purple-300 font-bold">-1,500 ELTR</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Convert</span>
-          <span class="text-blue-300 font-bold">+0.05 BTC</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Transfer</span>
-          <span class="text-yellow-300 font-bold">-0.02 ETH</span>
-        </div>
+      <p class="text-white font-semibold text-lg mb-4">Transaction History</p>
+      <div id="transactionList" class="space-y-4 max-h-64 overflow-y-auto text-sm">
+        <p class="text-slate-400 text-center">Loading...</p>
       </div>
+    </div>
     </div>
 
     <section class="mt-12">
@@ -447,6 +426,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   </footer>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
   <script>
     if (!<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
@@ -457,21 +437,63 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       try {
-        const res = await fetch("../config/wallet_data.php");
-        const data = await res.json();
+        // Load Wallet Balances
+        const resWallet = await fetch("../config/wallet_data.php");
+        const dataWallet = await resWallet.json();
 
-        if (data.status === 'success') {
-          document.getElementById("btcBalance").textContent = `${parseFloat(data.btc).toFixed(8)} BTC`;
-          document.getElementById("ethBalance").textContent = `${parseFloat(data.eth).toFixed(8)} ETH`;
-          document.getElementById("usdtBalance").textContent = `${parseFloat(data.usdt).toLocaleString()} USDT`;
-          document.getElementById("elytrsBalance").textContent = `${parseFloat(data.eltr).toLocaleString()} ELTR`;
-          document.getElementById("totalBalance").textContent = `$${parseFloat(data.total).toLocaleString()}`;
-          document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(data.last_activity).toLocaleString()}`;
+        if (dataWallet.status === 'success') {
+          document.getElementById("btcBalance").textContent = `${parseFloat(dataWallet.btc).toFixed(8)} BTC`;
+          document.getElementById("ethBalance").textContent = `${parseFloat(dataWallet.eth).toFixed(8)} ETH`;
+          document.getElementById("usdtBalance").textContent = `${parseFloat(dataWallet.usdt).toLocaleString()} USDT`;
+          document.getElementById("elytrsBalance").textContent = `${parseFloat(dataWallet.eltr).toLocaleString()} ELTR`;
+          document.getElementById("totalBalance").textContent = `$${parseFloat(dataWallet.total).toLocaleString()}`;
+          document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(dataWallet.last_activity).toLocaleString()}`;
+        }
+
+        // Load Transactions
+        const resTx = await fetch("../config/transaction_history.php");
+        const dataTx = await resTx.json();
+        const container = document.getElementById("transactionList");
+        container.innerHTML = "";
+
+        if (dataTx.status === 'success' && dataTx.data.length > 0) {
+          dataTx.data.forEach(tx => {
+            const colorMap = {
+              deposit: "text-emerald-400",
+              withdraw: "text-red-400",
+              stake: "text-purple-300",
+              convert: "text-blue-300",
+              transfer: "text-yellow-300"
+            };
+            const color = colorMap[tx.type.toLowerCase()] || "text-white";
+            const sign = tx.direction === 'in' ? "+" : "-";
+
+            const div = document.createElement("div");
+            div.className = "flex justify-between border-b border-purple-800 pb-2";
+            div.innerHTML = `
+          <span class="text-slate-300 capitalize">${tx.type}</span>
+          <span class="${color} font-bold">${sign}${parseFloat(tx.amount).toLocaleString()} ${tx.currency}</span>
+        `;
+            container.appendChild(div);
+          });
         } else {
-          console.error(data.message);
+          container.innerHTML = `<p class="text-slate-400 text-center">No transactions found.</p>`;
         }
       } catch (error) {
-        console.error("Wallet fetch error:", error);
+        console.error("Error loading data:", error);
+        document.getElementById("transactionList").innerHTML = `<p class="text-red-400 text-center">Error loading transactions.</p>`;
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionStorage.getItem("showDepositSuccess") === "true") {
+        sessionStorage.removeItem("showDepositSuccess");
+
+        setTimeout(() => {
+          alertify.success("✅ Funds received! Processing is almost done.");
+        }, 180000); // 3 minutes
       }
     });
   </script>

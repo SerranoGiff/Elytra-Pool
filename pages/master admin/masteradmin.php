@@ -1,3 +1,20 @@
+<?php
+session_start();
+
+// NO CACHE HEADERS
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// VALIDATE SESSION
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'MasterAdmin') {
+    header("Location: ../../index.php?error=Unauthorized access.");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -474,7 +491,7 @@
       </a>
       
       <!-- Logout Button -->
-      <a href="#" class="flex items-center bg-red-600 px-3 py-1 rounded hover:bg-red-700 space-x-2">
+      <a href="../../config/logout.php" class="flex items-center bg-red-600 px-3 py-1 rounded hover:bg-red-700 space-x-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
         </svg>

@@ -26,19 +26,16 @@
 
   <div class="max-w-3xl w-full bg-[#1e1b36] border border-purple-600 rounded-2xl p-6 sm:p-10 glow relative">
    
-<!-- Close Button -->
-<button onclick="window.history.back()" 
-  class="absolute top-4 right-4 z-50 bg-[#1e1b36] text-purple-300 hover:text-white hover:bg-purple-700 p-2 rounded-full text-xl shadow-md focus:outline-none">
-  &times;
-</button>
+    <button onclick="window.history.back()" 
+      class="absolute top-4 right-4 z-50 bg-[#1e1b36] text-purple-300 hover:text-white hover:bg-purple-700 p-2 rounded-full text-xl shadow-md focus:outline-none">
+      &times;
+    </button>
 
-    <!-- Header -->
     <div class="text-center mb-8">
       <h2 class="text-3xl sm:text-4xl font-bold text-purple-400">Upgrade to Premium</h2>
       <p class="text-sm sm:text-base text-gray-400 mt-2">Only <span class="text-green-400 font-bold">499 USDT</span> per month</p>
     </div>
 
-    <!-- Features -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
       <div class="space-y-3">
         <div class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i> 1 TH/s Hashrate</div>
@@ -54,7 +51,6 @@
       </div>
     </div>
 
-    <!-- Balance & Subscribe Button -->
     <div class="text-center">
       <p class="mb-4 text-sm text-gray-400">Current Wallet Balance: <span id="balanceDisplay" class="text-white font-bold">--</span> USDT</p>
       <button onclick="subscribePremium()" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg text-white font-semibold transition duration-300">
@@ -65,25 +61,44 @@
   </div>
 
   <script>
-    // Simulated backend balance (replace this with backend fetch if needed)
-    let userBalance = 500; // simulate a backend response
-    const subscriptionCost = 499;
+    async function fetchWalletBalance() {
+  try {
+    const res = await fetch("../config/fetch_wallet_balance.php");
+    const data = await res.json();
+    if (data.status === 'success') {
+      const balance = parseFloat(data.balance);
+      document.getElementById("balanceDisplay").innerText = balance.toFixed(2);
+      window.userBalance = balance;
+    } else {
+      document.getElementById("balanceDisplay").innerText = 'Error';
+    }
+  } catch (e) {
+    document.getElementById("balanceDisplay").innerText = 'Error';
+  }
+}
 
-    document.getElementById("balanceDisplay").innerText = userBalance.toFixed(2);
+const subscriptionCost = 499;
 
-    function subscribePremium() {
-      const error = document.getElementById("errorMsg");
-      if (userBalance >= subscriptionCost) {
-        // Simulate deduction
-        userBalance -= subscriptionCost;
-        localStorage.setItem("userIsPremium", "true");
-
-        // Redirect
-        window.location.href = "premium-dashboard.html"; // replace with your actual premium page
+function subscribePremium() {
+  const error = document.getElementById("errorMsg");
+  if (window.userBalance >= subscriptionCost) {
+    fetch("../config/upgrade_premium.php", {
+      method: "POST"
+    }).then(res => res.json()).then(data => {
+      if (data.status === 'success') {
+        window.location.href = "premium-dashboard.html";
       } else {
+        error.innerText = data.message;
         error.classList.remove("hidden");
       }
-    }
+    });
+  } else {
+    error.classList.remove("hidden");
+  }
+}
+
+fetchWalletBalance();
+
   </script>
 </body>
 </html>

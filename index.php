@@ -1,10 +1,21 @@
 <?php
 session_start();
 include 'config/dbcon.php';
-
-date_default_timezone_set('Asia/Manila');
+// Check if the user is already logged in
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
+  header("Location: pages/master admin/masteradmin.php");
+  exit;
+} elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') {
+  header("Location: pages/admin/admin.php");
+  exit;
+} elseif (isset($_SESSION['type']) && $_SESSION['type'] === 'Premium') {
+  header("Location: pages/PREMIUM ACCOUNT/premium-dashboard.php");
+  exit;
+} elseif (isset($_SESSION['type'])) {
+  header("Location: pages/user.php");
+  exit;
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,45 +102,43 @@ date_default_timezone_set('Asia/Manila');
       <div id="modalContentInner">
 
         <!-- Login Form -->
-        <div id="notification" class="hidden p-4 mb-4 text-sm text-white bg-green-600 rounded-lg text-center">
-          Successfully logged in!
-        </div>
-        <div id="error-message" class="text-red-600 text-sm text-center mb-4"></div>
-
         <div id="loginForm" class="form-section text-black">
           <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
-          <form>
+
+          <!-- Notifications -->
+          <?php if (isset($_GET['error'])): ?>
+            <div class="p-4 mb-4 text-sm text-white bg-red-600 rounded-lg text-center">
+              ❌ <?= htmlspecialchars($_GET['error']) ?>
+            </div>
+          <?php elseif (isset($_GET['success'])): ?>
+            <div class="p-4 mb-4 text-sm text-white bg-green-600 rounded-lg text-center">
+              ✅ <?= htmlspecialchars($_GET['success']) ?>
+            </div>
+          <?php endif; ?>
+
+          <form action="config/login.php" method="POST">
             <div class="mb-4">
               <label for="email" class="block text-sm font-medium">Email Address</label>
-              <input type="email" id="email"
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                required />
+              <input type="email" id="email" name="email" class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black" required />
             </div>
             <div class="mb-4">
               <label for="password" class="block text-sm font-medium">Password</label>
-              <input type="password" id="password"
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                required />
+              <input type="password" id="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black" required />
             </div>
             <div class="flex items-center mb-4">
-              <input type="checkbox" id="rememberMe"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+              <input type="checkbox" id="rememberMe" name="rememberMe" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
               <label for="rememberMe" class="ml-2 block text-sm cursor-pointer">Remember Me</label>
             </div>
             <div class="mb-4 text-right">
-              <button id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
+              <button type="button" id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
             </div>
-
-            <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold 
-                    bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 
-                    hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 
-                    transition-all duration-500 ease-in-out">
+            <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 transition-all duration-500 ease-in-out">
               Login
             </button>
           </form>
+
           <div class="mt-4 text-center">
-            <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign
-              Up</button>
+            <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign Up</button>
           </div>
         </div>
 
@@ -208,6 +217,8 @@ date_default_timezone_set('Asia/Manila');
           </div>
         </div>
 
+        <!-- Toast Notification Container -->
+        <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
       </div>
       <div class="mt-4 text-center">
@@ -987,7 +998,7 @@ date_default_timezone_set('Asia/Manila');
   </footer>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
       const menuButton = document.getElementById("menu-button");
       const navLinks = document.getElementById("nav-links");
 
@@ -1003,13 +1014,13 @@ date_default_timezone_set('Asia/Manila');
     const additionalCryptos = document.getElementById("additional-cryptos");
     const closeView = document.getElementById("close-view");
 
-    viewAllButton.addEventListener("click", function () {
+    viewAllButton.addEventListener("click", function() {
       additionalCryptos.classList.remove("hidden");
       viewAllButton.classList.add("hidden");
       closeView.classList.remove("hidden");
     });
 
-    closeViewButton.addEventListener("click", function () {
+    closeViewButton.addEventListener("click", function() {
       additionalCryptos.classList.add("hidden");
       viewAllButton.classList.remove("hidden");
       closeView.classList.add("hidden");
@@ -1020,25 +1031,10 @@ date_default_timezone_set('Asia/Manila');
     const loginModal = document.getElementById("loginModal");
     const closeModal = document.getElementById("closeModal");
     const switchToSignUp = document.getElementById("switchToSignUp");
-    const switchToLogin = document.getElementById("switchToLogin");
     const loginForm = document.getElementById("loginForm");
-    const signUpForm = document.getElementById("signUpForm");
-    const infoModal = document.getElementById("infoModal");
-    const privacyModal = document.getElementById("privacyModal");
-    const confirmTerms = document.getElementById("confirmTerms");
-    const confirmPrivacy = document.getElementById("confirmPrivacy");
-    const termsContent = document.getElementById("termsContent");
-    const privacyContent = document.getElementById("privacyContent");
-    const agreeTerms = document.getElementById("agreeTerms");
-    const agreePrivacy = document.getElementById("agreePrivacy");
-
-    let termsConfirmed = false;
-    let privacyConfirmed = false;
 
     document.getElementById("login-button").addEventListener("click", () => {
       loginForm.classList.remove("hidden");
-      signUpForm.classList.add("hidden");
-      signUpForm.querySelector("form").reset();
       loginModal.classList.remove("hidden");
       setTimeout(() => {
         loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
@@ -1055,15 +1051,80 @@ date_default_timezone_set('Asia/Manila');
 
     switchToSignUp.addEventListener("click", () => {
       loginForm.classList.add("hidden");
-      signUpForm.classList.remove("hidden");
+      document.getElementById("signUpForm").classList.remove("hidden");
     });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === loginModal) closeModal.click();
+    });
+
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+    const forgotPasswordContent = document.getElementById("forgotPasswordContent");
+    const cancelForgot = document.getElementById("cancelForgot");
+    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+
+    forgotPasswordBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      forgotPasswordModal.classList.remove("hidden");
+      setTimeout(() => {
+        forgotPasswordContent.classList.remove("scale-95", "opacity-0");
+        forgotPasswordContent.classList.add("scale-100", "opacity-100");
+      }, 10);
+    });
+
+    cancelForgot.addEventListener("click", () => {
+      forgotPasswordContent.classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        forgotPasswordModal.classList.add("hidden");
+      }, 300);
+    });
+
+    forgotPasswordForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("forgotEmail").value;
+      alert("Reset link sent to: " + email);
+      cancelForgot.click();
+    });
+  </script>
+
+  <script>
+    const signUpForm = document.getElementById("signUpForm");
+    const switchToLogin = document.getElementById("switchToLogin");
+    const infoModal = document.getElementById("infoModal");
+    const privacyModal = document.getElementById("privacyModal");
+    const confirmTerms = document.getElementById("confirmTerms");
+    const confirmPrivacy = document.getElementById("confirmPrivacy");
+    const termsContent = document.getElementById("termsContent");
+    const privacyContent = document.getElementById("privacyContent");
+    const agreeTerms = document.getElementById("agreeTerms");
+    const agreePrivacy = document.getElementById("agreePrivacy");
+
+    const signUpBtn = signUpForm.querySelector('button[type="submit"]');
+
+    function updateSubmitState() {
+      const bothChecked = agreeTerms.checked && agreePrivacy.checked;
+      signUpBtn.disabled = !bothChecked;
+      signUpBtn.classList.toggle("opacity-50", !bothChecked);
+      signUpBtn.classList.toggle("cursor-not-allowed", !bothChecked);
+      signUpBtn.classList.toggle("cursor-pointer", bothChecked);
+    }
+
+    agreeTerms.addEventListener("change", updateSubmitState);
+    agreePrivacy.addEventListener("change", updateSubmitState);
+
+    // Initial state
+    updateSubmitState();
+
+    let termsConfirmed = false;
+    let privacyConfirmed = false;
 
     switchToLogin.addEventListener("click", () => {
       signUpForm.classList.add("hidden");
-      loginForm.classList.remove("hidden");
+      document.getElementById("loginForm").classList.remove("hidden");
     });
 
-    agreeTerms.addEventListener("mousedown", function (e) {
+    agreeTerms.addEventListener("mousedown", function(e) {
       if (!termsConfirmed && !this.checked) {
         e.preventDefault();
         infoModal.classList.remove("hidden");
@@ -1074,7 +1135,7 @@ date_default_timezone_set('Asia/Manila');
       }
     });
 
-    agreePrivacy.addEventListener("mousedown", function (e) {
+    agreePrivacy.addEventListener("mousedown", function(e) {
       if (!privacyConfirmed && !this.checked) {
         e.preventDefault();
         privacyModal.classList.remove("hidden");
@@ -1088,6 +1149,7 @@ date_default_timezone_set('Asia/Manila');
     confirmTerms.addEventListener("click", () => {
       termsConfirmed = true;
       agreeTerms.checked = true;
+      updateSubmitState(); // ✅ This line enables the button
       infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
       setTimeout(() => {
         infoModal.classList.add("hidden");
@@ -1097,6 +1159,7 @@ date_default_timezone_set('Asia/Manila');
     confirmPrivacy.addEventListener("click", () => {
       privacyConfirmed = true;
       agreePrivacy.checked = true;
+      updateSubmitState(); // ✅ This line enables the button
       privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
       setTimeout(() => {
         privacyModal.classList.add("hidden");
@@ -1124,7 +1187,6 @@ date_default_timezone_set('Asia/Manila');
     });
 
     window.addEventListener("click", (e) => {
-      if (e.target === loginModal) closeModal.click();
       if (e.target === infoModal) {
         infoModal.querySelector("#infoModalContent").classList.add("scale-95", "opacity-0");
         setTimeout(() => infoModal.classList.add("hidden"), 300);
@@ -1133,57 +1195,61 @@ date_default_timezone_set('Asia/Manila');
         privacyModal.querySelector("#privacyModalContent").classList.add("scale-95", "opacity-0");
         setTimeout(() => privacyModal.classList.add("hidden"), 300);
       }
-      if (e.target === forgotPasswordModal) {
-        forgotPasswordContent.classList.add("scale-95", "opacity-0");
-        setTimeout(() => forgotPasswordModal.classList.add("hidden"), 300);
+    });
+
+    signUpForm.querySelector("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      // Required checkbox validation
+      if (!agreeTerms.checked || !agreePrivacy.checked) {
+        showToast("❌ You must agree to both Terms and Privacy Policy.", 'error');
+        return;
+      }
+
+      try {
+        const response = await fetch("config/registration.php", {
+          method: "POST",
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          showToast("✅ " + result.message, 'success');
+          form.reset();
+          signUpForm.classList.add("hidden");
+          document.getElementById("loginForm").classList.remove("hidden");
+        } else {
+          showToast("❌ " + result.message, 'error');
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        showToast("❌ An error occurred while registering.", 'error');
+
       }
     });
 
-    signUpForm.querySelector("form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      alert("Sign Up submitted!");
-      signUpForm.querySelector("form").reset();
-      signUpForm.classList.add("hidden");
-      loginForm.classList.remove("hidden");
-      loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `
+    px-4 py-3 rounded-md shadow-md text-white text-sm animate-slide-in-right
+    ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}
+  `;
+      toast.textContent = message;
+
+      document.getElementById('toastContainer').appendChild(toast);
+
       setTimeout(() => {
-        loginModal.classList.add("hidden");
-      }, 300);
-    });
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
 
-    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
-    const forgotPasswordModal = document.getElementById("forgotPasswordModal");
-    const forgotPasswordContent = document.getElementById("forgotPasswordContent");
-    const cancelForgot = document.getElementById("cancelForgot");
-    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 
-    // Show the forgot password modal when the button is clicked
-    forgotPasswordBtn.addEventListener("click", (e) => {
-      e.preventDefault(); // Prevent the default form submission
-      forgotPasswordModal.classList.remove("hidden");
-      setTimeout(() => {
-        forgotPasswordContent.classList.remove("scale-95", "opacity-0");
-        forgotPasswordContent.classList.add("scale-100", "opacity-100");
-      }, 10);
-    });
-
-    // Close the forgot password modal
-    cancelForgot.addEventListener("click", () => {
-      forgotPasswordContent.classList.add("scale-95", "opacity-0");
-      setTimeout(() => {
-        forgotPasswordModal.classList.add("hidden");
-      }, 300);
-    });
-
-    // Handle the forgot password form submission
-    forgotPasswordForm.addEventListener("submit", (e) => {
-      e.preventDefault(); // Prevent the default form submission
-      const email = document.getElementById("forgotEmail").value;
-      alert("Reset link sent to: " + email);
-      cancelForgot.click(); // Close the modal after submission
-    });
-
-    // Password strength checker with special character validation
+    // Password strength validation
     const signUpPassword = document.getElementById("signUpPassword");
     const passwordStrengthText = document.createElement("p");
     passwordStrengthText.classList.add("mt-1", "text-sm", "font-semibold");
@@ -1217,7 +1283,6 @@ date_default_timezone_set('Asia/Manila');
       passwordStrengthText.textContent = strength;
       passwordStrengthText.className = `mt-1 text-sm font-semibold ${strengthColor}`;
     });
-
   </script>
 
   <script>
@@ -1227,7 +1292,9 @@ date_default_timezone_set('Asia/Manila');
         const data = await response.json();
 
         const apy = (data.apy * 100).toFixed(2); // Example: 3.92
-        const totalStaked = (data.totalPooledEther / 1e18).toLocaleString(undefined, { maximumFractionDigits: 0 });
+        const totalStaked = (data.totalPooledEther / 1e18).toLocaleString(undefined, {
+          maximumFractionDigits: 0
+        });
         const percent = Math.min((data.totalPooledEther / 1e18 / 10000000) * 100, 100).toFixed(0); // Target = 10M ETH
 
         document.getElementById("eth-apy").textContent = `${apy}% APY`;
@@ -1368,7 +1435,7 @@ date_default_timezone_set('Asia/Manila');
             borderWidth: 1,
             padding: 12,
             callbacks: {
-              label: function (context) {
+              label: function(context) {
                 return ` ${context.dataset.label}: $${context.parsed.y}`;
               }
             }
@@ -1420,7 +1487,7 @@ date_default_timezone_set('Asia/Manila');
 
     // For a real application, you would replace the setInterval with a WebSocket connection:
     const socket = new WebSocket('wss://crypto-price-feed.example.com');
-    socket.onmessage = function (event) {
+    socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
       // Process real data and update chart
       updateChartWithRealData(data);
@@ -1428,75 +1495,31 @@ date_default_timezone_set('Asia/Manila');
   </script>
 
   <script>
-    window.onload = function () {
+    window.onload = function() {
       const savedEmail = localStorage.getItem("rememberedEmail");
-      const rememberChecked = localStorage.getItem("rememberMeChecked");
-      if (savedEmail && rememberChecked === "true") {
+      const remember = localStorage.getItem("rememberMeChecked");
+      if (savedEmail && remember === "true") {
         document.getElementById("email").value = savedEmail;
         document.getElementById("rememberMe").checked = true;
       }
     };
 
-    document.querySelector("#loginForm form").addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+    document.querySelector("form").addEventListener("submit", () => {
       const remember = document.getElementById("rememberMe").checked;
-
-      // Define all credentials
-      const credentials = [
-        {
-          role: "masteradmin",
-          email: "admin@example.com",
-          password: "adminpass",
-          redirect: "pages/master admin/masteradmin.html"
-        },
-        {
-          role: "admin",
-          email: "adminonly@example.com",
-          password: "adminonlypass",
-          redirect: "pages/admin/admin.html"
-        },
-        {
-          role: "user",
-          email: "user@example.com",
-          password: "password123",
-          redirect: "pages/user.html"
-        }
-      ];
-
-      // Find matching credentials
-      const matched = credentials.find(acc => acc.email === email && acc.password === password);
-
-      if (matched) {
-        // Remember Me functionality
-        if (remember) {
-          localStorage.setItem("rememberedEmail", email);
-          localStorage.setItem("rememberMeChecked", "true");
-        } else {
-          localStorage.removeItem("rememberedEmail");
-          localStorage.removeItem("rememberMeChecked");
-        }
-
-        // Show success notification
-        const notification = document.getElementById("notification");
-        notification.classList.remove("hidden");
-
-        // Redirect after delay
-        setTimeout(() => {
-          window.location.href = matched.redirect;
-        }, 1500);
-
+      const email = document.getElementById("email").value;
+      if (remember) {
+        localStorage.setItem("rememberedEmail", email);
+        localStorage.setItem("rememberMeChecked", "true");
       } else {
-        document.getElementById("error-message").innerText = "Invalid email or password.";
+        localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberMeChecked");
       }
     });
   </script>
 
   <script>
     // Connect buttons to the login modal
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
       const loginModal = document.getElementById("loginModal");
       const closeModal = document.getElementById("closeModal");
 

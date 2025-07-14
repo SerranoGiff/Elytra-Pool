@@ -1,3 +1,54 @@
+<?php
+session_start();
+include '../config/dbcon.php';
+
+// NO CACHE HEADERS
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// VALIDATE SESSION
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'free') {
+  header("Location: ../index.php?error=Unauthorized access.");
+  exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+
+if ($userId) {
+  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+  $stmt->bind_param("i", $userId);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+
+  $username = $user ? $user['username'] : 'User';
+} else {
+  $username = 'Guest';
+}
+
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+          FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+// Set default values with fallback to 'N/A'
+$firstName = $user['first_name'] ?? 'N/A';
+$lastName = $user['last_name'] ?? 'N/A';
+$birthday = $user['birthday'] ?? '';
+$username = $user['username'] ?? 'N/A';
+$aboutMe = $user['about_me'] ?? 'N/A';
+$email = $user['email'] ?? 'N/A';
+$walletAddress = $user['wallet_address'] ?? '';
+$profileImg = !empty($user['profile_photo']) ? "../" . $user['profile_photo'] : '../assets/default-avatar.png';
+$profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old image
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +70,7 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.html" class="flex items-center">
+        <a href="user.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
             <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
@@ -32,7 +83,7 @@
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -48,7 +99,7 @@
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -69,11 +120,12 @@
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -84,12 +136,13 @@
         </button>
         <div class="relative">
           <button id="mobileProfileBtn" class="focus:outline-none">
-            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+            <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -97,10 +150,10 @@
 
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="hidden flex-col mt-4 space-y-2 md:hidden">
-      <a href="user.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Home</a>
+      <a href="user.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Home</a>
       <a href="staking.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Staking</a>
       <a href="leaderboard.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Leaderboard</a>
-      <a href="deposit.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Deposit</a>
+      <a href="deposit.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Deposit</a>
       <a href="withdraw.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Withdraw</a>
       <a href="Convert.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Convert</a>
     </div>
@@ -112,76 +165,91 @@
       <!-- Updated Account Settings -->
       <section class="bg-[#1B263B] p-8 rounded-2xl shadow-xl border border-gray-700">
         <h2 class="text-3xl font-bold text-purple-400 text-center mb-2">👤 Account Settings</h2>
-        <p class="text-sm text-gray-400 text-center mb-10">Manage your personal info, profile, and wallet connection.
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <p class="text-sm text-gray-400 text-center mb-10">Manage your personal info, profile, and wallet connection.</p>
+
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-10" method="POST" enctype="multipart/form-data" id="accountForm">
           <!-- Profile Photo and Wallet -->
           <div class="flex flex-col items-center space-y-6">
             <div class="relative group">
-              <img src="/ella.jpg" alt="Profile"
+              <img src="<?= $profileImg ?>" alt="Profile"
                 class="w-40 h-40 rounded-full border-4 border-purple-500 object-cover shadow-lg transition duration-200 group-hover:opacity-70" />
               <label for="profilePhoto"
                 class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white font-semibold rounded-full opacity-0 group-hover:opacity-100 cursor-pointer">Change</label>
-              <input type="file" id="profilePhoto" class="hidden" />
+              <input type="file" id="profilePhoto" name="profilePhoto" class="hidden" />
             </div>
             <p class="text-gray-400 text-sm">Click to upload a new profile photo.</p>
-            <button id="connectWalletBtn"
-              class="bg-purple-500 hover:bg-purple-400 text-black font-semibold px-6 py-2 rounded-lg transition">Connect
-              Wallet</button>
+            <button type="button" id="connectWalletBtn"
+              class="bg-purple-500 hover:bg-purple-400 text-black font-semibold px-6 py-2 rounded-lg transition"
+              data-address="<?= htmlspecialchars($walletAddress) ?>">
+              <?= $walletAddress ? 'Wallet Connected' : 'Connect Wallet' ?>
+            </button>
           </div>
 
           <!-- Info Form -->
-          <form class="space-y-6">
+          <div class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label for="firstName" class="text-sm text-gray-300 mb-1 block">First Name</label>
-                <input type="text" id="firstName"
-                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" value="Juan" />
+                <input type="text" id="firstName" name="firstName"
+                  value="<?= htmlspecialchars($firstName) ?>"
+                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" />
               </div>
               <div>
                 <label for="lastName" class="text-sm text-gray-300 mb-1 block">Last Name</label>
-                <input type="text" id="lastName"
-                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2"
-                  value="Dela Cruz" />
+                <input type="text" id="lastName" name="lastName"
+                  value="<?= htmlspecialchars($lastName) ?>"
+                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" />
               </div>
             </div>
             <div>
               <label for="birthday" class="text-sm text-gray-300 mb-1 block">Birthday</label>
-              <input type="date" id="birthday"
-                class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" value="1995-01-01" />
+              <input type="date" id="birthday" name="birthday"
+                value="<?= htmlspecialchars($birthday) ?>"
+                class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" />
             </div>
             <div>
               <label for="username" class="text-sm text-gray-300 mb-1 block">Username</label>
-              <input type="text" id="username"
-                class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2"
-                value="juancruz123" />
+              <input type="text" id="username" name="username"
+                value="<?= htmlspecialchars($username) ?>"
+                class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" />
             </div>
             <div>
               <label for="bio" class="text-sm text-gray-300 mb-1 block">About Me</label>
-              <textarea id="bio" rows="3"
-                class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2">Crypto lover. Developer. Web3 enthusiast.</textarea>
+              <textarea id="bio" name="aboutMe" rows="3"
+                class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2"><?= htmlspecialchars($aboutMe) ?></textarea>
             </div>
             <div>
               <label class="text-sm text-gray-300 mb-1 block">Email</label>
-              <input type="email" class="w-full bg-[#1E293B] border border-gray-600 text-gray-400 rounded-lg px-4 py-2"
-                value="juan.elytra@example.com" disabled />
-              <p class="text-xs text-gray-500 mt-1">Email is locked. Contact support to update.</p>
+              <input type="email" value="<?= htmlspecialchars($email) ?>" disabled
+                class="w-full bg-[#1E293B] border border-gray-600 text-gray-400 rounded-lg px-4 py-2" />
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+              <!-- New Password -->
+              <div class="relative">
                 <label for="newPassword" class="text-sm text-gray-300 mb-1 block">New Password</label>
-                <input type="password" id="newPassword" placeholder="••••••••"
-                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" />
+                <input type="password" id="newPassword" name="newPassword" placeholder="••••••••"
+                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2 pr-10" />
+                <button type="button" class="absolute right-3 top-9 text-gray-400" onclick="togglePassword(this, 'newPassword')">
+                  <i class="fas fa-eye"></i>
+                </button>
               </div>
-              <div>
+
+              <!-- Confirm Password -->
+              <div class="relative">
                 <label for="confirmPassword" class="text-sm text-gray-300 mb-1 block">Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="••••••••"
-                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2" />
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••"
+                  class="w-full bg-[#0D1B2A] border border-gray-600 text-white rounded-lg px-4 py-2 pr-10" />
+                <button type="button" class="absolute right-3 top-9 text-gray-400" onclick="togglePassword(this, 'confirmPassword')">
+                  <i class="fas fa-eye"></i>
+                </button>
               </div>
             </div>
+
+            <input type="hidden" name="walletAddress" id="walletAddress" value="<?= htmlspecialchars($walletAddress) ?>" />
+
             <div>
               <label class="text-sm text-gray-300 mb-1 block">Verification / KYC</label>
-              <button id="openKycModal" type="button"
+              <button type="button" id="openKycModal"
                 class="bg-transparent border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-black font-semibold px-4 py-2 rounded-lg transition">
                 Start Verification
               </button>
@@ -191,9 +259,8 @@
                 class="bg-purple-500 hover:bg-purple-400 text-black font-semibold py-2 px-8 rounded-lg transition">Save
                 Changes</button>
             </div>
-          </form>
-        </div>
-
+          </div>
+        </form>
       </section>
 
       <!-- KYC Modal (Dark Mode + Purple Buttons Only) -->
@@ -446,6 +513,120 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+  <script>
+    function togglePassword(btn, inputId) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector("i");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    }
+
+    document.querySelector("#accountForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const birthday = document.getElementById("birthday").value;
+      const username = document.getElementById("username").value.trim();
+      const aboutMe = document.getElementById("bio").value.trim();
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const walletAddress = document.getElementById("connectWalletBtn").dataset.address || '';
+
+      // Password validation
+      if (newPassword.length > 0) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+        if (!passwordRegex.test(newPassword)) {
+          alertify.error("Password must be 8+ chars, include uppercase, number, and special character.");
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          alertify.error("Passwords do not match.");
+          return;
+        }
+      }
+
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("birthday", birthday);
+      formData.append("username", username);
+      formData.append("aboutMe", aboutMe);
+      formData.append("newPassword", newPassword);
+      formData.append("confirmPassword", confirmPassword);
+      formData.append("walletAddress", walletAddress);
+
+      const profilePhotoInput = document.getElementById("profilePhoto");
+      if (profilePhotoInput.files.length > 0) {
+        formData.append("profilePhoto", profilePhotoInput.files[0]);
+      }
+
+      try {
+        const res = await fetch("../config/update_account.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (res.ok) {
+          alertify.success("Profile updated successfully!");
+        } else if (res.status === 400) {
+          alertify.error("Password error.");
+        } else if (res.status === 401) {
+          alertify.error("Unauthorized access.");
+        } else {
+          alertify.error("Something went wrong. Try again.");
+        }
+      } catch (err) {
+        alertify.error("Failed to connect to server.");
+      }
+    });
+  </script>
+
+  <script>
+    document.querySelector("form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData();
+
+      formData.append("firstName", document.getElementById("firstName").value);
+      formData.append("lastName", document.getElementById("lastName").value);
+      formData.append("birthday", document.getElementById("birthday").value);
+      formData.append("username", document.getElementById("username").value);
+      formData.append("aboutMe", document.getElementById("bio").value);
+      formData.append("newPassword", document.getElementById("newPassword").value);
+      formData.append("confirmPassword", document.getElementById("confirmPassword").value);
+      formData.append("walletAddress", document.getElementById("connectWalletBtn").dataset.address || '');
+
+      const profilePhotoInput = document.getElementById("profilePhoto");
+      if (profilePhotoInput.files.length > 0) {
+        formData.append("profilePhoto", profilePhotoInput.files[0]);
+      }
+
+      const res = await fetch("../config/update_account.php", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await res.json();
+      alert(result.message);
+    });
+  </script>
+
   <script>
     const menuBtn = document.getElementById("menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
@@ -533,7 +714,7 @@
     }
 
     // Handle Enter key to send message
-    userInput.addEventListener("keypress", function (e) {
+    userInput.addEventListener("keypress", function(e) {
       if (e.key === "Enter" && userInput.value.trim() !== "") {
         const message = userInput.value.trim();
         addUserMessage(message);
@@ -585,7 +766,7 @@
     const countrySelect = document.getElementById('kycCountry');
     const idTypeSelect = document.getElementById('kycIdType');
 
-    countrySelect.addEventListener('change', function () {
+    countrySelect.addEventListener('change', function() {
       const selectedCountry = this.value;
       const ids = idOptions[selectedCountry] || idOptions["DEFAULT"];
 

@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "elytra_pool";
+$dbname = "elytra";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

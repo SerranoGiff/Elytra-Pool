@@ -1,3 +1,54 @@
+<?php
+session_start();
+include '../config/dbcon.php';
+
+// NO CACHE HEADERS
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// VALIDATE SESSION
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'free') {
+  header("Location: ../index.php?error=Unauthorized access.");
+  exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+
+if ($userId) {
+  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+  $stmt->bind_param("i", $userId);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+
+  $username = $user ? $user['username'] : 'User';
+} else {
+  $username = 'Guest';
+}
+
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+          FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+// Set default values with fallback to 'N/A'
+$firstName = $user['first_name'] ?? 'N/A';
+$lastName = $user['last_name'] ?? 'N/A';
+$birthday = $user['birthday'] ?? '';
+$username = $user['username'] ?? 'N/A';
+$aboutMe = $user['about_me'] ?? 'N/A';
+$email = $user['email'] ?? 'N/A';
+$walletAddress = $user['wallet_address'] ?? '';
+$profileImg = !empty($user['profile_photo']) ? "../" . $user['profile_photo'] : '../assets/default-avatar.png';
+$profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old image
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +72,7 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.html" class="flex items-center">
+        <a href="user.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
             <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
@@ -34,7 +85,7 @@
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -50,7 +101,7 @@
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -68,16 +119,16 @@
         </a>
       </div>
 
-
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-          <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -88,12 +139,13 @@
         </button>
         <div class="relative">
           <button id="mobileProfileBtn" class="focus:outline-none">
-            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+            <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -104,7 +156,7 @@
       <a href="user.html" class="nav-link">Home</a>
       <a href="staking.html" class="nav-link">Staking</a>
       <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-      <a href="deposit.html" class="nav-link">Deposit</a>
+      <a href="deposit.php" class="nav-link">Deposit</a>
       <a href="withdraw.html" class="nav-link">Withdraw</a>
       <a href="Convert.html" class="nav-link">Convert</a>
     </div>
@@ -116,49 +168,44 @@
     <section aria-label="Dashboard Heading" class="mb-8">
       <div class="flex justify-between items-center">
         <h1 class="text-4xl font-bold text-purple-400">
-          User Wallet Dashboard
+          <?php echo htmlspecialchars($username); ?> Wallet Dashboard
         </h1>
       </div>
     </section>
 
     <!-- Wallet Card -->
     <div class="relative bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
-      <!-- Last Activity top-right -->
-      <p class="absolute top-4 right-6 text-sm text-gray-400 font-semibold">
-        Last Activity: 2h ago
+      <p id="lastActivity" class="absolute top-2 right-6 text-sm text-gray-400 font-semibold">
+        Last Activity: Loading...
       </p>
 
-      <p class="text-white font-semibold text-lg mb-1">
-        Wallet Balance (Total)
-      </p>
-      <p class="text-4xl font-bold text-[#c084fc]">$5,000</p>
+      <p class="text-white font-semibold text-lg mb-1">Wallet Balance (Total)</p>
+      <p id="totalBalance" class="text-4xl font-bold text-[#c084fc]">$0.00</p>
 
-      <div class="text-sm text-slate-400 mb-4">
-        Secure and ready to use
-      </div>
+      <div class="text-sm text-slate-400 mb-4">Secure and ready to use</div>
 
       <div class="grid grid-cols-2 gap-4 text-sm mb-4">
         <div>
           <p class="text-slate-400">Bitcoin</p>
-          <p class="text-yellow-300 font-bold">0.215 BTC</p>
+          <p id="btcBalance" class="text-yellow-300 font-bold">Loading...</p>
         </div>
         <div>
           <p class="text-slate-400">Ethereum</p>
-          <p class="text-purple-300 font-bold">1.750 ETH</p>
+          <p id="ethBalance" class="text-purple-300 font-bold">Loading...</p>
         </div>
         <div>
           <p class="text-slate-400">Tether</p>
-          <p class="text-green-300 font-bold">3,400.00 USDT</p>
+          <p id="usdtBalance" class="text-green-300 font-bold">Loading...</p>
         </div>
         <div>
           <p class="text-slate-400">Elytrs</p>
-          <p class="text-blue-300 font-bold">5,000 ELTR</p>
+          <p id="elytrsBalance" class="text-blue-300 font-bold">Loading...</p>
         </div>
       </div>
 
       <!-- Neon Buttons -->
       <div class="flex gap-2 mt-2">
-        <a href="deposit.html"
+        <a href="deposit.php"
           class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-purple-800/30">
           <i class="fas fa-arrow-down"></i> Deposit
         </a>
@@ -166,7 +213,7 @@
           class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-red-800/30">
           <i class="fas fa-arrow-up"></i> Withdraw
         </a>
-        <a href="Convert.html"
+        <a href="convert.html"
           class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-blue-800/30">
           <i class="fas fa-sync-alt"></i> Convert
         </a>
@@ -267,7 +314,7 @@
                 <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>Exclusive Beta Access</li>
               </ul>
             </div>
-            <a href="upgrade.html"
+            <a href="upgrade.php"
               class="mt-8 block text-center bg-yellow-400 text-black font-semibold py-2 rounded-lg hover:bg-yellow-300 transition duration-300">
               Upgrade Now
             </a>
@@ -400,6 +447,35 @@
   </footer>
 
   <!-- Scripts -->
+
+  <script>
+    if (!<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
+      window.location.href = '../../index.php';
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("../config/wallet_data.php");
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          document.getElementById("btcBalance").textContent = `${parseFloat(data.btc).toFixed(8)} BTC`;
+          document.getElementById("ethBalance").textContent = `${parseFloat(data.eth).toFixed(8)} ETH`;
+          document.getElementById("usdtBalance").textContent = `${parseFloat(data.usdt).toLocaleString()} USDT`;
+          document.getElementById("elytrsBalance").textContent = `${parseFloat(data.eltr).toLocaleString()} ELTR`;
+          document.getElementById("totalBalance").textContent = `$${parseFloat(data.total).toLocaleString()}`;
+          document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(data.last_activity).toLocaleString()}`;
+        } else {
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error("Wallet fetch error:", error);
+      }
+    });
+  </script>
+
   <!-- Navbar Toggle Script -->
   <script>
     const menuBtn = document.getElementById("menu-button");
@@ -489,7 +565,7 @@
     }
 
     // Handle Enter key to send message
-    userInput.addEventListener("keypress", function (e) {
+    userInput.addEventListener("keypress", function(e) {
       if (e.key === "Enter" && userInput.value.trim() !== "") {
         const message = userInput.value.trim();
         addUserMessage(message);

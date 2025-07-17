@@ -106,14 +106,15 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
           <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
 
           <!-- Notifications -->
-          <?php if (isset($_GET['error'])): ?>
-            <div class="p-4 mb-4 text-sm text-white bg-red-600 rounded-lg text-center">
-              ❌ <?= htmlspecialchars($_GET['error']) ?>
-            </div>
-          <?php elseif (isset($_GET['success'])): ?>
-            <div class="p-4 mb-4 text-sm text-white bg-green-600 rounded-lg text-center">
-              ✅ <?= htmlspecialchars($_GET['success']) ?>
-            </div>
+          <?php if (isset($_GET['error']) || isset($_GET['success'])): ?>
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                const message = <?= json_encode($_GET['error'] ?? $_GET['success']) ?>;
+                const type = <?= isset($_GET['error']) ? json_encode('error') : json_encode('success') ?>;
+                showToast(message, type);
+                history.replaceState(null, "", window.location.pathname); // remove ?error or ?success
+              });
+            </script>
           <?php endif; ?>
 
           <form action="config/login.php" method="POST">
@@ -1028,6 +1029,24 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   </script>
 
   <script>
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `
+      px-4 py-3 rounded-md shadow-md text-white text-sm transition-opacity duration-500 animate-slide-in-right
+      ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}
+    `;
+      toast.textContent = message;
+
+      document.getElementById('toastContainer').appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 500);
+      }, 3000); // show for 3 seconds
+    }
+  </script>
+
+  <script>
     const loginModal = document.getElementById("loginModal");
     const closeModal = document.getElementById("closeModal");
     const switchToSignUp = document.getElementById("switchToSignUp");
@@ -1247,7 +1266,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
         setTimeout(() => toast.remove(), 500);
       }, 3000);
     }
-
 
     // Password strength validation
     const signUpPassword = document.getElementById("signUpPassword");
@@ -1559,7 +1577,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <script src="assets/js/calculator.js"></script>
-
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 </body>
+
 
 </html>

@@ -55,14 +55,13 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elytra Pool | Deposit</title>
+  <title>Elytra Pool | Withdraw & Transfer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <!-- AlertifyJS CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <!-- Optional: Default theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-
   <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/user.css">
@@ -122,6 +121,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         </a>
       </div>
 
+
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
@@ -148,7 +148,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
             <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="../config/logout.php"class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -166,118 +166,135 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   </nav>
 
   <!-- Main Section -->
-  <main class="flex items-center justify-center px-4 pt-28 pb-20">
-    <section class="bg-[#1a1f36] border border-purple-500 p-6 pb-10 rounded-lg w-full max-w-md shadow-lg">
-      <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Deposit Funds</h2>
+  <main class="max-w-5xl mx-auto pt-28 px-4 pb-16">
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-      <!-- Wallet Selector -->
-      <section class="mb-4">
-        <label for="walletSelect" class="block text-sm mb-2 text-purple-300">Select Wallet</label>
-        <select id="walletSelect" onchange="updateWallet()"
-          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
-          <option value="">(Choose Wallet)</option>
-          <option value="Gate">Gate</option>
-          <option value="Binance">Binance</option>
-          <option value="Bybit">Bybit</option>
-          <option value="Bitget">Bitget</option>
-          <option value="OKX">OKX</option>
-          <option value="OTHERS">OTHERS</option>
-        </select>
-      </section>
+      <!-- Withdraw Section -->
+      <section class="bg-[#1a1f36] border border-purple-500 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Withdraw Funds</h2>
 
-      <!-- Network Selector -->
-      <section class="mb-4">
-        <label for="networkSelect" class="block text-sm mb-2 text-purple-300">Select Network</label>
-        <select id="networkSelect" onchange="updateWallet()"
-          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
-          <option value="">(Choose Network)</option>
-          <option value="USDT">USDT</option>
-          <option value="BTC">BTC</option>
-          <option value="ETH">ETH</option>
-        </select>
-      </section>
-
-      <!-- Amount -->
-      <section class="mb-4">
-        <label for="depositAmount" class="block text-sm mb-2 text-purple-300">Amount</label>
-        <input type="number" id="depositAmount" placeholder="0.00"
-          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400" />
-      </section>
-
-      <!-- Wallet Address & QR -->
-      <section class="mb-4">
-        <label class="block text-sm mb-2 text-purple-300">Wallet Address / QR</label>
-        <div class="bg-[#0D1B2A] border border-purple-400 p-2 rounded flex justify-between items-center text-sm text-white">
-          <span id="walletAddress" class="truncate">---</span>
-          <div class="flex gap-2">
-            <button onclick="copyToClipboard()" class="text-yellow-400 hover:text-yellow-300 text-xs">📋</button>
-            <button onclick="showQR()" class="text-blue-400 hover:text-blue-300 text-xs">🔳</button>
-          </div>
+        <div class="mb-4">
+          <label class="block text-sm mb-2 text-purple-300">Select Network</label>
+          <select id="withdrawNetwork"
+            class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400" onchange="updateWallet()">
+            <option value="">Choose Network</option>
+            <option value="USDT">USDT</option>
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
+          </select>
         </div>
+
+        <div class="mb-4">
+          <label for="recipientAddress" class="block text-sm mb-2 text-purple-300">Recipient Wallet Address</label>
+          <input type="text" id="recipientAddress"
+            class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
+            placeholder="Enter recipient address" />
+        </div>
+
+        <div class="mb-4">
+          <label for="withdrawAmount" class="block text-sm mb-2 text-purple-300">Amount</label>
+          <input type="number" id="withdrawAmount"
+            class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
+            placeholder="0.00" />
+        </div>
+
+        <button onclick="submitWithdrawal()"
+          class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded w-full font-semibold bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-sm transition">Confirm
+          Withdrawal</button>
       </section>
 
-      <!-- Upload Proof -->
-      <section class="mb-4">
-        <label for="receiptUpload" class="block text-sm mb-2 text-purple-300">Upload Receipt</label>
-        <input type="file" id="receiptUpload" accept="image/*"
-          class="w-full px-2 py-1 rounded bg-slate-900 text-white text-sm border border-purple-400" />
-      </section>
+      <!-- Transfer Section -->
+      <section class="bg-[#1a1f36] border border-purple-500 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Transfer Elytra</h2>
 
-      <!-- Agreement -->
-      <section class="mb-4">
-        <label class="flex items-center gap-2 text-sm text-purple-300">
-          <input type="checkbox" id="agree" class="accent-yellow-400" />
-          I agree that my wallet address is correct and verified.
-        </label>
-      </section>
+        <div class="mb-4">
+          <label for="transferUsername" class="block text-sm mb-2 text-purple-300">Recipient Username</label>
+          <input type="text" id="transferUsername"
+            class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
+            placeholder="Enter username" />
+        </div>
 
-      <!-- Confirm Button -->
-      <section>
-        <button onclick="confirmDeposit()"
-          class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 px-4 py-2 rounded w-full font-semibold text-white text-sm">
-          Confirm Deposit
+        <div class="mb-4">
+          <label for="transferAmount" class="block text-sm mb-2 text-purple-300">Amount (ELYTRA)</label>
+          <input type="number" id="transferAmount"
+            class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400"
+            placeholder="0.00 ELYTRA" />
+        </div>
+
+        <button onclick="submitTransfer()"
+          class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded w-full font-semibold bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-sm transition">
+          Confirm Transfer
         </button>
       </section>
 
-      <!-- Floating Support Button + Chat -->
-      <div class="fixed bottom-6 right-6 z-50 group">
-        <button id="supportButton"
-          class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
-          <i class="fas fa-headset text-white text-xl"></i>
-        </button>
-
-        <!-- Tooltip -->
-        <div
-          class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Customer Support
-        </div>
-      </div>
-
-      <!-- Chatbox -->
-      <div id="chatBox"
-        class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
-        <div class="flex justify-between items-center mb-2">
-          <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
-          <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
-        </div>
-        <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
-          <!-- AI messages appear here -->
-        </div>
-        <input type="text" placeholder="Type your message..."
-          class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
-      </div>
+    </section>
   </main>
 
-  <!-- QR Code Popup -->
-  <section>
-    <div id="qrModal" class="fixed inset-0 hidden items-center justify-center z-50">
-      <div class="overlay absolute inset-0" onclick="closeQR()"></div>
-      <div class="bg-[#1e293b] p-4 rounded-lg z-10 border border-purple-500">
-        <img id="qrImage" src="" alt="QR Code" class="w-64 h-64 mx-auto" />
-        <button onclick="closeQR()" class="mt-4 w-full text-sm text-purple-400 hover:underline">Close</button>
+  <?php
+  $userId = $_SESSION['user_id'] ?? null;
+
+  $showKycModal = false;
+
+  if ($userId) {
+    $stmt = $conn->prepare("SELECT status FROM kyc_verifications WHERE user_id = ? ORDER BY submitted_at DESC LIMIT 1");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $kyc = $result->fetch_assoc();
+
+    if (!$kyc || $kyc['status'] !== 'approved') {
+      $showKycModal = true;
+    }
+  }
+  ?>
+
+  <?php if ($showKycModal): ?>
+    <!-- KYC Verification Modal (No Close Button) -->
+    <div id="kycModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div
+        class="bg-[#1a1f36] border border-purple-500 rounded-lg shadow-2xl w-full max-w-md p-6 text-white relative animate-fade-in">
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-purple-400 mb-3">Verify Your Identity</h2>
+          <p class="text-sm text-slate-400 mb-5">
+            To continue using Elytra Pool’s features, please complete your KYC verification.
+            This ensures the security of your funds and unlocks withdrawals and staking.
+          </p>
+          <a href="kyc_verification.php"
+            class="inline-block bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-semibold py-2 px-6 rounded shadow-md shadow-purple-700/30 transition">
+            Start Verification
+          </a>
+        </div>
       </div>
     </div>
-  </section>
+  <?php endif; ?>
+
+  <!-- Floating Support Button + Chat -->
+  <div class="fixed bottom-6 right-6 z-50 group">
+    <button id="supportButton"
+      class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+      <i class="fas fa-headset text-white text-xl"></i>
+    </button>
+
+    <!-- Tooltip -->
+    <div
+      class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      Customer Support
+    </div>
+  </div>
+
+  <!-- Chatbox -->
+  <div id="chatBox"
+    class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
+      <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+    </div>
+    <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
+      <!-- AI messages appear here -->
+    </div>
+    <input type="text" placeholder="Type your message..."
+      class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
+  </div>
 
   <!-- Footer -->
   <footer class="py-12 px-6 border-t border-gray-800">
@@ -343,57 +360,118 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   </footer>
 
   <!-- Scripts -->
+
   <script>
-    function copyToClipboard() {
-      const address = document.getElementById("walletAddress").textContent;
-      navigator.clipboard.writeText(address)
-        .then(() => alertify.success("Wallet address copied!"))
-        .catch(() => alertify.error("Failed to copy address."));
+    let isSubmitting = false;
+
+    function validateWalletAddress(address) {
+      // Must be alphanumeric and at least 20 characters
+      return /^[a-zA-Z0-9]{20,}$/.test(address);
     }
 
-    function confirmDeposit() {
-      const amount = document.getElementById("depositAmount").value;
-      const agreed = document.getElementById("agree").checked;
-      const receipt = document.getElementById("receiptUpload").files[0];
+    function submitWithdrawal() {
+      if (isSubmitting) return;
 
-      if (!amount || amount <= 0) {
-        alertify.warning("Please enter a valid amount.");
+      const network = document.getElementById("withdrawNetwork").value.trim();
+      const address = document.getElementById("recipientAddress").value.trim();
+      const amount = parseFloat(document.getElementById("withdrawAmount").value);
+      const button = document.querySelector("button[onclick='submitWithdrawal()']");
+
+      // Network validation
+      if (!["USDT", "BTC", "ETH"].includes(network)) {
+        alertify.error("Please select a valid network (USDT, BTC, ETH).");
         return;
       }
 
-      if (!receipt) {
-        alertify.warning("Please upload your receipt.");
+      // Wallet address validation
+      if (!validateWalletAddress(address)) {
+        alertify.error("Invalid wallet address. Must be alphanumeric and at least 20 characters.");
         return;
       }
 
-      if (!agreed) {
-        alertify.warning("You must agree before proceeding.");
+      // Amount validation
+      if (isNaN(amount) || amount <= 0) {
+        alertify.error("Enter a valid withdrawal amount.");
         return;
       }
 
-      alertify.success("Your balance will update in 10–20 minutes.");
-      alertify.message("📧 Email sent! Contact support if not reflected.");
+      if (amount < 1000) {
+        alertify.error("Minimum withdrawal is ₱1000 USDT. Applies to BTC and ETH as well.");
+        return;
+      }
+
+      // Lock submission
+      isSubmitting = true;
+      button.disabled = true;
+      button.innerText = "Processing...";
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("network", network);
+      formData.append("recipient", address);
+      formData.append("amount", amount);
+      formData.append("action", "withdraw");
+
+      // Submit to backend
+      fetch("../config/submit_withdrawal.php", {
+          method: "POST",
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.status === "success") {
+            alertify.success("Withdrawal submitted. Wait for admin approval within 24 hours.");
+
+            // Reset fields
+            document.getElementById("withdrawNetwork").value = "";
+            document.getElementById("recipientAddress").value = "";
+            document.getElementById("withdrawAmount").value = "";
+          } else {
+            alertify.error(data.message || "An error occurred. Please try again.");
+          }
+        })
+        .catch(() => {
+          alertify.error("Server error. Please try again later.");
+        })
+        .finally(() => {
+          isSubmitting = false;
+          button.disabled = false;
+          button.innerText = "Confirm Withdrawal";
+        });
     }
+  </script>
 
-    function generateQRPopup() {
-      const address = document.getElementById("walletAddress").textContent;
-      const qrImage = document.getElementById("qrImage");
-      const qrWalletText = document.getElementById("qrWalletText");
+  <script>
+    function submitTransfer() {
+      const username = document.getElementById("transferUsername").value.trim();
+      const amount = parseFloat(document.getElementById("transferAmount").value);
 
-      if (!address || address === "---") {
-        alertify.error("Invalid wallet address.");
+      if (!username || amount <= 0) {
+        alertify.error("Please enter valid recipient and amount.");
         return;
       }
 
-      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(address)}`;
-      qrWalletText.textContent = address;
-
-      document.getElementById("qrPopup").classList.remove("hidden");
-      document.getElementById("qrPopup").classList.add("flex");
-    }
-
-    function closeQRPopup() {
-      document.getElementById("qrPopup").classList.add("hidden");
+      fetch("../config/transfer_elytra.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: `username=${encodeURIComponent(username)}&amount=${amount}`
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "success") {
+            alertify.success(data.message);
+            document.getElementById("transferUsername").value = "";
+            document.getElementById("transferAmount").value = "";
+          } else {
+            alertify.error(data.message);
+          }
+        })
+        .catch(() => {
+          alertify.error("Something went wrong.");
+        });
     }
   </script>
 
@@ -436,197 +514,16 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       });
     }
   </script>
-
-  <!--wallet addreses-->
   <script>
-    const addresses = {
-      "Bitget": {
-        "USDT": {
-          address: "TDfNhM7zLR9MeQSGCNBCvW2NdBZPnhMcXy",
-          qr: "../assets/qr_codes/Bitget_USDT.png"
-        },
-        "BTC": {
-          address: "bc1pdse4xuk2r8f0eg8ycfksupw6syq5gw8e4y28p29gdxyma57v5rnqh87jd5",
-          qr: "../assets/qr_codes/Bitget_BTC.png"
-        },
-        "ETH": {
-          address: "0x13383459DF26E6ff19EcD27F748e29C302CD8e26",
-          qr: "../assets/qr_codes/Bitget_ETH.png"
-        }
-      },
-      "OKX": {
-        "USDT": {
-          address: "TLZTcjWXdP57hx4NCZ1SdMuNvPE61gvLUo",
-          qr: "../assets/img/OKX_USDT.jpg"
-        },
-        "BTC": {
-          address: "bc1q83f3shcnn9ufxrm4jjxtpajk0sh06uummkaww68uxd3279sulpvq4u6q34",
-          qr: "../assets/qr_codes/OKX_BTC.png"
-        },
-        "ETH": {
-          address: "0x96b90389212dc3ef3bbf550d9d98be9feecd11dc",
-          qr: "../assets/qr_codes/OKX_ETH.png"
-        }
-      },
-      "Bybit": {
-        "USDT": {
-          address: "TDPVkMkZsbxYhtH4yUrfV3nbDtfb6GPYAH",
-          qr: "../assets/qr_codes/Bybit_USDT.png"
-        },
-        "BTC": {
-          address: "12kFVEtVxgt4GDjoz5uLY4xQyYPsNt1GsL",
-          qr: "../assets/qr_codes/Bybit_BTC.png"
-        },
-        "ETH": {
-          address: "0x1fae81ab9ff51645e525d4000556250dc778444f",
-          qr: "../assets/qr_codes/Bybit_ETH.png"
-        }
-      },
-      "Gate": {
-        "USDT": {
-          address: "TKpZDhHDAajPjfmfrQreyr3Sp5JysPZffE",
-          qr: "../assets/qr_codes/Gate_USDT.png"
-        },
-        "BTC": {
-          address: "1AWYeZ1QReaS5bu3T9gm4wAJP2i7iHtbaV",
-          qr: "../assets/qr_codes/Gate_BTC.png"
-        },
-        "ETH": {
-          address: "0x6c0e6426279F5b793B75B5cd592FAb93eA64638c",
-          qr: "../assets/qr_codes/Gate_ETH.png"
-        }
-      },
-      "Binance": {
-        "USDT": {
-          address: "TLFXrnUuDzHFnhf3Uk4snkVQBVgpzczg2L",
-          qr: "../assets/qr_codes/Binance_USDT.png"
-        },
-        "BTC": {
-          address: "12Pkd8jvQipC1kKAzWcUeEaFUWoBRMsTPR",
-          qr: "../assets/qr_codes/Binance_BTC.png"
-        },
-        "ETH": {
-          address: "0x85473395be671cef8a767af53bef0d89af5ec83c",
-          qr: "../assets/qr_codes/Binance_ETH.png"
-        }
-      }
-    };
-
-    let currentQR = "";
-
-    function updateWallet() {
-      const wallet = document.getElementById("walletSelect").value;
-      const network = document.getElementById("networkSelect").value;
-      const addressSpan = document.getElementById("walletAddress");
-
-      if (!wallet || !network) {
-        addressSpan.textContent = "---";
-        currentQR = "";
-        alertify.error("Please select a wallet and network.");
-        return;
-      }
-
-      if (addresses[wallet] && addresses[wallet][network]) {
-        addressSpan.textContent = addresses[wallet][network].address;
-        currentQR = addresses[wallet][network].qr;
+    // Show only if user is NOT verified
+    window.addEventListener('DOMContentLoaded', () => {
+      const isVerified = false; // 🔁 Change this based on your verification logic
+      if (isVerified) {
+        document.getElementById('kycModal').classList.add('hidden');
       } else {
-        addressSpan.textContent = "---";
-        currentQR = "";
-        alertify.error("Wallet/network combination not supported.");
+        document.getElementById('kycModal').classList.remove('hidden');
       }
-    }
-
-    function showQR() {
-      if (!currentQR) {
-        alert("Select wallet & network first!");
-        return;
-      }
-
-      document.getElementById("qrImage").src = currentQR;
-      document.getElementById("qrModal").classList.remove("hidden");
-      document.getElementById("qrModal").classList.add("flex");
-    }
-
-    function closeQR() {
-      document.getElementById("qrModal").classList.add("hidden");
-      document.getElementById("qrModal").classList.remove("flex");
-    }
-
-    function confirmDeposit() {
-      const wallet = document.getElementById("walletSelect").value;
-      const network = document.getElementById("networkSelect").value;
-      const address = document.getElementById("walletAddress").textContent;
-      const amount = parseFloat(document.getElementById("depositAmount").value);
-      const agreed = document.getElementById("agree").checked;
-      const receipt = document.getElementById("receiptUpload").files[0];
-
-      if (!wallet || !network || address === "---") {
-        alertify.error("Please select a wallet and network.");
-        return;
-      }
-
-      if (isNaN(amount) || amount <= 0) {
-        alertify.error("Please enter a valid deposit amount.");
-        return;
-      }
-
-      if (amount < 100) {
-        alertify.error("Minimum deposit amount is 100.");
-        return;
-      }
-
-      if (!receipt) {
-        alertify.error("Please upload your deposit receipt.");
-        return;
-      }
-
-      if (!agreed) {
-        alertify.warning("You must agree to the wallet terms.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("wallet", wallet);
-      formData.append("network", network);
-      formData.append("address", address);
-      formData.append("amount", amount);
-      formData.append("receipt", receipt);
-      formData.append("agreed", agreed ? 1 : 0);
-
-      fetch("../config/submit_deposit.php", {
-          method: "POST",
-          body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            // Reset form
-            document.getElementById("depositAmount").value = '';
-            document.getElementById("receiptUpload").value = '';
-            document.getElementById("walletAddress").textContent = '---';
-            document.getElementById("walletSelect").selectedIndex = 0;
-            document.getElementById("networkSelect").selectedIndex = 0;
-            document.getElementById("agree").checked = false;
-
-            sessionStorage.setItem("showDepositSuccess", "true");
-
-            // ✅ Alert with OK button, then redirect
-            alertify.alert(
-              "Deposit Submitted",
-              "Your deposit has been successfully submitted and is now under review. Please allow 10 to 20 minutes for approval. If you don't receive confirmation within this time, kindly contact our customer service for assistance."
-            ).set('onok', function() {
-              window.location.href = "user.php";
-            });
-
-          } else {
-            alertify.error(data.message || "Deposit failed.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alertify.error("Something went wrong. Please try again.");
-        });
-    }
+    });
   </script>
 
   <script>
@@ -691,10 +588,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       }
     });
   </script>
-
   <!-- AlertifyJS Script -->
   <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-
 </body>
 
 </html>

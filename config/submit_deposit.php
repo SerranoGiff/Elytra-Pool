@@ -49,36 +49,15 @@ if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) 
     move_uploaded_file($fileTmp, $receiptPath);
 }
 
-// Insert into deposits table
+// ✅ Insert into deposits table with status = 'pending'
 $insert = $conn->prepare("INSERT INTO deposits 
-    (user_id, wallet, network, wallet_address, amount, receipt, agreed) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)");
+    (user_id, wallet, network, wallet_address, amount, receipt, agreed, status, created_at) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NOW())");
 $insert->bind_param("isssdsi", $user_id, $wallet, $network, $address, $amount, $receiptPath, $agreed);
 $insertSuccess = $insert->execute();
 
 if ($insertSuccess) {
-    // Update user balances
-    $column = '';
-    switch (strtolower($network)) {
-        case 'btc': $column = 'btc_balance'; break;
-        case 'eth': $column = 'eth_balance'; break;
-        case 'usdt': $column = 'usdt_balance'; break;
-        default:
-            echo json_encode(["success" => false, "message" => "Invalid network for balance update."]);
-            exit;
-    }
-
-    // Update selected crypto balance
-    $update = $conn->prepare("UPDATE users 
-        SET $column = $column + ?, 
-            wallet_balance = wallet_balance + ?, 
-            last_activity = NOW(), 
-            updated_at = NOW() 
-        WHERE id = ?");
-    $update->bind_param("ddi", $amount, $amount, $user_id);
-    $update->execute();
-
-    echo json_encode(["success" => true, "message" => "Deposit submitted. It will reflect in your wallet in 3 minutes."]);
+    echo json_encode(["success" => true, "message" => "Deposit submitted. Waiting for admin approval."]);
 } else {
     echo json_encode(["success" => false, "message" => "Failed to save deposit."]);
 }

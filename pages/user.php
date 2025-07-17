@@ -47,6 +47,12 @@ $email = $user['email'] ?? 'N/A';
 $walletAddress = $user['wallet_address'] ?? '';
 $profileImg = !empty($user['profile_photo']) ? "../" . $user['profile_photo'] : '../assets/default-avatar.png';
 $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old image
+
+// Generate random fixed number (e.g., 4 digits)
+$referralSuffix = sprintf('%04d', $userId % 10000); // consistent & unique per user
+$referralCode = $username . $referralSuffix;
+
+$referralLink = "https://elytra.io/referral/" . $referralCode;
 ?>
 
 <!DOCTYPE html>
@@ -90,12 +96,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="leaderboard.html"
+        <a href="leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
@@ -106,13 +112,13 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="withdraw.html"
+        <a href="withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -153,17 +159,28 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="nav-links">
-      <a href="user.html" class="nav-link">Home</a>
-      <a href="staking.html" class="nav-link">Staking</a>
-      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <a href="user.php" class="nav-link">Home</a>
+      <a href="staking.php" class="nav-link">Staking</a>
+      <a href="leaderboard.php" class="nav-link">Leaderboard</a>
       <a href="deposit.php" class="nav-link">Deposit</a>
-      <a href="withdraw.html" class="nav-link">Withdraw</a>
-      <a href="Convert.html" class="nav-link">Convert</a>
+      <a href="withdraw.php" class="nav-link">Withdraw</a>
+      <a href="Convert.php" class="nav-link">Convert</a>
     </div>
   </nav>
 
   <!-- Dashboard Main Content -->
   <main id="dashboard" class="max-w-7xl mx-auto px-4 pt-24 pb-10">
+    <?php if (isset($_GET['success']) || isset($_GET['error'])): ?>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const message = <?= json_encode($_GET['error'] ?? $_GET['success']) ?>;
+          const type = <?= isset($_GET['error']) ? json_encode('error') : json_encode('success') ?>;
+          showToast(message, type);
+          history.replaceState(null, "", window.location.pathname);
+        });
+      </script>
+    <?php endif; ?>
+
     <!-- Section: Dashboard Header -->
     <section aria-label="Dashboard Heading" class="mb-8">
       <div class="flex justify-between items-center">
@@ -209,11 +226,11 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-purple-800/30">
           <i class="fas fa-arrow-down"></i> Deposit
         </a>
-        <a href="withdraw.html"
+        <a href="withdraw.php"
           class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-red-800/30">
           <i class="fas fa-arrow-up"></i> Withdraw
         </a>
-        <a href="convert.html"
+        <a href="convert.php"
           class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-blue-800/30">
           <i class="fas fa-sync-alt"></i> Convert
         </a>
@@ -230,7 +247,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
       <!-- Referral Link Input Box -->
       <div class="flex items-center gap-2">
-        <input id="referralLink" type="text" readonly value="https://elytra.io/referral/yourcode123"
+        <input id="referralLink" type="text" readonly value="<?= htmlspecialchars($referralLink) ?>"
           class="flex-1 px-4 py-2 bg-[#111827] border border-purple-600 text-white rounded-lg text-sm select-all" />
         <button onclick="copyReferralLink()"
           class="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white rounded-lg text-sm shadow-md shadow-purple-800/30">
@@ -367,7 +384,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.html" class="flex items-center">
+          <a href="index.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
               <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
@@ -387,7 +404,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
               <a href="#earnings" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+              <a href="pages/about.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -431,6 +448,24 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <script>
     if (!<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
       window.location.href = '../../index.php';
+    }
+  </script>
+
+  <script>
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `
+      px-4 py-3 rounded-md shadow-md text-white text-sm transition-opacity duration-500 animate-slide-in-right
+      ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}
+    `;
+      toast.textContent = message;
+
+      document.getElementById('toastContainer').appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
     }
   </script>
 
@@ -487,15 +522,15 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   </script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (sessionStorage.getItem("showDepositSuccess") === "true") {
-        sessionStorage.removeItem("showDepositSuccess");
+    function copyReferralLink() {
+      const linkInput = document.getElementById("referralLink");
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
 
-        setTimeout(() => {
-          alertify.success("✅ Funds received! Processing is almost done.");
-        }, 180000); // 3 minutes
-      }
-    });
+      // Show Alertify message
+      alertify.success("Referral link copied to clipboard!");
+    }
   </script>
 
   <!-- Navbar Toggle Script -->
@@ -604,7 +639,9 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <script src="../assets/js/script.js"></script>
   <script src="../assets/js/randomizer.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
 </body>
+
 
 </html>

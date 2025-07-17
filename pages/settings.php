@@ -88,12 +88,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="leaderboard.html"
+        <a href="leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
@@ -104,13 +104,13 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="withdraw.html"
+        <a href="withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -151,11 +151,11 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="hidden flex-col mt-4 space-y-2 md:hidden">
       <a href="user.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Home</a>
-      <a href="staking.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Staking</a>
-      <a href="leaderboard.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Leaderboard</a>
+      <a href="staking.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Staking</a>
+      <a href="leaderboard.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Leaderboard</a>
       <a href="deposit.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Deposit</a>
-      <a href="withdraw.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Withdraw</a>
-      <a href="Convert.html" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Convert</a>
+      <a href="withdraw.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Withdraw</a>
+      <a href="Convert.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Convert</a>
     </div>
   </nav>
 
@@ -249,7 +249,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
             <div>
               <label class="text-sm text-gray-300 mb-1 block">Verification / KYC</label>
-              <button type="button" id="openKycModal"
+              <button type="button" onclick="window.location.href='kyc_verification.php'"
                 class="bg-transparent border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-black font-semibold px-4 py-2 rounded-lg transition">
                 Start Verification
               </button>
@@ -262,120 +262,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           </div>
         </form>
       </section>
-
-      <!-- KYC Modal (Dark Mode + Purple Buttons Only) -->
-      <div id="kycDocumentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center w-full h-full p-4">
-          <form action="submit_kyc.php" method="POST" enctype="multipart/form-data"
-            class="bg-gray-900 text-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative p-5 space-y-5">
-
-            <!-- Close Button -->
-            <button type="button" id="closeKycModal"
-              class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl font-bold">&times;</button>
-
-            <h3 class="text-lg font-bold text-white">KYC Document Verification</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- LEFT: USER INFO -->
-              <div class="space-y-3">
-                <!-- Full Name -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Full Name</label>
-                  <input type="text" name="full_name"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-
-                <!-- Email -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Email</label>
-                  <input type="email" name="email"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-
-                <!-- Username -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Username</label>
-                  <input type="text" name="username"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-
-                <!-- Country -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Country</label>
-                  <select name="country" id="kycCountry"
-                    class="w-full px-3 py-1.5 bg-gray-800 text-white border border-gray-600 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-
-                    <option value="">-- Select Country --</option>
-                    <!-- Sample countries -->
-                    <option value="PH">Philippines</option>
-                    <option value="US">United States</option>
-                    <option value="AE">United Arab Emirates</option>
-                    <!-- Add more as needed -->
-                  </select>
-                </div>
-
-                <!-- ID Type -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Type</label>
-                  <select name="id_type" id="kycIdType"
-                    class="w-full px-3 py-1.5 bg-gray-800 text-white border border-gray-600 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                    <option value="">-- Select ID Type --</option>
-                  </select>
-                </div>
-
-
-              </div>
-
-              <!-- RIGHT: FILE UPLOADS -->
-              <div class="space-y-3">
-                <!-- ID Number -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Number</label>
-                  <input type="text" name="id_number"
-                    class="w-full px-3 py-1.5 bg-transparent border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    required>
-                </div>
-                <!-- ID Front -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Document (Front)</label>
-                  <input type="file" name="id_front" accept="image/*"
-                    class="w-full file:bg-purple-700 file:text-white file:border-0 file:px-3 file:py-1.5 file:mr-3 border border-gray-600 rounded bg-transparent text-white text-sm"
-                    required>
-                </div>
-
-                <!-- ID Back -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">ID Document (Back)</label>
-                  <input type="file" name="id_back" accept="image/*"
-                    class="w-full file:bg-purple-700 file:text-white file:border-0 file:px-3 file:py-1.5 file:mr-3 border border-gray-600 rounded bg-transparent text-white text-sm"
-                    required>
-                </div>
-
-                <!-- Selfie (Optional) -->
-                <div>
-                  <label class="block text-xs mb-1 text-gray-300">Selfie with ID (Optional)</label>
-                  <input type="file" name="selfie" accept="image/*"
-                    class="w-full file:bg-purple-700 file:text-white file:border-0 file:px-3 file:py-1.5 file:mr-3 border border-gray-600 rounded bg-transparent text-white text-sm">
-                </div>
-              </div>
-            </div>
-
-            <!-- Submit -->
-            <div class="text-right pt-2">
-              <button type="submit"
-                class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-1.5 px-5 rounded text-sm transition">
-                Submit Verification
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
 
       <!-- Activity Logs -->
       <section class="bg-[#1B263B] p-6 rounded-2xl shadow-xl border border-gray-700">

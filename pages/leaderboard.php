@@ -1,3 +1,54 @@
+<?php
+session_start();
+include '../config/dbcon.php';
+
+// NO CACHE HEADERS
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// VALIDATE SESSION
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'free') {
+  header("Location: ../index.php?error=Unauthorized access.");
+  exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+
+if ($userId) {
+  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+  $stmt->bind_param("i", $userId);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+
+  $username = $user ? $user['username'] : 'User';
+} else {
+  $username = 'Guest';
+}
+
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+          FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+// Set default values with fallback to 'N/A'
+$firstName = $user['first_name'] ?? 'N/A';
+$lastName = $user['last_name'] ?? 'N/A';
+$birthday = $user['birthday'] ?? '';
+$username = $user['username'] ?? 'N/A';
+$aboutMe = $user['about_me'] ?? 'N/A';
+$email = $user['email'] ?? 'N/A';
+$walletAddress = $user['wallet_address'] ?? '';
+$profileImg = !empty($user['profile_photo']) ? "../" . $user['profile_photo'] : '../assets/default-avatar.png';
+$profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old image
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,7 +114,7 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.html" class="flex items-center">
+        <a href="user.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
             <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
@@ -77,34 +128,34 @@
       <!-- Desktop Nav Links -->
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="user.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="staking.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="leaderboard.html"
+        <a href="leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="withdraw.html"
+        <a href="withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="Convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -115,12 +166,13 @@
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-          <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -131,12 +183,13 @@
         </button>
         <div class="relative">
           <button id="mobileProfileBtn" class="focus:outline-none">
-            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+            <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../index.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -144,12 +197,12 @@
 
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="nav-links">
-      <a href="user.html" class="nav-link">Home</a>
-      <a href="staking.html" class="nav-link">Staking</a>
-      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-      <a href="deposit.html" class="nav-link">Deposit</a>
-      <a href="withdraw.html" class="nav-link">Withdraw</a>
-      <a href="Convert.html" class="nav-link">Convert</a>
+      <a href="user.php" class="nav-link">Home</a>
+      <a href="staking.php" class="nav-link">Staking</a>
+      <a href="leaderboard.php" class="nav-link">Leaderboard</a>
+      <a href="deposit.php" class="nav-link">Deposit</a>
+      <a href="withdraw.php" class="nav-link">Withdraw</a>
+      <a href="Convert.php" class="nav-link">Convert</a>
     </div>
   </nav>
 
@@ -252,7 +305,7 @@
   <footer class="py-10 px-6 border-t border-purple-900 mt-20">
     <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 text-sm text-gray-400">
       <div>
-        <a href="user.html" class="flex items-center gap-3 mb-4">
+        <a href="user.php" class="flex items-center gap-3 mb-4">
           <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-10 h-10 rounded-full object-cover" />
           <span class="text-xl font-bold text-white">Elytra Pool</span>
         </a>

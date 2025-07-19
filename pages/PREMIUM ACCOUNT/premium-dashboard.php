@@ -1,3 +1,72 @@
+<?php
+session_start();
+include '../../config/dbcon.php';
+
+// NO CACHE HEADERS
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// VALIDATE SESSION
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'premium') {
+  header("Location: ../../index.php?error=Unauthorized access.");
+  exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+
+// Fetch username (used in referral code)
+if ($userId) {
+  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+  $stmt->bind_param("i", $userId);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $user = $result->fetch_assoc();
+
+  $username = $user ? $user['username'] : 'User';
+} else {
+  $username = 'Guest';
+}
+
+// Get full user details
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+          FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+// Set default values
+$firstName = $user['first_name'] ?? 'N/A';
+$lastName = $user['last_name'] ?? 'N/A';
+$birthday = $user['birthday'] ?? '';
+$username = $user['username'] ?? 'N/A';
+$aboutMe = $user['about_me'] ?? 'N/A';
+$email = $user['email'] ?? 'N/A';
+$walletAddress = $user['wallet_address'] ?? '';
+$photoPath = $user['profile_photo'] ?? '';
+
+// Check if file exists and construct proper image URL (relative to public access)
+if (!empty($photoPath) && file_exists("../../" . $photoPath)) {
+  $profileImg = "../../" . $photoPath;
+} else {
+  $profileImg = '../../assets/default-avatar.png';
+}
+
+// Append cache buster to avoid cached image
+$profileImg .= '?v=' . time();
+
+// Generate referral code
+$referralSuffix = sprintf('%04d', $userId % 10000); // consistent & unique per user
+$referralCode = $username . $referralSuffix;
+$referralLink = "https://elytra.io/referral/" . $referralCode;
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +78,10 @@
   <link rel="stylesheet" href="../../assets/css/user.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="shortcut icon" href="../../assets/img/ELYTRA.jpg" type="image/x-icon" />
-
+  <!-- Alertify CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <!-- Optional themes -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -21,56 +93,54 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="premium-dashboard.html" class="flex items-center">
+        <a href="premium-dashboard.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
             <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
           <span
-            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-2">
+            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-1">
             Elytra Pool
-            <span class="bg-yellow-400 text-black text-xs font-semibold px-2 py-0.5 rounded-full animate-pulse">
-              Premium
-              <span class="ml-2 text-green-500 text-sm">✔ Active</span>
+            <span class=" text-s font-semibold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+              <i class="fas fa-crown text-yellow-400"></i>
             </span>
           </span>
-
         </a>
       </div>
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="premium-dashboard.html"
+        <a href="premium-dashboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-staking.html"
+        <a href="premium-staking.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-leaderboard.html"
+        <a href="premium-leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-deposit.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-withdraw.html"
+        <a href="premium-withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-convert.html" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -81,12 +151,13 @@
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="premium-settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-          <a href="../../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          <a href="premium-settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -97,12 +168,13 @@
         </button>
         <div class="relative">
           <button id="mobileProfileBtn" class="focus:outline-none">
-            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+            <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="premium-settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="premium-settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -110,91 +182,109 @@
 
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="nav-links">
-      <a href="premium-dashboard.html" class="nav-link">Home</a>
-      <a href="premium-staking.html" class="nav-link">Staking</a>
-      <a href="premium-leaderboard.html" class="nav-link">Leaderboard</a>
-      <a href="premium-deposit.html" class="nav-link">Deposit</a>
-      <a href="premium-withdraw.html" class="nav-link">Withdraw</a>
-      <a href="premium-convert.html" class="nav-link">Convert</a>
+      <a href="premium-dashboard.php" class="nav-link">Home</a>
+      <a href="premium-staking.php" class="nav-link">Staking</a>
+      <a href="premium-leaderboard.php" class="nav-link">Leaderboard</a>
+      <a href="premium-deposit.php" class="nav-link">Deposit</a>
+      <a href="premium-withdraw.php" class="nav-link">Withdraw</a>
+      <a href="premium-convert.php" class="nav-link">Convert</a>
     </div>
   </nav>
 
   <!-- Dashboard Main Content -->
   <main id="dashboard" class="max-w-7xl mx-auto px-4 pt-24 pb-10">
+    <?php if (isset($_GET['success']) || isset($_GET['error'])): ?>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const message = <?= json_encode($_GET['error'] ?? $_GET['success']) ?>;
+          const type = <?= isset($_GET['error']) ? json_encode('error') : json_encode('success') ?>;
+          showToast(message, type);
+          history.replaceState(null, "", window.location.pathname);
+        });
+      </script>
+    <?php endif; ?>
+
     <!-- Section: Dashboard Header -->
     <section aria-label="Dashboard Heading" class="mb-8">
       <div class="flex justify-between items-center">
         <h1 class="text-4xl font-bold text-purple-400">
-          User Wallet Dashboard
+          <?php echo htmlspecialchars($username); ?> Wallet Dashboard
         </h1>
       </div>
     </section>
 
     <!-- Wallet Card -->
     <div class="relative bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
-      <!-- Last Activity + Premium Features -->
-      <div class="absolute top-4 right-6 text-sm text-right space-y-1">
-        <p class="text-gray-400 font-semibold">Last Activity: 2h ago</p>
 
-        <!-- Premium Feature: Hashrate -->
-        <div class="text-blue-300 font-bold flex items-center justify-end gap-2 animate-pulse">
-          <i class="fas fa-bolt text-blue-400"></i>
-          <span
-            class="text-xs bg-blue-900/50 px-2 py-1 rounded-full border border-blue-500 shadow-md shadow-blue-500/30">
-            1 TH/s Hashrate
-          </span>
-        </div>
-
-        <!-- Premium Feature: Pool Fee -->
-        <div class="text-green-300 font-bold flex items-center justify-end gap-2 animate-pulse">
-          <i class="fas fa-percentage text-green-400"></i>
-          <span
-            class="text-xs bg-green-900/50 px-2 py-1 rounded-full border border-green-500 shadow-md shadow-green-500/30">
-            1.9% Pool Fee
-          </span>
+      <!-- Desktop-only Last Activity + badges -->
+      <div class="absolute top-2 right-6 hidden md:flex flex-col items-end gap-1">
+        <p id="lastActivity" class="text-sm text-gray-400 font-semibold">
+          Last Activity: Loading...
+        </p>
+        <div class="flex gap-2">
+          <div class="flex items-center gap-1 text-xs bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded-full border border-blue-500">
+            <i class="fas fa-bolt text-blue-400 text-xs"></i>
+            1 TH/s
+          </div>
+          <div class="flex items-center gap-1 text-xs bg-green-900/60 text-green-300 px-2 py-0.5 rounded-full border border-green-500">
+            <i class="fas fa-percentage text-green-400 text-xs"></i>
+            1.9% Fee
+          </div>
         </div>
       </div>
-      
-      <p class="text-white font-semibold text-lg mb-1">
-        Wallet Balance (Total)
+
+      <!-- Mobile-only Last Activity -->
+      <p id="lastActivityMobile" class="text-sm text-gray-400 font-semibold mb-1 md:hidden text-end">
+        Last Activity: Loading...
       </p>
-      <p class="text-4xl font-bold text-[#c084fc]">$5,000</p>
 
-      <div class="text-sm text-slate-400 mb-4">
-        Enhanced features and priority access
+      <!-- Wallet Balance -->
+      <p class="text-white font-semibold text-lg mb-1">Wallet Balance (Total)</p>
+      <p id="totalBalance" class="text-4xl font-bold text-[#c084fc] mb-2">$0.00</p>
+
+      <!-- Mobile-only badges -->
+      <div class="flex gap-2 mb-3 md:hidden">
+        <div class="flex items-center gap-1 text-xs bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded-full border border-blue-500">
+          <i class="fas fa-bolt text-blue-400 text-xs"></i>
+          1 TH/s
+        </div>
+        <div class="flex items-center gap-1 text-xs bg-green-900/60 text-green-300 px-2 py-0.5 rounded-full border border-green-500">
+          <i class="fas fa-percentage text-green-400 text-xs"></i>
+          1.9% Fee
+        </div>
       </div>
 
+      <div class="text-sm text-slate-400 mb-4">Secure and ready to use</div>
+
+      <!-- Balances -->
       <div class="grid grid-cols-2 gap-4 text-sm mb-4">
         <div>
           <p class="text-slate-400">Bitcoin</p>
-          <p class="text-yellow-300 font-bold">0.215 BTC</p>
+          <p id="btcBalance" class="text-yellow-300 font-bold">Loading...</p>
         </div>
         <div>
           <p class="text-slate-400">Ethereum</p>
-          <p class="text-purple-300 font-bold">1.750 ETH</p>
+          <p id="ethBalance" class="text-purple-300 font-bold">Loading...</p>
         </div>
         <div>
           <p class="text-slate-400">Tether</p>
-          <p class="text-green-300 font-bold">3,400.00 USDT</p>
+          <p id="usdtBalance" class="text-green-300 font-bold">Loading...</p>
         </div>
         <div>
           <p class="text-slate-400">Elytrs</p>
-          <p class="text-blue-300 font-bold">5,000 ELTR</p>
+          <p id="elytrsBalance" class="text-blue-300 font-bold">Loading...</p>
         </div>
       </div>
 
-      <!-- Neon Buttons -->
+      <!-- Action Buttons -->
       <div class="flex gap-2 mt-2">
-        <a href="deposit.html"
-          class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-purple-800/30">
+        <a href="premium-deposit.php" class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-purple-800/30">
           <i class="fas fa-arrow-down"></i> Deposit
         </a>
-        <a href="withdraw.html"
-          class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-red-800/30">
+        <a href="premium-withdraw.php" class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-red-800/30">
           <i class="fas fa-arrow-up"></i> Withdraw
         </a>
-        <a href="Convert.html"
-          class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-blue-800/30">
+        <a href="premium-convert.php" class="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs py-2 rounded transition duration-300 shadow-md shadow-blue-800/30">
           <i class="fas fa-sync-alt"></i> Convert
         </a>
       </div>
@@ -210,50 +300,27 @@
     <div class="relative bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500 mt-10 mb-8">
       <h2 class="text-xl font-bold text-purple-300 mb-2">Referral Program</h2>
       <p class="text-sm text-slate-400 mb-4">
-        Get <span class="text-purple-400 font-semibold">200 ELTR</span> for every referral that deposits <span
-          class="text-green-400 font-semibold">1,000 USDT</span>.
+        Get <span class="text-purple-400 font-semibold">200 ELTR</span> for every referral that deposits
+        <span class="text-green-400 font-semibold">1,000 USDT</span>.
       </p>
 
       <!-- Referral Link Input Box -->
       <div class="flex items-center gap-2">
-        <input id="referralLink" type="text" readonly value="https://elytra.io/referral/yourcode123"
+        <input id="referralLink" type="text" readonly value="<?= htmlspecialchars($referralLink) ?>"
           class="flex-1 px-4 py-2 bg-[#111827] border border-purple-600 text-white rounded-lg text-sm select-all" />
         <button onclick="copyReferralLink()"
           class="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white rounded-lg text-sm shadow-md shadow-purple-800/30">
           Copy
         </button>
       </div>
-
-      <p id="copiedText" class="text-green-400 text-xs mt-2 hidden">Referral link copied!</p>
     </div>
 
 
     <!-- Transactions -->
     <div class="bg-[#1a1f36] p-6 rounded-xl shadow-lg border border-purple-500">
-      <p class="text-white font-semibold text-lg mb-4">
-        Transaction History
-      </p>
-      <div class="space-y-4 max-h-64 overflow-y-auto text-sm">
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Deposit</span>
-          <span class="text-emerald-400 font-bold">+1,000 ELTR</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Withdraw</span>
-          <span class="text-red-400 font-bold">-200 USDT</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Stake</span>
-          <span class="text-purple-300 font-bold">-1,500 ELTR</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Convert</span>
-          <span class="text-blue-300 font-bold">+0.05 BTC</span>
-        </div>
-        <div class="flex justify-between border-b border-purple-800 pb-2">
-          <span class="text-slate-300">Transfer</span>
-          <span class="text-yellow-300 font-bold">-0.02 ETH</span>
-        </div>
+      <p class="text-white font-semibold text-lg mb-4">Transaction History</p>
+      <div id="transactionList" class="space-y-4 max-h-64 overflow-y-auto text-sm">
+        <p class="text-slate-400 text-center">Loading...</p>
       </div>
     </div>
 
@@ -341,32 +408,32 @@
     </section>
 
     <!-- Floating Support Button + Chat -->
-  <div class="fixed bottom-6 right-6 z-50 group">
-    <button id="supportButton"
-      class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
-      <i class="fas fa-headset text-white text-xl"></i>
-    </button>
+    <div class="fixed bottom-6 right-6 z-50 group">
+      <button id="supportButton"
+        class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-lg hover:shadow-purple-500/50 transition duration-300 ease-in-out animate-bounce hover:scale-110">
+        <i class="fas fa-headset text-white text-xl"></i>
+      </button>
 
-    <!-- Tooltip -->
-    <div
-      class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      Customer Support
+      <!-- Tooltip -->
+      <div
+        class="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        Customer Support
+      </div>
     </div>
-  </div>
 
-  <!-- Chatbox -->
-  <div id="chatBox"
-    class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
-    <div class="flex justify-between items-center mb-2">
-      <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
-      <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+    <!-- Chatbox -->
+    <div id="chatBox"
+      class="fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 hidden flex-col">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-semibold text-purple-700">Support Chat</h3>
+        <button id="closeChat" class="text-gray-500 hover:text-red-500">&times;</button>
+      </div>
+      <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
+        <!-- AI messages appear here -->
+      </div>
+      <input type="text" placeholder="Type your message..."
+        class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
     </div>
-    <div id="chatMessages" class="h-64 overflow-y-auto text-sm mb-2 space-y-2">
-      <!-- AI messages appear here -->
-    </div>
-    <input type="text" placeholder="Type your message..."
-      class="w-full px-3 py-2 border rounded-md focus:outline-none text-sm text-black" />
-  </div>
   </main>
 
   <!-- Footer -->
@@ -374,7 +441,7 @@
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.html" class="flex items-center">
+          <a href="index.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
               <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
@@ -388,13 +455,13 @@
         <div>
           <h4 class="font-semibold mb-4">Products</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="premium-staking.html" class="hover:text-white">Staking</a></li>
-            <li><a href="premium-dashboard.html" class="hover:text-white">Assets</a></li>
+            <li><a href="premium-staking.php" class="hover:text-white">Staking</a></li>
+            <li><a href="premium-dashboard.php" class="hover:text-white">Assets</a></li>
             <li>
-              <a href="premium-leaderboard.html" class="hover:text-white">Leaderboard</a>
+              <a href="premium-leaderboard.php" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+              <a href="pages/about.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -433,6 +500,98 @@
   </footer>
 
   <!-- Scripts -->
+
+  <script>
+    if (!<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
+      window.location.href = '../../index.php';
+    }
+  </script>
+
+  <script>
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `
+      px-4 py-3 rounded-md shadow-md text-white text-sm transition-opacity duration-500 animate-slide-in-right
+      ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}
+    `;
+      toast.textContent = message;
+
+      document.getElementById('toastContainer').appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        // Load Wallet Balances
+        const resWallet = await fetch("../../config/wallet_data.php");
+        const dataWallet = await resWallet.json();
+
+        if (dataWallet.status === 'success') {
+          const formattedDate = new Date(dataWallet.last_activity).toLocaleString();
+          document.getElementById("btcBalance").textContent = `${parseFloat(dataWallet.btc).toFixed(8)} BTC`;
+          document.getElementById("ethBalance").textContent = `${parseFloat(dataWallet.eth).toFixed(8)} ETH`;
+          document.getElementById("usdtBalance").textContent = `${parseFloat(dataWallet.usdt).toLocaleString()} USDT`;
+          document.getElementById("elytrsBalance").textContent = `${parseFloat(dataWallet.eltr).toLocaleString()} ELTR`;
+          document.getElementById("totalBalance").textContent = `$${parseFloat(dataWallet.total).toLocaleString()}`;
+          document.getElementById("lastActivity").textContent = `Last Activity: ${formattedDate}`;
+          document.getElementById("lastActivityMobile").textContent = `Last Activity: ${formattedDate}`;
+        }
+
+        // Load Transactions
+        const resTx = await fetch("../../config/transaction_history.php");
+        const dataTx = await resTx.json();
+        const container = document.getElementById("transactionList");
+        if (container) container.innerHTML = "";
+
+        if (dataTx.status === 'success' && dataTx.data.length > 0) {
+          dataTx.data.forEach(tx => {
+            const colorMap = {
+              deposit: "text-emerald-400",
+              withdraw: "text-red-400",
+              stake: "text-purple-300",
+              convert: "text-blue-300",
+              transfer: "text-yellow-300"
+            };
+            const color = colorMap[tx.type.toLowerCase()] || "text-white";
+            const sign = tx.direction === 'in' ? "+" : "-";
+
+            const div = document.createElement("div");
+            div.className = "flex justify-between border-b border-purple-800 pb-2";
+            div.innerHTML = `
+            <span class="text-slate-300 capitalize">${tx.type}</span>
+            <span class="${color} font-bold">${sign}${parseFloat(tx.amount).toLocaleString()} ${tx.currency}</span>
+          `;
+            if (container) container.appendChild(div);
+          });
+        } else {
+          if (container) container.innerHTML = `<p class="text-slate-400 text-center">No transactions found.</p>`;
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+        const container = document.getElementById("transactionList");
+        if (container) container.innerHTML = `<p class="text-red-400 text-center">Error loading transactions.</p>`;
+      }
+    });
+  </script>
+
+  <script>
+    function copyReferralLink() {
+      const linkInput = document.getElementById("referralLink");
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
+
+      // Show Alertify alert with OK button
+      alertify.alert("Copied", "Referral link copied to clipboard!");
+    }
+  </script>
+
   <!-- Navbar Toggle Script -->
   <script>
     const menuBtn = document.getElementById("menu-button");
@@ -490,17 +649,35 @@
       options: {
         responsive: true,
         plugins: {
-          legend: { labels: { color: '#c084fc' } }
+          legend: {
+            labels: {
+              color: '#c084fc'
+            }
+          }
         },
         scales: {
-          x: { ticks: { color: '#a78bfa' }, grid: { color: '#2e2b4a' } },
-          y: { ticks: { color: '#a78bfa' }, grid: { color: '#2e2b4a' } }
+          x: {
+            ticks: {
+              color: '#a78bfa'
+            },
+            grid: {
+              color: '#2e2b4a'
+            }
+          },
+          y: {
+            ticks: {
+              color: '#a78bfa'
+            },
+            grid: {
+              color: '#2e2b4a'
+            }
+          }
         }
       }
     });
   </script>
 
-   <script>
+  <script>
     const supportButton = document.getElementById("supportButton");
     const chatBox = document.getElementById("chatBox");
     const closeChat = document.getElementById("closeChat");
@@ -549,7 +726,7 @@
     }
 
     // Handle Enter key to send message
-    userInput.addEventListener("keypress", function (e) {
+    userInput.addEventListener("keypress", function(e) {
       if (e.key === "Enter" && userInput.value.trim() !== "") {
         const message = userInput.value.trim();
         addUserMessage(message);
@@ -566,7 +743,8 @@
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/randomizer.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
+  <!-- Alertify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 </body>
 
 </html>

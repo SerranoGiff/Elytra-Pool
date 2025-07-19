@@ -58,6 +58,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <title>Elytra Pool | Staking</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
   <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/user.css">
@@ -157,8 +159,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-         <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
-              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
@@ -197,47 +199,36 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     </div>
   </nav>
 
-
-
   <!-- Staking Section -->
   <section id="staking" class="pt-32 pb-20 px-4 md:px-10">
     <div class="max-w-[90rem] mx-auto">
       <h2 class="text-4xl font-bold mb-4 text-center text-purple-400">Earn Rewards On Staking</h2>
-      <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg">
-      </p>
+      <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg"></p>
+
       <!-- Earnings Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <!-- Yesterday's Profit -->
         <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
           <div class="text-sm text-gray-400 mb-1">Yesterday's Profit</div>
-          <div class="text-3xl font-bold">+1,000 <span class="text-purple-400">ELTR</span></div>
+          <div class="text-3xl font-bold">0.00 <span class="text-purple-400">ELTR</span></div>
           <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
         </div>
-
-        <!-- 30 Days Cumulative Income -->
         <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
           <div class="text-sm text-gray-400 mb-1">30 Days Cumulative Income</div>
-          <div class="text-3xl font-bold">+18,420 <span class="text-purple-400">ELTR</span></div>
+          <div class="text-3xl font-bold">0.00 <span class="text-purple-400">ELTR</span></div>
           <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
         </div>
       </div>
 
-      <!-- Tabs Navigation -->
+      <!-- Tabs -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 w-full">
-        <button
-          class="tab-btn w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white font-semibold hover:brightness-110 transition">Staking
-          Cycles</button>
-        <button
-          class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Active
-          Stakes</button>
-        <button
-          class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Staking
-          History</button>
+        <button class="tab-btn w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white font-semibold hover:brightness-110 transition">Staking Cycles</button>
+        <button class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Active Stakes</button>
+        <button class="tab-btn w-full py-3 rounded-lg bg-gray-700 text-white font-semibold hover:bg-purple-700 transition">Staking Archive</button>
       </div>
 
-      <!-- Section Containers -->
+      <!-- Sections -->
       <div id="stakingCyclesSection">
-        <!-- Keep your existing staking cards inside this div -->
+        <!-- This will just toggle card visibility -->
       </div>
 
       <div class="hidden" id="activeStakesSection">
@@ -252,18 +243,13 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         </div>
       </div>
 
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Bitcoin Staking -->
-        <div class="relative staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 1s">
-          <!-- 🏆 Hanging Best Option Badge -->
+      <!-- STAKING CARDS -->
+      <div id="stakingCards" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Bitcoin -->
+        <div id="card-btc" class="staking-card p-6 rounded-2xl cursor-pointer fade-in relative" data-default="true">
           <div class="absolute -top-3 -right-3 z-10">
-            <div
-              class="bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse ring-2 ring-purple-400">
-              🏆 Best Option
-            </div>
+            <div class="bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse ring-2 ring-purple-400">🏆 Best Option</div>
           </div>
-
           <div class="flex justify-between items-start mb-4">
             <div class="flex items-center">
               <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
@@ -274,40 +260,29 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
                 <div class="text-sm text-gray-400">BTC Staking</div>
               </div>
             </div>
-            <div id="btc-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">600.5% APY</div>
+            <div class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">100 GH/s Hashrate</div>
           </div>
-
           <div class="mb-6">
-            <div class="flex justify-between text-sm mb-1">
-              <span class="text-gray-400">Total Staked</span>
-              <span id="btc-staked">12,450 BTC</span>
-            </div>
+            <div class="flex justify-between text-sm mb-1"><span class="text-gray-400">Total Staked</span><span>12,450 BTC</span></div>
             <div class="w-full bg-gray-800 rounded-full h-2">
-              <div class="progress-bar" style="width: 65%"></div>
+              <div class="progress-bar bg-blue-400 h-2 rounded-full" style="width: 65%"></div>
             </div>
           </div>
-
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div id="btc-min" class="font-semibold">0.01 BTC</div>
+              <div class="font-semibold">200 ELTR</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
-              <div id="btc-lock" class="font-semibold">30 Days</div>
+              <div class="font-semibold">3-90 days</div>
             </div>
           </div>
-
-          <a href="#"
-            class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
-            data-title="Bitcoin" data-min="0.01 BTC" data-lock="30 Days">
-            Stake Now
-          </a>
+          <a href="#" class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700" data-title="Bitcoin" data-min="0.1 ETH" data-lock="14 Days" data-currency="BTC">Stake Now</a>
         </div>
 
-
         <!-- Ethereum Staking -->
-        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.2s">
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.2s" data-default="true">
           <div class="flex justify-between items-start mb-4">
             <div class="flex items-center">
               <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center mr-3">
@@ -318,8 +293,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
                 <div class="text-sm text-gray-400">ETH Staking</div>
               </div>
             </div>
-            <div id="eth-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">500.2%
-              APY</div>
+            <div id="eth-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">87 GH/s Hashrate</div>
           </div>
           <div class="mb-6">
             <div class="flex justify-between text-sm mb-1">
@@ -333,21 +307,20 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div id="eth-min" class="font-semibold">0.1 ETH</div>
+              <div id="eth-min" class="font-semibold">200 ELTR</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
-              <div id="eth-lock" class="font-semibold">14 Days</div>
+              <div id="eth-lock" class="font-semibold">3-90 days</div>
             </div>
           </div>
           <a href="#"
             class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
-            data-title="Ethereum" data-min="0.1 ETH" data-lock="14 Days">Stake Now</a>
-
+            data-title="Ethereum" data-min="0.1 ETH" data-lock="14 Days" data-currency="ETH">Stake Now</a>
         </div>
 
         <!-- Solana Staking -->
-        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.3s">
+        <div class="staking-card p-6 rounded-2xl cursor-pointer fade-in" style="animation-delay: 0.3s" data-default="true">
           <div class="flex justify-between items-start mb-4">
             <div class="flex items-center">
               <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
@@ -358,8 +331,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
                 <div class="text-sm text-gray-400">SOL Staking</div>
               </div>
             </div>
-            <div id="sol-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">800.7%
-              APY</div>
+            <div id="sol-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">78 GH/s Hashrate</div>
           </div>
           <div class="mb-6">
             <div class="flex justify-between text-sm mb-1">
@@ -373,21 +345,21 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div id="sol-min" class="font-semibold">1 SOL</div>
+              <div id="sol-min" class="font-semibold">200 ELTR</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
-              <div id="sol-lock" class="font-semibold">7 Days</div>
+              <div id="sol-lock" class="font-semibold">3-90 days</div>
             </div>
           </div>
           <a href="#"
             class="stake-btn btn-primary w-full py-2 rounded-lg text-center block bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-blue-700"
-            data-title="Solana" data-min="1 SOL" data-lock="7 Days">Stake Now</a>
+            data-title="Solana" data-min="1 SOL" data-lock="7 Days" data-currency="SOL">Stake Now</a>
 
         </div>
 
         <!-- Cardano -->
-        <div class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform">
+        <div class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform" data-default="true">
           <div class="flex justify-between items-start mb-6">
             <div class="flex items-center">
               <div
@@ -398,7 +370,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
                 <div class="text-sm text-gray-400">ADA Staking</div>
               </div>
             </div>
-            <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">500% APY</div>
+            <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">66 GH/s Hashrate</div>
           </div>
           <div class="mb-6">
             <div class="flex justify-between text-sm mb-1 text-white">
@@ -412,21 +384,21 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div class="grid grid-cols-2 gap-4 mb-6 text-white">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div class="font-semibold">10 ADA</div>
+              <div class="font-semibold">200 ELTR</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
-              <div class="font-semibold">14 Days</div>
+              <div class="font-semibold">3-90 days</div>
             </div>
           </div>
           <a href="#"
             class="stake-btn w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:brightness-110"
-            data-title="Cardano" data-min="10 ADA" data-lock="14 Days">Stake Now</a>
+            data-title="Cardano" data-min="10 ADA" data-lock="14 Days" data-currency="ADA">Stake Now</a>
 
         </div>
 
         <!-- Polkadot -->
-        <div class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform">
+        <div class="staking-card p-8 rounded-2xl fade-in shadow-lg bg-gray-900 hover:scale-[1.02] transition-transform" data-default="true">
           <div class="flex justify-between items-start mb-6">
             <div class="flex items-center">
               <div
@@ -437,7 +409,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
                 <div class="text-sm text-gray-400">DOT Staking</div>
               </div>
             </div>
-            <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">700% APY</div>
+            <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm">92 GH/s Hashrate</div>
           </div>
           <div class="mb-6">
             <div class="flex justify-between text-sm mb-1 text-white">
@@ -451,35 +423,33 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div class="grid grid-cols-2 gap-4 mb-6 text-white">
             <div>
               <div class="text-sm text-gray-400">Min. Stake</div>
-              <div class="font-semibold">5 DOT</div>
+              <div class="font-semibold">200 ELTR</div>
             </div>
             <div>
               <div class="text-sm text-gray-400">Lock Period</div>
-              <div class="font-semibold">28 Days</div>
+              <div class="font-semibold">3-90 days</div>
             </div>
           </div>
           <a href="#"
             class="stake-btn w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:brightness-110"
-            data-title="Polkadot" data-min="5 DOT" data-lock="28 Days">Stake Now</a>
+            data-title="Polkadot" data-min="5 DOT" data-lock="28 Days" data-currency="DOT">Stake Now</a>
 
         </div>
       </div>
     </div>
-    <!-- Staking Modal -->
+
+    <!-- STAKING MODAL -->
     <div id="stakingModal"
       class="fixed inset-0 bg-black bg-opacity-60 modal-overlay flex items-center justify-center z-50 hidden">
       <div class="bg-gray-900 rounded-2xl w-full max-w-md p-6 relative text-white shadow-lg fade-in-up">
-        <!-- Close button -->
         <button id="closeModal"
           class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
 
-        <!-- Modal Title -->
         <h2 id="modalTitle" class="text-3xl font-bold mb-4 text-purple-400">Stake Now</h2>
         <p id="modalDescription" class="mb-4 text-sm text-gray-300">
           Select a period and stake your crypto securely.
         </p>
 
-        <!-- Lock Period -->
         <div class="mb-4">
           <label class="block text-sm text-gray-400 mb-1">Select Lock Period</label>
           <select id="lockPeriodSelect"
@@ -493,25 +463,21 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           </select>
         </div>
 
-        <!-- Min-Max Elytra -->
         <div class="mb-4">
           <label class="block text-sm text-gray-400 mb-1">Allowed Elytra Range</label>
           <div id="modalElytra" class="font-semibold text-white">Loading...</div>
         </div>
 
-        <!-- USDT Reference -->
         <div class="mb-4">
           <label class="block text-sm text-gray-400 mb-1">Amount in USDT (approx)</label>
           <div id="modalUSDT" class="font-semibold text-white">Loading...</div>
         </div>
 
-        <!-- Daily Average Earnings -->
         <div class="mb-4">
           <label class="block text-sm text-gray-400 mb-1">DAE Range</label>
           <div id="modalAPY" class="font-semibold text-white">Loading...</div>
         </div>
 
-        <!-- Amount Input -->
         <div class="mb-6">
           <label for="stakeAmount" class="block text-sm text-gray-400 mb-1">Amount to Stake</label>
           <input id="stakeAmount" type="number"
@@ -519,11 +485,47 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             placeholder="Enter amount">
         </div>
 
-        <!-- Confirm Button -->
-        <button
+        <button type="button"
           class="staking-modal-btn bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 w-full py-3 rounded-lg font-semibold hover:brightness-110 transition-all flex items-center justify-center gap-2">
           <i class="fas fa-lock text-sm"></i> Confirm Stake
         </button>
+      </div>
+    </div>
+
+    <!-- Cancel Modal -->
+    <div id="cancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
+      <div class="bg-gray-900 text-white p-6 rounded-2xl max-w-sm w-full shadow-2xl relative border border-red-500">
+        <div class="mb-4">
+          <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
+            <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+            Cancel Stake
+          </h2>
+          <p class="text-sm text-gray-300 mt-2">
+            Are you sure you want to cancel your stake of:
+          </p>
+          <p class="text-lg font-bold mt-3">
+            <span id="cancelAmount"></span> <span id="cancelCurrency"></span>
+          </p>
+
+          <div class="bg-yellow-900 text-yellow-300 text-sm p-3 rounded-lg mt-4 border border-yellow-600 flex gap-2 items-start">
+            <i class="fas fa-info-circle text-yellow-400 mt-0.5"></i>
+            <span>
+              <strong>Note:</strong> Cancelling a stake early will result in a
+              <span class="font-bold text-yellow-200">penalty</span> and loss of potential rewards.
+            </span>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-6">
+          <button onclick="document.getElementById('cancelModal').classList.add('hidden')"
+            class="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 transition">
+            <i class="fas fa-times-circle mr-1"></i> Close
+          </button>
+          <button id="confirmCancelBtn"
+            class="px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:brightness-110 transition font-medium">
+            <i class="fas fa-ban mr-1"></i> Yes, Cancel Anyway
+          </button>
+        </div>
       </div>
     </div>
 
@@ -619,68 +621,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     </div>
   </footer>
 
-  <!-- Success Toast Notification -->
-  <div id="toastNotification" class="fixed top-6 right-6 z-50 hidden animate-slide-in-right">
-    <div
-      class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-4 border border-purple-500">
-      <i class="fas fa-check-circle text-2xl text-green-300"></i>
-      <div>
-        <div class="font-bold text-white">Staking Confirmed!</div>
-        <div class="text-sm text-gray-200">Your crypto has been successfully staked.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Error Toast Notification -->
-  <div id="errorToast" class="fixed top-6 right-6 z-50 hidden animate-slide-in-right">
-    <div
-      class="bg-gradient-to-r from-red-600 via-pink-600 to-red-500 text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-4 border border-red-400">
-      <i class="fas fa-exclamation-triangle text-2xl text-yellow-200"></i>
-      <div>
-        <div class="font-bold text-white">Missing Amount</div>
-        <div class="text-sm text-gray-200">Please enter a valid stake amount before confirming.</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function showToast(toastId) {
-      const toast = document.getElementById(toastId);
-      toast.classList.remove("hidden", "animate-fade-out");
-      toast.classList.add("animate-slide-in-right");
-
-      setTimeout(() => {
-        toast.classList.remove("animate-slide-in-right");
-        toast.classList.add("animate-fade-out");
-
-        // hide after animation ends
-        setTimeout(() => {
-          toast.classList.add("hidden");
-        }, 600); // match fade-out duration
-      }, 2000); // display for 5s
-    }
-
-    // Example usage:
-    // showToast("toastNotification"); // for success
-    // showToast("errorToast");        // for error
-  </script>
-
-
-  <script>
-    function calculateReturn() {
-      const amount = parseFloat(document.getElementById('amount').value) || 0;
-      const duration = parseInt(document.getElementById('duration').value);
-
-      let apy = 0;
-      if (duration === 7) apy = 0.05;
-      else if (duration === 30) apy = 0.10;
-      else if (duration === 90) apy = 0.20;
-
-      const estimated = amount + (amount * apy);
-      document.getElementById('estimatedReturn').textContent = `₱${estimated.toFixed(2)}`;
-    }
-  </script>
-
   <!-- Navbar Toggle Script -->
   <script>
     const menuBtn = document.getElementById("menu-button");
@@ -722,121 +662,301 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   </script>
 
   <script>
-    const stakingModal = document.getElementById("stakingModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDescription = document.getElementById("modalDescription");
-    const stakeButtons = document.querySelectorAll(".stake-btn");
-    const toastNotification = document.getElementById("toastNotification");
-    const errorToast = document.getElementById("errorToast");
-    const confirmBtn = document.querySelector(".staking-modal-btn");
-    const stakeInput = document.getElementById("stakeAmount");
+    document.addEventListener("DOMContentLoaded", function() {
+      const stakingModal = document.getElementById("stakingModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalDescription = document.getElementById("modalDescription");
+      const stakeButtons = document.querySelectorAll(".stake-btn");
+      const confirmBtn = document.querySelector(".staking-modal-btn");
+      const stakeInput = document.getElementById("stakeAmount");
+      const lockPeriodSelect = document.getElementById('lockPeriodSelect');
+      const modalElytra = document.getElementById('modalElytra');
+      const modalUSDT = document.getElementById('modalUSDT');
+      const modalAPY = document.getElementById('modalAPY');
+      const closeModal = document.getElementById("closeModal");
 
-    const lockPeriodSelect = document.getElementById('lockPeriodSelect');
-    const modalElytra = document.getElementById('modalElytra');
-    const modalUSDT = document.getElementById('modalUSDT');
-    const modalAPY = document.getElementById('modalAPY');
+      alertify.set('notifier', 'position', 'top-right');
 
-    const minimums = {
-      3: 100,
-      7: 3000,
-      15: 7000,
-      30: 10000,
-      60: 30000,
-      90: 50000,
-    };
+      let selectedDisplayCurrency = 'Elytra'; // for UI
+      let stakeLabel = 'ELTR'; // always use ELTR for staking backend
 
-    const maximums = {
-      3: 2999.99,
-      7: 6999.99,
-      15: 9999.99,
-      30: 29999.99,
-      60: 49999.99,
-      90: Infinity,
-    };
+      const stakingConfig = {
+        periods: {
+          3: {
+            min: 200,
+            max: 2999.99,
+            dailyRange: [4.2, 4.5]
+          },
+          7: {
+            min: 3000,
+            max: 6999.99,
+            dailyRange: [4.5, 4.8]
+          },
+          15: {
+            min: 7000,
+            max: 19999.99,
+            dailyRange: [7.0, 8.0]
+          },
+          30: {
+            min: 20000,
+            max: 39999.99,
+            dailyRange: [8.5, 9.3]
+          },
+          60: {
+            min: 40000,
+            max: 99999.99,
+            dailyRange: [10.0, 14.0]
+          },
+          90: {
+            min: 120000,
+            max: Infinity,
+            dailyRange: [16.0, 25.0]
+          }
+        },
+        elytraToUSDT: ely => ely / 2,
+        updateModalInfo() {
+          const period = parseInt(lockPeriodSelect.value);
+          const {
+            min,
+            max,
+            dailyRange
+          } = this.periods[period];
+          modalElytra.textContent = `${min} ELTR – ${max === Infinity ? "∞" : max} ELTR`;
+          modalUSDT.textContent = `${this.elytraToUSDT(min).toFixed(2)} USDT – ${max === Infinity ? "∞" : this.elytraToUSDT(max).toFixed(2)} USDT`;
+          modalAPY.textContent = `${dailyRange[0]}% – ${dailyRange[1]}%`;
+        }
+      };
 
-    const dailyPercentRanges = {
-      3: [4.2, 4.5],
-      7: [4.5, 4.8],
-      15: [7.0, 8.0],
-      30: [8.5, 9.3],
-      60: [10.0, 14.0],
-      90: [16.0, 25.0]
-    };
+      function initModal() {
+        stakeButtons.forEach(btn => {
+          btn.addEventListener("click", e => {
+            e.preventDefault();
+            selectedDisplayCurrency = btn.getAttribute("data-currency") || 'Elytra';
 
-    // 2 ELYTRA = 1 USDT
-    function elytraToUSDT(elytraAmount) {
-      return elytraAmount / 2;
-    }
+            modalTitle.textContent = `Stake ${selectedDisplayCurrency}`;
+            modalDescription.textContent = `Stake your ${selectedDisplayCurrency} securely and earn passive income.`;
+            stakingModal.classList.remove("hidden");
 
-    function updateModalInfo() {
-      const value = parseInt(lockPeriodSelect.value);
-      const min = minimums[value];
-      const max = maximums[value];
-      const [minDAE, maxDAE] = dailyPercentRanges[value];
+            stakingConfig.updateModalInfo();
+          });
+        });
 
-      modalElytra.textContent = `${min} ELTR – ${max === Infinity ? "∞" : max} ELTR`;
+        lockPeriodSelect.addEventListener('change', () => stakingConfig.updateModalInfo());
 
-      const minUSDT = elytraToUSDT(min).toFixed(2);
-      const maxUSDT = max === Infinity ? "∞" : elytraToUSDT(max).toFixed(2);
-      modalUSDT.textContent = `${minUSDT} USDT – ${maxUSDT} USDT`;
+        closeModal.addEventListener("click", () => stakingModal.classList.add("hidden"));
+        window.addEventListener("click", e => {
+          if (e.target === stakingModal) stakingModal.classList.add("hidden");
+        });
+      }
 
-      modalAPY.textContent = `${minDAE}% – ${maxDAE}%`;
-    }
+      async function handleStakeConfirmation() {
+        try {
+          const lockDays = parseInt(lockPeriodSelect.value);
+          const amount = parseFloat(stakeInput.value);
+          const {
+            min,
+            max,
+            dailyRange
+          } = stakingConfig.periods[lockDays];
 
-    lockPeriodSelect.addEventListener('change', updateModalInfo);
-    updateModalInfo();
+          if (isNaN(amount) || amount < min || (max !== Infinity && amount > max)) {
+            alertify.error(`Enter amount between ${min} and ${max === Infinity ? "∞" : max} ELTR`);
+            return;
+          }
 
-    stakeButtons.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        const title = btn.getAttribute("data-title");
-        modalTitle.textContent = `Stake ${title}`;
-        modalDescription.textContent = `Stake your ${title} securely and earn passive income.`;
-        stakingModal.classList.remove("hidden");
+          confirmBtn.disabled = true;
+          confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+          const processingAlert = alertify.message('Processing your stake...', 0);
+
+          const checkResponse = await fetch("../config/check_stake_limits.php");
+          const checkData = await checkResponse.json();
+
+          if (checkData.status !== 'ok') {
+            alertify.dismissAll();
+            alertify.error(checkData.message || "Unable to verify stake limits.");
+            return;
+          }
+
+          if (checkData.active_stakes >= 1) {
+            alertify.dismissAll();
+            alertify.error("Free users can only have 1 active stake at a time.");
+            return;
+          }
+
+          if (checkData.monthly_stakes >= 5) {
+            alertify.dismissAll();
+            alertify.error("Free users can only stake 5 times per month.");
+            return;
+          }
+
+          // Proceed with actual staking
+          const response = await fetch("../config/stake.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+              amount,
+              currency: selectedDisplayCurrency,
+              lock_days: lockDays,
+              daily_percent: dailyRange[0]
+            })
+          });
+
+          const rawText = await response.text();
+          console.log("Server response:", rawText);
+
+          let data;
+          try {
+            data = JSON.parse(rawText);
+          } catch (e) {
+            throw new Error("Invalid JSON response from server: " + rawText);
+          }
+
+          if (!response.ok || data.status !== 'success') {
+            throw new Error(data.message || 'Staking failed');
+          }
+
+          alertify.dismissAll();
+          alertify.success(`Success! ${amount} ${selectedDisplayCurrency} staked for ${lockDays} days.`);
+          stakingModal.classList.add("hidden");
+          stakeInput.value = "";
+
+        } catch (error) {
+          console.error(error);
+          alertify.dismissAll();
+          alertify.error(error.message || 'Error during staking.');
+        } finally {
+          confirmBtn.disabled = false;
+          confirmBtn.innerHTML = '<i class="fas fa-lock text-sm"></i> Confirm Stake';
+        }
+      }
+
+      initModal();
+      confirmBtn.addEventListener("click", handleStakeConfirmation);
+    });
+  </script>
+
+  <script>
+    function renderActiveStakes(data) {
+      const container = document.getElementById('stakingCards');
+
+      // Hide default cards before rendering dynamic ones
+      document.querySelectorAll('.staking-card').forEach(card => {
+        if (card.dataset.default === "true") {
+          card.classList.add('hidden');
+        }
       });
-    });
 
-    confirmBtn.addEventListener("click", () => {
-      const value = parseInt(lockPeriodSelect.value);
-      const min = minimums[value];
-      const max = maximums[value];
-      const amount = parseFloat(stakeInput.value);
+      data.forEach(stake => {
+        const hashRate = (Math.random() * 100).toFixed(2);
+        const dailyEarnings = (stake.amount * (stake.daily_percent / 100)).toFixed(6);
+        const now = new Date();
+        const start = new Date(stake.created_at);
+        const end = new Date(stake.end_date);
+        const totalDuration = end - start;
+        const elapsed = now - start;
+        let progress = Math.min(100, Math.floor((elapsed / totalDuration) * 100));
+        if (progress < 0) progress = 0;
 
-      if (!amount || amount < min || amount > max) {
-        showToast("errorToast");
-        return;
-      }
+        const iconData = {
+          'BTC': {
+            icon: '<i class="fab fa-btc text-white"></i>',
+            color: 'bg-orange-500'
+          },
+          'ETH': {
+            icon: '<i class="fab fa-ethereum text-white"></i>',
+            color: 'bg-gray-400'
+          },
+          'ELTR': {
+            icon: '<i class="fas fa-rocket text-white"></i>',
+            color: 'bg-purple-500'
+          },
+          'USDT': {
+            icon: '<i class="fas fa-dollar-sign text-white"></i>',
+            color: 'bg-green-500'
+          },
+          'SOL': {
+            icon: '<i class="fas fa-bolt text-white"></i>',
+            color: 'bg-purple-500'
+          },
+          'ADA': {
+            icon: '₳',
+            color: 'bg-blue-500'
+          },
+          'DOT': {
+            icon: '●',
+            color: 'bg-pink-500'
+          }
+        };
 
-      stakingModal.classList.add("hidden");
-      stakeInput.value = "";
-      showToast("toastNotification");
-    });
+        const selected = iconData[stake.currency] || {
+          icon: '<i class="fas fa-coins text-white"></i>',
+          color: 'bg-gray-500'
+        };
 
-    const closeModal = document.getElementById("closeModal");
-    closeModal.addEventListener("click", () => {
-      stakingModal.classList.add("hidden");
-    });
+        const card = document.createElement('div');
+        card.className = 'staking-card p-4 bg-gray-800 rounded-lg shadow text-white';
+        card.dataset.default = "false";
+        card.innerHTML = `
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 ${selected.color} rounded-full flex items-center justify-center">
+            ${selected.icon}
+          </div>
+          <div class="text-lg font-semibold">${stake.currency} Stake</div>
+        </div>
 
-    window.addEventListener("click", (e) => {
-      if (e.target === stakingModal) {
-        stakingModal.classList.add("hidden");
-      }
-    });
+        <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+          <div>
+            <div class="text-xs text-gray-400">Hashrate</div>
+            <div class="text-base font-semibold">${hashRate} TH/s</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-400">Daily Earnings</div>
+            <div class="text-base font-semibold">${dailyEarnings} ${stake.currency}</div>
+          </div>
+        </div>
 
-    // ✅ Toast animation function
-    function showToast(toastId) {
-      const toast = document.getElementById(toastId);
-      toast.classList.remove("hidden", "fade-out");
-      toast.classList.add("slide-in");
+        <div class="mb-2 text-xs text-gray-400">Staked Amount: 
+          <span class="text-white font-semibold">${stake.amount} ${stake.currency}</span>
+        </div>
 
-      setTimeout(() => {
-        toast.classList.remove("slide-in");
-        toast.classList.add("fade-out");
+        <div class="flex justify-between text-xs text-white mb-1">
+          <span>Progress</span>
+          <span>${progress}%</span>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-1.5 mb-4">
+          <div class="bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 h-1.5 rounded-full" style="width: ${progress}%"></div>
+        </div>
 
-        setTimeout(() => {
-          toast.classList.add("hidden");
-        }, 500); // fade out time
-      }, 2000); // visible for 5 seconds
+        <a href="#"
+          onclick="openCancelModal(${stake.id}, ${stake.amount}, '${stake.currency}')"
+          class="w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:brightness-110 text-sm font-medium">
+          Cancel Stake
+        </a>
+      `;
+        container.appendChild(card);
+      });
+    }
+
+    function openCancelModal(id, amount, currency) {
+      const modal = document.getElementById("cancelModal");
+      const modalAmount = document.getElementById("cancelAmount");
+      const modalCurrency = document.getElementById("cancelCurrency");
+      const confirmBtn = document.getElementById("confirmCancelBtn");
+
+      // Set content
+      modalAmount.textContent = amount;
+      modalCurrency.textContent = currency;
+
+      // Set confirm button action
+      confirmBtn.onclick = function() {
+        cancelStake(id);
+        modal.classList.add("hidden");
+      };
+
+      // Show modal
+      modal.classList.remove("hidden");
     }
   </script>
 
@@ -845,27 +965,80 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     const stakingCycles = document.getElementById('stakingCyclesSection');
     const activeStakes = document.getElementById('activeStakesSection');
     const stakingHistory = document.getElementById('stakingHistorySection');
+    const stakingCards = document.getElementById('stakingCards');
 
     tabs.forEach((btn, index) => {
       btn.addEventListener('click', () => {
+        // Reset tab styles
         tabs.forEach(tab => {
           tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
           tab.classList.remove('bg-purple-700');
           tab.classList.add('bg-gray-700');
         });
 
+        // Highlight selected tab
         btn.classList.remove('bg-gray-700');
         btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
 
+        // Hide all sections
         stakingCycles.classList.add('hidden');
         activeStakes.classList.add('hidden');
         stakingHistory.classList.add('hidden');
+        stakingCards.classList.add('hidden');
 
-        if (index === 0) stakingCycles.classList.remove('hidden');
-        else if (index === 1) activeStakes.classList.remove('hidden');
-        else if (index === 2) stakingHistory.classList.remove('hidden');
+        if (index === 0) {
+          // Tab 1: Show default staking cycles
+          stakingCycles.classList.remove('hidden');
+          stakingCards.classList.remove('hidden');
+
+          // Show default cards, hide dynamically added cards
+          document.querySelectorAll('.staking-card').forEach(card => {
+            if (card.dataset.default === "true") {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+
+        } else if (index === 1) {
+          // Tab 2: Active Stakes
+          fetch('../config/fetch_active_stakes.php')
+            .then(res => res.json())
+            .then(data => {
+              // Hide all default cards
+              document.querySelectorAll('.staking-card').forEach(card => {
+                if (card.dataset.default === "true") {
+                  card.classList.add('hidden');
+                }
+              });
+
+              if (data.length > 0) {
+                stakingCards.classList.remove('hidden');
+                activeStakes.classList.add('hidden');
+                renderActiveStakes(data);
+              } else {
+                stakingCards.classList.add('hidden');
+                activeStakes.classList.remove('hidden');
+              }
+            })
+            .catch(err => {
+              console.error('Failed to load active stakes:', err);
+              stakingCards.classList.add('hidden');
+              activeStakes.classList.remove('hidden');
+            });
+
+        } else if (index === 2) {
+          // Tab 3: Staking History
+          stakingHistory.classList.remove('hidden');
+        }
       });
     });
+
+    function showAllCards() {
+      document.querySelectorAll('.staking-card[data-default="true"]').forEach(card => {
+        card.classList.remove('hidden');
+      });
+    }
   </script>
 
   <script>
@@ -917,7 +1090,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     }
 
     // Handle Enter key to send message
-    userInput.addEventListener("keypress", function (e) {
+    userInput.addEventListener("keypress", function(e) {
       if (e.key === "Enter" && userInput.value.trim() !== "") {
         const message = userInput.value.trim();
         addUserMessage(message);
@@ -930,7 +1103,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       }
     });
   </script>
-
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 </body>
 
 </html>

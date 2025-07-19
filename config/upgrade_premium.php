@@ -12,7 +12,7 @@ if (!$userId) {
 
 $cost = 499;
 
-// Check current balance
+// 1. Get user's USDT balance
 $sql = "SELECT usdt_balance FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
@@ -32,13 +32,16 @@ if ($currentBalance < $cost) {
   exit;
 }
 
-// Deduct and upgrade
+// 2. Deduct balance and upgrade account
 $newBalance = $currentBalance - $cost;
 $update = "UPDATE users SET usdt_balance = ?, type = 'premium' WHERE id = ?";
 $updateStmt = $conn->prepare($update);
 $updateStmt->bind_param("di", $newBalance, $userId);
 
 if ($updateStmt->execute()) {
+  // 3. Update session to reflect premium type
+  $_SESSION['type'] = 'premium';
+
   echo json_encode(['status' => 'success', 'message' => 'Upgraded successfully']);
 } else {
   echo json_encode(['status' => 'error', 'message' => 'Upgrade failed']);

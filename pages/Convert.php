@@ -324,26 +324,35 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   }
 
   function convertNow() {
-    const from = document.getElementById("fromSelect").value;
-    const to = document.getElementById("toSelect").value;
-    const amount = parseFloat(document.getElementById("convertAmount").value);
+  const from = document.getElementById("fromSelect").value;
+  const to = document.getElementById("toSelect").value;
+  const amount = parseFloat(document.getElementById("convertAmount").value);
 
-    if (!from || !to) {
-      alertify.error("Please select both From and To currencies.");
-      return;
-    }
+  if (!from || !to) {
+    alertify.error("Please select both From and To currencies.");
+    return;
+  }
 
-    if (isNaN(amount) || amount <= 0) {
-      alertify.error("Please enter a valid amount.");
-      return;
-    }
+  if (isNaN(amount) || amount <= 0) {
+    alertify.error("Please enter a valid amount.");
+    return;
+  }
 
-    fetch("../config/convert.php", {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to, amount })
+  fetch("../config/convert.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ from, to, amount })
+  })
+    .then(async res => {
+      if (!res.ok) {
+        const text = await res.text(); // to inspect raw response
+        console.error("Raw response:", text);
+        throw new Error("HTTP error " + res.status);
+      }
+      return res.json();
     })
-    .then(res => res.json())
     .then(data => {
       if (data.status === "success") {
         alertify.alert("Request Submitted", data.message).set('onok', () => {
@@ -353,10 +362,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         alertify.error(data.message);
       }
     })
-    .catch(() => {
+    .catch(err => {
+      console.error("Conversion Error:", err);
       alertify.error("Something went wrong. Please try again.");
     });
-  }
+}
+
 </script>
 
   <!-- Navbar Toggle Script -->

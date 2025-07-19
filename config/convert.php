@@ -14,6 +14,7 @@ $from = strtoupper(trim($data['from'] ?? ''));
 $to = strtoupper(trim($data['to'] ?? ''));
 $amount = floatval($data['amount'] ?? 0);
 
+// ✅ Allowed conversion directions
 $allowedPairs = [
     'USDT' => ['ELYTRA'],
     'BTC' => ['ELYTRA'],
@@ -21,14 +22,14 @@ $allowedPairs = [
     'ELYTRA' => ['USDT', 'BTC', 'ETH']
 ];
 
-// Your custom conversion logic
+// ✅ Exchange rates (example only; adjust as needed)
 $exchangeRates = [
-    'USDT:ELYTRA' => 2,                        // 1 USDT = 2 ELTR
-    'BTC:ELYTRA' => 235929.62,                // 1 BTC = 235,929.62 ELTR
-    'ETH:ELYTRA' => 13764.70,                 // 1 ETH = 13,764.70 ELTR
-    'ELYTRA:USDT' => 0.5,                     // 1 ELTR = 0.5 USDT
-    'ELYTRA:BTC' => 1 / 235929.62,            // 1 ELTR = ~0.00000424 BTC
-    'ELYTRA:ETH' => 1 / 13764.70              // 1 ELTR = ~0.0000726 ETH
+    'USDT:ELYTRA' => 2,
+    'BTC:ELYTRA' => 235929.62,
+    'ETH:ELYTRA' => 13764.70,
+    'ELYTRA:USDT' => 0.5,
+    'ELYTRA:BTC' => 1 / 235929.62,
+    'ELYTRA:ETH' => 1 / 13764.70
 ];
 
 if (!isset($allowedPairs[$from]) || !in_array($to, $allowedPairs[$from])) {
@@ -51,29 +52,50 @@ if (!$rate) {
 
 $convertedAmount = round($amount * $rate, 8);
 
-$fromField = strtolower($from) . "_balance";
+// ✅ Correct field mapping
+$fieldMap = [
+    'USDT' => 'usdt_balance',
+    'BTC' => 'btc_balance',
+    'ETH' => 'eth_balance',
+    'ELYTRA' => 'eltr_balance'
+];
 
-// Check user balance
+$fromField = $fieldMap[$from] ?? null;
+$toField = $fieldMap[$to] ?? null;
+
+if (!$fromField || !$toField) {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid currency field.']);
+    exit;
+}
+
+// ✅ Get current balance
 $sql = "SELECT $fromField FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
 if (!$user || $user[$fromField] < $amount) {
     echo json_encode(['status' => 'error', 'message' => 'Insufficient balance.']);
     exit;
 }
 
-// Save conversion request for admin approval
-$sql = "INSERT INTO conversion_requests (user_id, from_coin, to_coin, amount, converted_amount, rate) VALUES (?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("issddd", $userId, $from, $to, $amount, $convertedAmount, $rate);
+// ✅ Insert conversion request
+$insertSql = "INSERT INTO conversion_requests (user_id, from_coin, to_coin, amount, converted_amount, rate) VALUES (?, ?, ?, ?, ?, ?)";
+$insertStmt = $conn->prepare($insertSql);
+$insertStmt->bind_param("issddd", $userId, $from, $to, $amount, $convertedAmount, $rate);
 
-if ($stmt->execute()) {
+if ($insertStmt->execute()) {
+    // ✅ Update user balances
+    $updateSql = "UPDATE users SET $fromField = $fromField - ?, $toField = $toField + ? WHERE id = ?";
+    $updateStmt = $conn->prepare($updateSql);
+    $updateStmt->bind_param("ddi", $amount, $convertedAmount, $userId);
+    $updateStmt->execute();
+
     echo json_encode([
         'status' => 'success',
-        'message' => "Request submitted. You'll get $convertedAmount $to after approval."
+        'message' => "Converted $amount $from to $convertedAmount $to successfully."
     ]);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Failed to submit request.']);

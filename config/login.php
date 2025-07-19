@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['type'] = $user['type'];
 
-            if ($user['type'] === 'Premium') {
+            if ($user['type'] === 'premium') {
                 header("Location: ../pages/PREMIUM ACCOUNT/premium-dashboard.php?success=Logged in successfully");
             } else {
                 header("Location: ../pages/user.php?success=Logged in successfully");

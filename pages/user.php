@@ -265,7 +265,6 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         <p class="text-slate-400 text-center">Loading...</p>
       </div>
     </div>
-    </div>
 
     <section class="mt-12">
       <div
@@ -477,13 +476,31 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         const dataWallet = await resWallet.json();
 
         if (dataWallet.status === 'success') {
-          document.getElementById("btcBalance").textContent = `${parseFloat(dataWallet.btc).toFixed(8)} BTC`;
-          document.getElementById("ethBalance").textContent = `${parseFloat(dataWallet.eth).toFixed(8)} ETH`;
-          document.getElementById("usdtBalance").textContent = `${parseFloat(dataWallet.usdt).toLocaleString()} USDT`;
-          document.getElementById("elytrsBalance").textContent = `${parseFloat(dataWallet.eltr).toLocaleString()} ELTR`;
-          document.getElementById("totalBalance").textContent = `$${parseFloat(dataWallet.total).toLocaleString()}`;
-          document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(dataWallet.last_activity).toLocaleString()}`;
-        }
+  const btc = parseFloat(dataWallet.btc);
+  const eth = parseFloat(dataWallet.eth);
+  const usdt = parseFloat(dataWallet.usdt);
+  const eltr = parseFloat(dataWallet.eltr);
+
+  const eltrToUsdt = 0.5;
+const btcToUsdt = 235929.62 * eltrToUsdt; // = 117964.81
+const ethToUsdt = 13764.70 * eltrToUsdt;  // = 6882.35
+
+const totalInUsdt = 
+  (btc * btcToUsdt) +
+  (eth * ethToUsdt) +
+  usdt +
+  (eltr * eltrToUsdt);
+
+
+  document.getElementById("btcBalance").textContent = `${btc.toFixed(8)} BTC`;
+  document.getElementById("ethBalance").textContent = `${eth.toFixed(8)} ETH`;
+  document.getElementById("usdtBalance").textContent = `${usdt.toLocaleString()} USDT`;
+  document.getElementById("elytrsBalance").textContent = `${eltr.toLocaleString()} ELTR`;
+
+  document.getElementById("totalBalance").textContent = `$${totalInUsdt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(dataWallet.last_activity).toLocaleString()}`;
+}
+
 
         // Load Transactions
         const resTx = await fetch("../config/transaction_history.php");

@@ -201,12 +201,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
                     <div class="space-y-4">
                         <div>
                             <label class="text-sm text-slate-300">Country</label>
-                            <input type="text" name="country" placeholder="e.g., Philippines" required
+                            <input type="text" name="country" placeholder="e.g., United Kindom" required
                                 class="mt-1 w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
                         </div>
                         <div>
                             <label class="text-sm text-slate-300">Document Type</label>
-                            <input type="text" name="doc_type" placeholder="e.g., Passport, ID" required
+                            <input type="text" name="doc_type" placeholder="e.g., Passport, Driver's License" required
                                 class="mt-1 w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
                         </div>
                         <div>

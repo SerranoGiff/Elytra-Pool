@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+// Redirect to premium dashboard if already upgraded
+if (isset($_SESSION['type']) && $_SESSION['type'] === 'premium') {
+  header("Location: PREMIUM ACCOUNT/premium-dashboard.php");
+  exit;
+}
+
+// Prevent browser from caching this page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: 0");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +102,7 @@ function subscribePremium() {
       method: "POST"
     }).then(res => res.json()).then(data => {
       if (data.status === 'success') {
-        window.location.href = "premium-dashboard.html";
+        window.location.href = "PREMIUM ACCOUNT/premium-dashboard.php";
       } else {
         error.innerText = data.message;
         error.classList.remove("hidden");

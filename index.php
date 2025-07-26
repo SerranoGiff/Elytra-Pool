@@ -961,8 +961,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
           <h4 class="font-semibold mb-4">Products</h4>
           <ul class="space-y-2 text-sm text-gray-400">
             <li><a href="#staking" class="hover:text-white">Staking</a></li>
-            <li><a href="#mining" class="hover:text-white">Assets</a></li>
-            <li><a href="#earnings" class="hover:text-white">Leaderboard</a></li>
+            <li><a href="#mining" class="hover:text-white">Premium</a></li>
+            <li><a href="#earnings" class="hover:text-white">Calculator</a></li>
             <li><a href="pages/about.html" class="hover:text-white">FAQ</a></li>
           </ul>
         </div>

@@ -282,44 +282,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         </form>
       </section>
 
-      <!-- Activity Logs -->
-      <section class="bg-[#1B263B] p-6 rounded-2xl shadow-xl border border-gray-700">
-        <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center">📝 Activity Logs</h3>
-        <p class="text-sm text-gray-400 text-center mb-6">Your recent actions on the platform</p>
-        <div class="overflow-x-auto rounded-lg">
-          <table class="min-w-full divide-y divide-gray-700 text-sm text-white">
-            <thead class="bg-[#0D1B2A] text-purple-300">
-              <tr>
-                <th class="py-3 px-4 text-left">Date</th>
-                <th class="py-3 px-4 text-left">Action</th>
-                <th class="py-3 px-4 text-left">Details</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-800 bg-[#1E293B]">
-              <tr>
-                <td class="px-4 py-3">2025-06-28 14:32</td>
-                <td class="px-4 py-3 text-green-400">Deposit</td>
-                <td class="px-4 py-3">₱5,000 added to staking balance</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">2025-06-27 09:20</td>
-                <td class="px-4 py-3 text-blue-400">Settings Update</td>
-                <td class="px-4 py-3">Changed profile picture and wallet address</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">2025-06-26 16:11</td>
-                <td class="px-4 py-3 text-red-400">Withdraw</td>
-                <td class="px-4 py-3">₱2,500 withdrawn to 0x43fa...e12F</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">2025-06-25 10:55</td>
-                <td class="px-4 py-3 text-purple-400">Convert</td>
-                <td class="px-4 py-3">Converted ₱1,000 to ElyCoin</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
     </div>
   </main>
 

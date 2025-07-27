@@ -58,8 +58,8 @@ try {
     $stmt->execute();
 
     // Insert stake record (use selected currency for label)
-    $insert = "INSERT INTO stakes (user_id, currency, amount, lock_days, daily_percent, created_at, end_date) 
-               VALUES (?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL ? DAY))";
+    $insert = "INSERT INTO stakes (user_id, currency, amount, lock_days, daily_percent, created_at, end_date, status) 
+           VALUES (?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL ? DAY), 'active')";
     $stmt = $conn->prepare($insert);
     $stmt->bind_param("isdddi", $userId, $currency, $amount, $lock_days, $daily_percent, $lock_days);
     $stmt->execute();

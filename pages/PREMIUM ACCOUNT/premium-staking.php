@@ -1,6 +1,35 @@
 <?php
 session_start();
-include '../config/dbcon.php';
+include '../../config/dbcon.php';
+
+// PREMIUM EXPIRATION ENFORCEMENT
+if (isset($_SESSION['user_id']) && isset($_SESSION['type']) && $_SESSION['type'] === 'premium') {
+    $userId = (int) $_SESSION['user_id'];
+    // Fetch current expiration
+    $stmtExp = $conn->prepare("SELECT premium_expiration FROM users WHERE id = ?");
+    $stmtExp->bind_param("i", $userId);
+    $stmtExp->execute();
+    $expResult = $stmtExp->get_result()->fetch_assoc();
+    $stmtExp->close();
+
+    $now = new DateTime('now', new DateTimeZone('Asia/Manila'));
+    $exp  = !empty($expResult['premium_expiration'])
+         ? DateTime::createFromFormat('Y-m-d H:i:s', $expResult['premium_expiration'], new DateTimeZone('Asia/Manila'))
+         : null;
+
+    if (is_null($exp) || $exp < $now) {
+        // expired → downgrade
+        $downgrade = $conn->prepare("UPDATE users SET type = 'free' WHERE id = ?");
+        $downgrade->bind_param("i", $userId);
+        $downgrade->execute();
+        $downgrade->close();
+
+        $_SESSION['type'] = 'free';
+        unset($_SESSION['expires']);
+        header("Location: ../../index.php?error=Subscription expired.");
+        exit;
+    }
+}
 
 // NO CACHE HEADERS
 header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
@@ -10,45 +39,39 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 // VALIDATE SESSION
-if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'free') {
-  header("Location: ../index.php?error=Unauthorized access.");
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'premium') {
+  header("Location: ../../index.php?error=Unauthorized access.");
   exit;
 }
 
-$userId = $_SESSION['user_id'] ?? null;
+$userId = $_SESSION['user_id'];
 
-if ($userId) {
-  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
-  $stmt->bind_param("i", $userId);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $user = $result->fetch_assoc();
-
-  $username = $user ? $user['username'] : 'User';
-} else {
-  $username = 'Guest';
-}
-
-$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+// Fetch user data
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo
           FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user = $stmt->get_result()->fetch_assoc();
 
-// Set default values with fallback to 'N/A'
-$firstName = $user['first_name'] ?? 'N/A';
-$lastName = $user['last_name'] ?? 'N/A';
-$birthday = $user['birthday'] ?? '';
-$username = $user['username'] ?? 'N/A';
-$aboutMe = $user['about_me'] ?? 'N/A';
-$email = $user['email'] ?? 'N/A';
-$walletAddress = $user['wallet_address'] ?? '';
-$profileImg = !empty($user['profile_photo']) ? "../" . $user['profile_photo'] : '../assets/default-avatar.png';
-$profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old image
+// Set defaults
+$firstName     = $user['first_name']    ?? 'N/A';
+$lastName      = $user['last_name']     ?? 'N/A';
+$birthday      = $user['birthday']      ?? '';
+$username      = $user['username']      ?? 'N/A';
+$aboutMe       = $user['about_me']      ?? 'N/A';
+$email         = $user['email']         ?? 'N/A';
+$walletAddress = $user['wallet_address']?? '';
+$profileImg    = !empty($user['profile_photo'])
+                 ? "../../" . $user['profile_photo']
+                 : '../../assets/default-avatar.png';
+$profileImg   .= '?v=' . time();
+
+// Generate referral code
+$referralSuffix = sprintf('%04d', $userId % 10000);
+$referralCode   = $username . $referralSuffix;
+$referralLink   = "https://elytra.io/referral/" . $referralCode;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,10 +83,88 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-  <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/user.css">
+  <link rel="shortcut icon" href="../../assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/user.css">
   <style>
+    .shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shimmer::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.1) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      animation: shimmerMove 2.5s infinite;
+    }
+
+    @keyframes shimmerMove {
+      0% {
+        left: -150%;
+      }
+
+      100% {
+        left: 150%;
+      }
+    }
+
+    .floating-premium-badge {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      z-index: 50;
+      background: linear-gradient(to right, #facc15, #fcd34d);
+      color: #1e1b36;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      border-radius: 9999px;
+      box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+      animation: bounceIn 1s ease;
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: translateY(-30%);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .exclusive-tag {
+      background: #facc15;
+      color: #1a1f36;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+      }
+
+      50% {
+        box-shadow: 0 0 10px 6px rgba(250, 204, 21, 0.3);
+      }
+    }
+
     @keyframes slideIn {
       0% {
         opacity: 0;
@@ -107,47 +208,52 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.php" class="flex items-center">
+        <a href="premium-dashboard.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+            <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
-          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-            Pool</span>
+          <span
+            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-1">
+            Elytra Pool
+            <span class=" text-s font-semibold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+              <i class="fas fa-crown text-yellow-400"></i>
+            </span>
+          </span>
         </a>
       </div>
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-dashboard.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="leaderboard.php"
+        <a href="premium-leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="withdraw.php"
+        <a href="premium-withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -163,7 +269,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
           <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-          <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -180,7 +286,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
             <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -188,27 +294,27 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
-      <a href="user.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-dashboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Home
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Staking
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Leaderboard
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Deposit
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Withdraw
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="Convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Convert
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
@@ -218,21 +324,44 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <!-- Staking Section -->
   <section id="staking" class="pt-32 pb-20 px-4 md:px-10">
     <div class="max-w-[90rem] mx-auto">
-      <h2 class="text-4xl font-bold mb-4 text-center text-purple-400">Earn Rewards On Staking</h2>
-      <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg"></p>
+      <div class="text-center mb-4">
+        <h2
+          class="flex flex-col sm:flex-row justify-center items-center
+           gap-y-2 sm:gap-x-3
+           text-4xl font-bold text-purple-400">
+          <i class="fas fa-crown text-yellow-400 animate-pulse"></i>
+          Earn Rewards On Staking
+        </h2>
+      </div>
+      <p class="text-gray-400 mb-12 text-center max-w-3xl mx-auto text-lg">
+        Premium users enjoy higher Hashrate, weekly payouts, and exclusive access.
+      </p>
 
-      <!-- Earnings Summary Cards -->
+      <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+        <!-- Yesterday's Profit -->
+        <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow-lg text-purple-300 w-full neon-glow">
           <div class="text-sm text-gray-400 mb-1">Yesterday's Profit</div>
           <div class="text-3xl font-bold" id="yesterday-profit">0.00 <span class="text-purple-400">ELTR</span></div>
           <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
         </div>
-        <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow text-purple-300 w-full">
+
+        <!-- 30 Days Cumulative Income -->
+        <div class="bg-gray-800 border border-purple-500 p-6 rounded-xl shadow-lg text-purple-300 w-full neon-glow">
           <div class="text-sm text-gray-400 mb-1">30 Days Cumulative Income</div>
           <div class="text-3xl font-bold" id="thirty-day-profit">0.00 <span class="text-purple-400">ELTR</span></div>
           <div class="text-xs text-gray-500 mt-1">Platform-wide earnings</div>
         </div>
+
+        <!-- Premium Profit Tracker -->
+        <div class="bg-gray-800 border border-yellow-400 p-6 rounded-xl shadow-lg shimmer w-full text-yellow-300 col-span-1 md:col-span-2">
+          <div class="text-sm text-gray-400 mb-1">Premium Profit Tracker</div>
+          <div class="text-3xl font-bold">
+            <span id="premium-profit">0.00</span> <span class="text-yellow-400">ELTR</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">Lifetime exclusive earnings</div>
+        </div>
+
       </div>
 
       <!-- Tabs -->
@@ -270,6 +399,54 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
       <!-- STAKING CARDS -->
       <div id="stakingCards" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Elytra Staking -->
+        <div class="relative staking-card p-6 rounded-2xl cursor-pointer fade-in bg-[#1a1f36] border border-purple-500 shadow-lg hover:shadow-purple-500/30 transition duration-300" data-default="true">
+          <!-- 🏆 Hanging Badge -->
+          <div class="absolute -top-3 -right-3 z-10">
+            <div class="bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-200 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse ring-2 ring-purple-600">
+              🔥 Exclusive
+            </div>
+          </div>
+
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                <i class="fab fa-book text-white"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-white">Elytra</div>
+                <div class="text-sm text-gray-400">ELTR Staking</div>
+              </div>
+            </div>
+            <div id="btc-apy" class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm">5 TH/s Hashrate</div>
+          </div>
+
+          <div class="mb-6">
+            <div class="flex justify-between text-sm mb-1 text-white">
+              <span class="text-gray-400">Total Staked</span>
+              <span id="btc-staked">120,450 ELTR</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2">
+              <div class="progress-bar bg-blue-400 h-2 rounded-full" style="width: 25%"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-6 text-white">
+            <div>
+              <div class="text-sm text-gray-400">Min. Stake</div>
+              <div id="btc-min" class="font-semibold">200 ELTR</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-400">Lock Period</div>
+              <div id="btc-lock" class="font-semibold">3-90 days</div>
+            </div>
+          </div>
+
+          <a href="#"
+            class="stake-btn w-full py-2 rounded-lg text-center block text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:bg-purple-800 transition">
+            Stake Now
+          </a>
+        </div>
         <!-- Bitcoin -->
         <div id="card-btc" class="staking-card p-6 rounded-2xl cursor-pointer fade-in relative" data-default="true">
           <div class="absolute -top-3 -right-3 z-10">
@@ -588,10 +765,10 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.php" class="flex items-center">
+          <a href="user.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
                 class="w-full h-full rounded-full object-cover" />
             </div>
             <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
@@ -602,13 +779,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <div>
           <h4 class="font-semibold mb-4">Products</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#staking" class="hover:text-white">Staking</a></li>
-            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li><a href="premium-staking.php" class="hover:text-white">Staking</a></li>
             <li>
-              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+              <a href="premium-leaderboard.php" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.php" class="hover:text-white">FAQ</a>
+              <a href="faq.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -616,10 +792,10 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <div>
           <h4 class="font-semibold mb-4">Support</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="../../help center.html" class="hover:text-white">Help Center</a></li>
             <li><a href="#" class="hover:text-white">Contact Us</a></li>
-            <li><a href="#" class="hover:text-white">Status</a></li>
-            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+            <li><a href="../../terms and condition.html" class="hover:text-white">Terms & Conditions</a></li>
+            <li><a href="../../privacy policy.html" class="hover:text-white">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -687,166 +863,192 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   </script>
 
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const stakingModal = document.getElementById("stakingModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDescription = document.getElementById("modalDescription");
-    const stakeButtons = document.querySelectorAll(".stake-btn");
-    const confirmBtn = document.querySelector(".staking-modal-btn");
-    const stakeInput = document.getElementById("stakeAmount");
-    const lockPeriodSelect = document.getElementById("lockPeriodSelect");
-    const modalElytra = document.getElementById("modalElytra");
-    const modalUSDT = document.getElementById("modalUSDT");
-    const modalAPY = document.getElementById("modalAPY");
-    const closeModal = document.getElementById("closeModal");
+    document.addEventListener("DOMContentLoaded", function() {
+      const stakingModal = document.getElementById("stakingModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalDescription = document.getElementById("modalDescription");
+      const stakeButtons = document.querySelectorAll(".stake-btn");
+      const confirmBtn = document.querySelector(".staking-modal-btn");
+      const stakeInput = document.getElementById("stakeAmount");
+      const lockPeriodSelect = document.getElementById("lockPeriodSelect");
+      const modalElytra = document.getElementById("modalElytra");
+      const modalUSDT = document.getElementById("modalUSDT");
+      const modalAPY = document.getElementById("modalAPY");
+      const closeModal = document.getElementById("closeModal");
 
-    if (!stakingModal || !confirmBtn || !stakeInput) return;
+      if (!stakingModal || !confirmBtn || !stakeInput) return;
 
-    alertify.set("notifier", "position", "top-right");
+      alertify.set("notifier", "position", "top-right");
 
-    let selectedDisplayCurrency = "Elytra";
+      let selectedDisplayCurrency = "Elytra";
 
-    const stakingConfig = {
-      periods: {
-        3: { min: 200, max: 2999.99, dailyRange: [4.2, 4.5] },
-        7: { min: 3000, max: 6999.99, dailyRange: [4.5, 4.8] },
-        15: { min: 7000, max: 19999.99, dailyRange: [7.0, 8.0] },
-        30: { min: 20000, max: 39999.99, dailyRange: [8.5, 9.3] },
-        60: { min: 40000, max: 99999.99, dailyRange: [10.0, 14.0] },
-        90: { min: 120000, max: Infinity, dailyRange: [16.0, 25.0] },
-      },
-      elytraToUSDT: (ely) => ely / 2,
-      updateModalInfo() {
-        const period = parseInt(lockPeriodSelect.value);
-        const config = this.periods[period];
-        if (!config) return;
-        const { min, max, dailyRange } = config;
-        modalElytra.textContent = `${min} ELTR – ${max === Infinity ? "∞" : max} ELTR`;
-        modalUSDT.textContent = `${this.elytraToUSDT(min).toFixed(2)} USDT – ${
+      const stakingConfig = {
+        periods: {
+          3: {
+            min: 200,
+            max: 2999.99,
+            dailyRange: [4.2, 4.5]
+          },
+          7: {
+            min: 3000,
+            max: 6999.99,
+            dailyRange: [4.5, 4.8]
+          },
+          15: {
+            min: 7000,
+            max: 19999.99,
+            dailyRange: [7.0, 8.0]
+          },
+          30: {
+            min: 20000,
+            max: 39999.99,
+            dailyRange: [8.5, 9.3]
+          },
+          60: {
+            min: 40000,
+            max: 99999.99,
+            dailyRange: [10.0, 14.0]
+          },
+          90: {
+            min: 120000,
+            max: Infinity,
+            dailyRange: [16.0, 25.0]
+          },
+        },
+        elytraToUSDT: (ely) => ely / 2,
+        updateModalInfo() {
+          const period = parseInt(lockPeriodSelect.value);
+          const config = this.periods[period];
+          if (!config) return;
+          const {
+            min,
+            max,
+            dailyRange
+          } = config;
+          modalElytra.textContent = `${min} ELTR – ${max === Infinity ? "∞" : max} ELTR`;
+          modalUSDT.textContent = `${this.elytraToUSDT(min).toFixed(2)} USDT – ${
           max === Infinity ? "∞" : this.elytraToUSDT(max).toFixed(2)
         } USDT`;
-        modalAPY.textContent = `${dailyRange[0]}% – ${dailyRange[1]}%`;
-      },
-    };
+          modalAPY.textContent = `${dailyRange[0]}% – ${dailyRange[1]}%`;
+        },
+      };
 
-    function initModal() {
-      stakeButtons.forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          selectedDisplayCurrency = btn.getAttribute("data-currency") || "Elytra";
+      function initModal() {
+        stakeButtons.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            selectedDisplayCurrency = btn.getAttribute("data-currency") || "Elytra";
 
-          modalTitle.textContent = `Stake ${selectedDisplayCurrency}`;
-          modalDescription.textContent = `Stake your ${selectedDisplayCurrency} securely and earn passive income.`;
-          stakingModal.classList.remove("hidden");
+            modalTitle.textContent = `Stake ${selectedDisplayCurrency}`;
+            modalDescription.textContent = `Stake your ${selectedDisplayCurrency} securely and earn passive income.`;
+            stakingModal.classList.remove("hidden");
 
-          stakingConfig.updateModalInfo();
-        });
-      });
-
-      lockPeriodSelect.addEventListener("change", () => stakingConfig.updateModalInfo());
-      closeModal.addEventListener("click", () => stakingModal.classList.add("hidden"));
-
-      window.addEventListener("click", (e) => {
-        if (e.target === stakingModal) stakingModal.classList.add("hidden");
-      });
-    }
-
-    async function handleStakeConfirmation() {
-      try {
-        const lockDays = parseInt(lockPeriodSelect.value);
-        const amount = parseFloat(stakeInput.value);
-        const config = stakingConfig.periods[lockDays];
-
-        if (!config || isNaN(amount) || amount < config.min || (config.max !== Infinity && amount > config.max)) {
-          alertify.error(`Enter amount between ${config.min} and ${config.max === Infinity ? "∞" : config.max} ELTR`);
-          return;
-        }
-
-        confirmBtn.disabled = true;
-        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        const processingAlert = alertify.message("Processing your stake...", 0);
-
-        // Run expired stake updater silently
-        await fetch("../config/check_stake_limits.php");
-
-        const checkResponse = await fetch("../config/check_stake_limits.php");
-        const checkData = await checkResponse.json();
-
-        if (checkData.status !== "ok") {
-          alertify.dismissAll();
-          alertify.error(checkData.message || "Unable to verify stake limits.");
-          return;
-        }
-
-        if (checkData.active_stakes >= 1) {
-          alertify.dismissAll();
-          alertify.error("You already have 1 active stake. Please wait for it to finish or cancel it before staking again.");
-          return;
-        }
-
-        if (checkData.monthly_stakes >= 5) {
-          alertify.dismissAll();
-          alertify.error("Free users can only stake 5 times per month.");
-          return;
-        }
-
-        const response = await fetch("../config/stake.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            amount,
-            currency: selectedDisplayCurrency === "Elytra" ? "ELTR" : selectedDisplayCurrency,
-            lock_days: lockDays,
-            daily_percent: config.dailyRange[0],
-          }),
+            stakingConfig.updateModalInfo();
+          });
         });
 
-        const rawText = await response.text();
-        let data;
+        lockPeriodSelect.addEventListener("change", () => stakingConfig.updateModalInfo());
+        closeModal.addEventListener("click", () => stakingModal.classList.add("hidden"));
 
-        try {
-          data = JSON.parse(rawText);
-        } catch {
-          throw new Error("Invalid response: " + rawText);
-        }
-
-        if (!response.ok || data.status !== "success") {
-          throw new Error(data.message || "Staking failed");
-        }
-
-        alertify.dismissAll();
-        alertify.success(`Success! ${amount} ${selectedDisplayCurrency} staked for ${lockDays} days.`);
-        stakingModal.classList.add("hidden");
-        stakeInput.value = "";
-      } catch (error) {
-        console.error(error);
-        alertify.dismissAll();
-        alertify.error(error.message || "Error during staking.");
-      } finally {
-        confirmBtn.disabled = false;
-        confirmBtn.innerHTML = '<i class="fas fa-lock text-sm"></i> Confirm Stake';
+        window.addEventListener("click", (e) => {
+          if (e.target === stakingModal) stakingModal.classList.add("hidden");
+        });
       }
-    }
 
-    initModal();
-    confirmBtn.addEventListener("click", handleStakeConfirmation);
+      async function handleStakeConfirmation() {
+        try {
+          const lockDays = parseInt(lockPeriodSelect.value);
+          const amount = parseFloat(stakeInput.value);
+          const config = stakingConfig.periods[lockDays];
 
-    fetch("../config/fetch_earnings_summary.php")
-      .then((res) => res.json())
-      .then((data) => {
-        document.getElementById("yesterday-profit").innerHTML = `${data.yesterday_earnings.toFixed(2)} <span class="text-purple-400">ELTR</span>`;
-        document.getElementById("thirty-day-profit").innerHTML = `${data.thirty_day_earnings.toFixed(2)} <span class="text-purple-400">ELTR</span>`;
-      })
-      .catch((err) => {
-        console.error("Error fetching earnings summary:", err);
-      });
-  });
-</script>
+          if (!config || isNaN(amount) || amount < config.min || (config.max !== Infinity && amount > config.max)) {
+            alertify.error(`Enter amount between ${config.min} and ${config.max === Infinity ? "∞" : config.max} ELTR`);
+            return;
+          }
+
+          confirmBtn.disabled = true;
+          confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+          const processingAlert = alertify.message("Processing your stake...", 0);
+
+          // Run expired stake updater silently
+          await fetch("../../config/check_stake_limits.php");
+
+          const checkResponse = await fetch("../../config/check_stake_limits.php");
+          const checkData = await checkResponse.json();
+
+          if (checkData.status !== "ok") {
+            alertify.dismissAll();
+            alertify.error(checkData.message || "Unable to verify stake limits.");
+            return;
+          }
+
+          const response = await fetch("../../config/stake.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              amount,
+              currency: selectedDisplayCurrency === "Elytra" ? "ELTR" : selectedDisplayCurrency,
+              lock_days: lockDays,
+              daily_percent: config.dailyRange[0],
+            }),
+          });
+
+          const rawText = await response.text();
+          let data;
+
+          try {
+            data = JSON.parse(rawText);
+          } catch {
+            throw new Error("Invalid response: " + rawText);
+          }
+
+          if (!response.ok || data.status !== "success") {
+            throw new Error(data.message || "Staking failed");
+          }
+
+          alertify.dismissAll();
+          alertify.success(`Success! ${amount} ${selectedDisplayCurrency} staked for ${lockDays} days.`);
+          stakingModal.classList.add("hidden");
+          stakeInput.value = "";
+        } catch (error) {
+          console.error(error);
+          alertify.dismissAll();
+          alertify.error(error.message || "Error during staking.");
+        } finally {
+          confirmBtn.disabled = false;
+          confirmBtn.innerHTML = '<i class="fas fa-lock text-sm"></i> Confirm Stake';
+        }
+      }
+
+      initModal();
+      confirmBtn.addEventListener("click", handleStakeConfirmation);
+
+      fetch("../../config/fetch_earnings_summary.php")
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("yesterday-profit").innerHTML = `${data.yesterday_earnings.toFixed(2)} <span class="text-purple-400">ELTR</span>`;
+          document.getElementById("thirty-day-profit").innerHTML = `${data.thirty_day_earnings.toFixed(2)} <span class="text-purple-400">ELTR</span>`;
+          document.getElementById("premium-profit").textContent = data.lifetime_earnings.toFixed(2);
+        })
+        .catch((err) => {
+          console.error("Error fetching earnings summary:", err);
+        });
+    });
+  </script>
 
   <script>
     const hashIntervals = {}; // Track update intervals per card
+
+    // Helper to format GH/s into GH/s or TH/s
+    function formatHashrate(gh) {
+      if (gh >= 1000) {
+        return (gh / 1000).toFixed(2) + ' TH/s';
+      } else {
+        return gh.toFixed(2) + ' GH/s';
+      }
+    }
 
     function renderActiveStakes(data) {
       const container = document.getElementById('stakingCards');
@@ -856,12 +1058,16 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         card.classList.add('hidden');
       });
 
-      // Remove dynamic cards
+      // Remove any previously‐rendered dynamic cards
       document.querySelectorAll('.staking-card[data-default="false"]').forEach(card => card.remove());
 
       data.forEach(stake => {
         const cardId = `stake-${stake.id}`;
+
+        // Compute daily earnings label
         const dailyEarnings = (stake.amount * (stake.daily_percent / 100)).toFixed(6);
+
+        // Progress calculation
         const now = new Date();
         const start = new Date(stake.created_at);
         const end = new Date(stake.end_date);
@@ -870,8 +1076,11 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         let progress = Math.min(100, Math.floor((elapsed / totalDuration) * 100));
         if (progress < 0) progress = 0;
 
-        const currencyLabel = stake.currency === 'ELTR' ? 'Elytra' : stake.currency;
+        // Pick a random initial hashrate between 66 and 10,000 GH/s
+        const initialGH = Math.random() * (10000 - 66) + 66;
+        const initialHashrate = formatHashrate(initialGH);
 
+        // Choose icon & color
         const iconData = {
           'BTC': {
             icon: '<i class="fab fa-btc text-white"></i>',
@@ -902,70 +1111,62 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             color: 'bg-pink-500'
           }
         };
-
-        const selected = iconData[stake.currency] || {
+        const sel = iconData[stake.currency] || {
           icon: '<i class="fas fa-coins text-white"></i>',
           color: 'bg-gray-500'
         };
+        const currencyLabel = stake.currency === 'ELTR' ? 'Elytra' : stake.currency;
 
-        // Random initial hashrate
-        const initialHashrate = (Math.random() * (100 - 60) + 60).toFixed(2);
-
+        // Build card
         const card = document.createElement('div');
         card.className = 'staking-card p-4 bg-gray-800 rounded-lg shadow text-white';
         card.dataset.default = "false";
         card.id = cardId;
         card.innerHTML = `
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 ${selected.color} rounded-full flex items-center justify-center">
-            ${selected.icon}
+          <div class="w-10 h-10 ${sel.color} rounded-full flex items-center justify-center">
+            ${sel.icon}
           </div>
           <div class="text-lg font-semibold">${currencyLabel} Stake</div>
         </div>
         <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
           <div>
             <div class="text-xs text-gray-400">Hashrate</div>
-            <div id="${cardId}-hashrate" class="text-base font-semibold">${initialHashrate} GH/s</div>
+            <div id="${cardId}-hashrate" class="text-base font-semibold">${initialHashrate}</div>
           </div>
           <div>
             <div class="text-xs text-gray-400">Daily Earnings</div>
             <div class="text-base font-semibold">${dailyEarnings} ELTR</div>
           </div>
         </div>
-        <div class="mb-2 text-xs text-gray-400">Staked Amount: 
-          <span class="text-white font-semibold">${stake.amount} ELTR</span>
+        <div class="mb-2 text-xs text-gray-400">
+          Staked Amount: <span class="text-white font-semibold">${stake.amount} ELTR</span>
         </div>
         <div class="flex justify-between text-xs text-white mb-1">
-          <span>Progress</span>
-          <span>${progress}%</span>
+          <span>Progress</span><span>${progress}%</span>
         </div>
         <div class="w-full bg-gray-700 rounded-full h-1.5 mb-4">
           <div class="bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 h-1.5 rounded-full" style="width: ${progress}%"></div>
         </div>
         <a href="#"
-          onclick="openCancelModal(${stake.id}, ${stake.amount}, 'ELTR')"
-          class="w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:brightness-110 text-sm font-medium">
+           onclick="openCancelModal(${stake.id}, ${stake.amount}, '${stake.currency}')"
+           class="w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:brightness-110 text-sm font-medium">
           Cancel Stake
         </a>
       `;
-
         container.appendChild(card);
 
-        // Setup random hashrate update
-        if (!hashIntervals[cardId]) {
-          const updateHashrate = () => {
-            const newRate = (Math.random() * (100 - 60) + 60).toFixed(2);
-            const target = document.getElementById(`${cardId}-hashrate`);
-            if (target) target.textContent = `${newRate} GH/s`;
-
-            // Schedule next update in 1–5 minutes
-            const nextInterval = Math.floor(Math.random() * (5 - 1 + 1) + 1) * 60000;
-            hashIntervals[cardId] = setTimeout(updateHashrate, nextInterval);
-          };
-
-          const initialDelay = Math.floor(Math.random() * (5 - 1 + 1) + 1) * 60000;
-          hashIntervals[cardId] = setTimeout(updateHashrate, initialDelay);
-        }
+        // Schedule random hashrate updates every 1–5 minutes
+        const updateHashrate = () => {
+          const gh = Math.random() * (10000 - 66) + 66;
+          const label = formatHashrate(gh);
+          const el = document.getElementById(`${cardId}-hashrate`);
+          if (el) el.textContent = label;
+          const next = (Math.floor(Math.random() * 5) + 1) * 60000;
+          hashIntervals[cardId] = setTimeout(updateHashrate, next);
+        };
+        const firstDelay = (Math.floor(Math.random() * 5) + 1) * 60000;
+        hashIntervals[cardId] = setTimeout(updateHashrate, firstDelay);
       });
     }
 
@@ -978,8 +1179,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       modalAmount.textContent = amount;
       modalCurrency.textContent = currency;
 
-      confirmBtn.onclick = function() {
-        fetch(`../config/cancel_stake.php`, {
+      confirmBtn.onclick = () => {
+        fetch(`../../config/cancel_stake.php`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -989,19 +1190,18 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             })
           })
           .then(res => res.json())
-          .then(response => {
-            if (response.success) {
-              alertify.success(response.message || 'Stake successfully canceled.');
+          .then(resp => {
+            if (resp.success) {
+              alertify.success(resp.message || 'Stake successfully canceled.');
               location.reload();
             } else {
-              alertify.error(response.message || 'Failed to cancel stake.');
+              alertify.error(resp.message || 'Failed to cancel stake.');
             }
           })
           .catch(err => {
-            console.error('Cancel stake error:', err);
+            console.error('Cancel error:', err);
             alertify.error('Something went wrong.');
           });
-
         modal.classList.add("hidden");
       };
 
@@ -1051,7 +1251,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
         } else if (index === 1) {
           // Active Stakes
-          fetch('../config/fetch_active_stakes.php')
+          fetch('../../config/fetch_active_stakes.php')
             .then(res => res.json())
             .then(data => {
               document.querySelectorAll('.staking-card').forEach(card => {
@@ -1086,7 +1286,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             <p class="text-lg">Loading staking history...</p>
           </div>`;
 
-          fetch('../config/fetch_staking_archive.php')
+          fetch('../../config/fetch_staking_archive.php')
             .then(res => res.json())
             .then(data => {
               stakingHistory.innerHTML = '';

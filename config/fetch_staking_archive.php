@@ -2,7 +2,7 @@
 session_start();
 header('Content-Type: application/json');
 
-include '../config/dbcon.php';
+include 'dbcon.php';
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode([]);
@@ -11,10 +11,14 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
-// Sample: select all finished stakes
-$query = "SELECT id, currency, amount, daily_percent, created_at, end_date
+// Include: (completed OR canceled) stakes
+$query = "SELECT id, currency, amount, daily_percent, created_at, end_date, status
           FROM stakes
-          WHERE user_id = ? AND end_date IS NOT NULL AND end_date <= NOW()
+          WHERE user_id = ? 
+            AND (
+              (end_date IS NOT NULL AND end_date <= NOW()) 
+              OR status = 'canceled'
+            )
           ORDER BY end_date DESC";
 
 $stmt = $conn->prepare($query);

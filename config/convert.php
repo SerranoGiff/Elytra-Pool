@@ -88,7 +88,12 @@ $insertStmt->bind_param("issddd", $userId, $from, $to, $amount, $convertedAmount
 
 if ($insertStmt->execute()) {
     // ✅ Update user balances
-    $updateSql = "UPDATE users SET $fromField = $fromField - ?, $toField = $toField + ? WHERE id = ?";
+    $updateSql = "UPDATE users SET
+    $fromField     = $fromField - ?,
+    $toField       = $toField   + ?,
+    last_activity  = NOW()
+  WHERE id = ?
+";
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bind_param("ddi", $amount, $convertedAmount, $userId);
     $updateStmt->execute();
@@ -100,4 +105,3 @@ if ($insertStmt->execute()) {
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Failed to submit request.']);
 }
-?>

@@ -26,7 +26,26 @@ if (!is_numeric($amount) || $amount <= 0) {
     exit;
 }
 
-// Handle file upload
+// ✅ Fetch user type
+$typeQuery = $conn->prepare("SELECT type FROM users WHERE id = ?");
+$typeQuery->bind_param("i", $user_id);
+$typeQuery->execute();
+$typeResult = $typeQuery->get_result();
+
+if ($typeResult->num_rows === 0) {
+    echo json_encode(["success" => false, "message" => "User not found."]);
+    exit;
+}
+
+$userData = $typeResult->fetch_assoc();
+$userType = strtolower($userData['type']); // expected 'free' or 'premium'
+
+// ✅ Apply pool fee
+$feeRate = ($userType === 'premium') ? 0.019 : 0.05;
+$feeAmount = round($amount * $feeRate, 8);
+$netAmount = round($amount - $feeAmount, 8);
+
+// ✅ Handle file upload
 $receiptPath = '';
 if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
     $uploadDir = 'uploads/receipts/';
@@ -49,15 +68,20 @@ if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) 
     move_uploaded_file($fileTmp, $receiptPath);
 }
 
-// ✅ Insert into deposits table with status = 'pending'
+// ✅ Insert into deposits table
 $insert = $conn->prepare("INSERT INTO deposits 
-    (user_id, wallet, network, wallet_address, amount, receipt, agreed, status, created_at) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NOW())");
-$insert->bind_param("isssdsi", $user_id, $wallet, $network, $address, $amount, $receiptPath, $agreed);
+    (user_id, wallet, network, wallet_address, amount, net_amount, fee_amount, receipt, agreed, status, created_at) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())");
+
+$insert->bind_param(
+    "isssddssi", 
+    $user_id, $wallet, $network, $address, $amount, $netAmount, $feeAmount, $receiptPath, $agreed
+);
+
 $insertSuccess = $insert->execute();
 
 if ($insertSuccess) {
-    echo json_encode(["success" => true, "message" => "Deposit submitted. Waiting for admin approval."]);
+    echo json_encode(["success" => true, "message" => "Deposit submitted. A service fee of $feeAmount has been deducted."]);
 } else {
     echo json_encode(["success" => false, "message" => "Failed to save deposit."]);
 }

@@ -1,3 +1,78 @@
+<?php
+session_start();
+include '../../config/dbcon.php';
+
+// PREMIUM EXPIRATION ENFORCEMENT
+if (isset($_SESSION['user_id']) && isset($_SESSION['type']) && $_SESSION['type'] === 'premium') {
+    $userId = (int) $_SESSION['user_id'];
+    // Fetch current expiration
+    $stmtExp = $conn->prepare("SELECT premium_expiration FROM users WHERE id = ?");
+    $stmtExp->bind_param("i", $userId);
+    $stmtExp->execute();
+    $expResult = $stmtExp->get_result()->fetch_assoc();
+    $stmtExp->close();
+
+    $now = new DateTime('now', new DateTimeZone('Asia/Manila'));
+    $exp  = !empty($expResult['premium_expiration'])
+         ? DateTime::createFromFormat('Y-m-d H:i:s', $expResult['premium_expiration'], new DateTimeZone('Asia/Manila'))
+         : null;
+
+    if (is_null($exp) || $exp < $now) {
+        // expired → downgrade
+        $downgrade = $conn->prepare("UPDATE users SET type = 'free' WHERE id = ?");
+        $downgrade->bind_param("i", $userId);
+        $downgrade->execute();
+        $downgrade->close();
+
+        $_SESSION['type'] = 'free';
+        unset($_SESSION['expires']);
+        header("Location: ../../index.php?error=Subscription expired.");
+        exit;
+    }
+}
+
+// NO CACHE HEADERS
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// VALIDATE SESSION
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'premium') {
+  header("Location: ../../index.php?error=Unauthorized access.");
+  exit;
+}
+
+$userId = $_SESSION['user_id'];
+
+// Fetch user data
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo
+          FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+// Set defaults
+$firstName     = $user['first_name']    ?? 'N/A';
+$lastName      = $user['last_name']     ?? 'N/A';
+$birthday      = $user['birthday']      ?? '';
+$username      = $user['username']      ?? 'N/A';
+$aboutMe       = $user['about_me']      ?? 'N/A';
+$email         = $user['email']         ?? 'N/A';
+$walletAddress = $user['wallet_address']?? '';
+$profileImg    = !empty($user['profile_photo'])
+                 ? "../../" . $user['profile_photo']
+                 : '../../assets/default-avatar.png';
+$profileImg   .= '?v=' . time();
+
+// Generate referral code
+$referralSuffix = sprintf('%04d', $userId % 10000);
+$referralCode   = $username . $referralSuffix;
+$referralLink   = "https://elytra.io/referral/" . $referralCode;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +82,10 @@
   <title>Elytra Pool | Convert</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <!-- AlertifyJS CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <!-- Optional: Default theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
   <link rel="shortcut icon" href="../../assets/img/ELYTRA.jpg" type="image/x-icon" />
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/user.css">
@@ -19,74 +98,68 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="premium-dashboard.html" class="flex items-center">
+        <a href="premium-dashboard.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-            <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
+            <img src="../../../../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
           <span
-            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-2">
+            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-1">
             Elytra Pool
-            <span class="bg-yellow-400 text-black text-xs font-semibold px-2 py-0.5 rounded-full animate-pulse">
-              Premium
-              <span class="ml-2 text-green-500 text-sm">✔ Active</span>
+            <span class=" text-s font-semibold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+              <i class="fas fa-crown text-yellow-400"></i>
             </span>
           </span>
-
         </a>
       </div>
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="premium-dashboard.html"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-dashboard.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-staking.html"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-leaderboard.html"
+        <a href="premium-leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-deposit.html"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-withdraw.html"
+        <a href="premium-withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-convert.html"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
       </div>
 
-
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
-          <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="premium-settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-          <a href="../../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../../../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -97,25 +170,44 @@
         </button>
         <div class="relative">
           <button id="mobileProfileBtn" class="focus:outline-none">
-            <img src="/ella.jpg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-yellow-400 object-cover" />
+            <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="premium-settings.html" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../../index.html" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../../../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Mobile Navigation Links -->
-    <div id="mobile-menu" class="nav-links">
-      <a href="premium-dashboard.html" class="nav-link">Home</a>
-      <a href="premium-staking.html" class="nav-link">Staking</a>
-      <a href="premium-leaderboard.html" class="nav-link">Leaderboard</a>
-      <a href="premium-deposit.html" class="nav-link">Deposit</a>
-      <a href="premium-withdraw.html" class="nav-link">Withdraw</a>
-      <a href="premium-convert.html" class="nav-link">Convert</a>
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
+      <a href="premium-dashboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Leaderboard
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Deposit
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Withdraw
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Convert
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
     </div>
   </nav>
 
@@ -124,7 +216,6 @@
     <section class="bg-[#1a1f36] border border-purple-500 p-6 rounded-lg w-full max-w-md shadow-lg">
       <h2 class="text-2xl font-semibold text-purple-400 mb-6 text-center">Convert Crypto</h2>
 
-      <!-- From Selector -->
       <section class="mb-4">
         <label class="block text-sm mb-2 text-purple-300">From</label>
         <select id="fromSelect" onchange="updateToOptions()"
@@ -137,15 +228,14 @@
         </select>
       </section>
 
-      <!-- To Selector -->
       <section class="mb-4">
         <label class="block text-sm mb-2 text-purple-300">To</label>
-        <select id="toSelect" class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
+        <select id="toSelect"
+          class="w-full px-3 py-2 rounded bg-slate-900 text-white text-sm border border-purple-400">
           <option value="">Select</option>
         </select>
       </section>
 
-      <!-- Amount Input -->
       <section class="mb-6">
         <label class="block text-sm mb-2 text-purple-300">Amount</label>
         <input type="number" id="convertAmount"
@@ -153,7 +243,6 @@
           placeholder="0.00" />
       </section>
 
-      <!-- Confirm Button -->
       <section>
         <button onclick="convertNow()"
           class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded w-full font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm">
@@ -161,6 +250,7 @@
         </button>
       </section>
     </section>
+
     <!-- Floating Support Button + Chat -->
     <div class="fixed bottom-6 right-6 z-50 group">
       <button id="supportButton"
@@ -195,10 +285,10 @@
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.html" class="flex items-center">
+          <a href="index.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
                 class="w-full h-full rounded-full object-cover" />
             </div>
             <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
@@ -215,7 +305,7 @@
               <a href="#earnings" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.html" class="hover:text-white">FAQ</a>
+              <a href="pages/about.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -254,53 +344,78 @@
   </footer>
 
   <!-- Scripts -->
-  <script>
-    function updateToOptions() {
-      const from = document.getElementById("fromSelect").value;
-      const to = document.getElementById("toSelect");
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Attach event listener to update To options on From select change
+    document.getElementById("fromSelect").addEventListener("change", updateToOptions);
+  });
 
-      to.innerHTML = ''; // Clear existing options
+  function updateToOptions() {
+    const from = document.getElementById("fromSelect").value;
+    const to = document.getElementById("toSelect");
+    to.innerHTML = ''; // Clear previous options
 
-      if (from === "ELYTRA") {
-        const options = ["USDT", "BTC", "ETH"];
-        options.forEach(opt => {
-          const option = document.createElement("option");
-          option.value = opt;
-          option.text = opt;
-          to.appendChild(option);
+    const optionsMap = {
+      "ELYTRA": ["USDT", "BTC", "ETH"],
+      "USDT": ["ELYTRA"],
+      "BTC": ["ELYTRA"],
+      "ETH": ["ELYTRA"]
+    };
+
+    const toOptions = optionsMap[from] || [];
+    if (toOptions.length === 0) {
+      to.add(new Option("Select", ""));
+    } else {
+      toOptions.forEach(currency => to.add(new Option(currency, currency)));
+    }
+  }
+
+  function convertNow() {
+  const from = document.getElementById("fromSelect").value;
+  const to = document.getElementById("toSelect").value;
+  const amount = parseFloat(document.getElementById("convertAmount").value);
+
+  if (!from || !to) {
+    alertify.error("Please select both From and To currencies.");
+    return;
+  }
+
+  if (isNaN(amount) || amount <= 0) {
+    alertify.error("Please enter a valid amount.");
+    return;
+  }
+
+  fetch("../../config/convert.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ from, to, amount })
+  })
+    .then(async res => {
+      if (!res.ok) {
+        const text = await res.text(); // to inspect raw response
+        console.error("Raw response:", text);
+        throw new Error("HTTP error " + res.status);
+      }
+      return res.json();
+    })
+    .then(data => {
+      if (data.status === "success") {
+        alertify.alert("Request Submitted", data.message).set('onok', () => {
+          window.location.href = "premium-dashboard.php";
         });
-      } else if (["USDT", "BTC", "ETH"].includes(from)) {
-        const option = document.createElement("option");
-        option.value = "ELYTRA";
-        option.text = "ELYTRA";
-        to.appendChild(option);
       } else {
-        const option = document.createElement("option");
-        option.value = "";
-        option.text = "Select";
-        to.appendChild(option);
+        alertify.error(data.message);
       }
-    }
+    })
+    .catch(err => {
+      console.error("Conversion Error:", err);
+      alertify.error("Something went wrong. Please try again.");
+    });
+}
 
-    function convertNow() {
-      const from = document.getElementById("fromSelect").value;
-      const to = document.getElementById("toSelect").value;
-      const amount = parseFloat(document.getElementById("convertAmount").value);
-
-      if (!from || !to) {
-        alert("Please select both From and To currencies.");
-        return;
-      }
-
-      if (isNaN(amount) || amount <= 0) {
-        alert("Please enter a valid amount.");
-        return;
-      }
-
-      alert(`Converted ${amount} ${from} to ${to} successfully!\nRedirecting to Dashboard...`);
-      window.location.href = "user.html";
-    }
-  </script>
+</script>
 
   <!-- Navbar Toggle Script -->
   <script>
@@ -391,7 +506,7 @@
     }
 
     // Handle Enter key to send message
-    userInput.addEventListener("keypress", function (e) {
+    userInput.addEventListener("keypress", function(e) {
       if (e.key === "Enter" && userInput.value.trim() !== "") {
         const message = userInput.value.trim();
         addUserMessage(message);
@@ -404,7 +519,8 @@
       }
     });
   </script>
-
+  <!-- AlertifyJS Script -->
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 </body>
 
 </html>

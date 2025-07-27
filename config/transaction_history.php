@@ -10,7 +10,7 @@ if (!$userId) {
     exit;
 }
 
-// ✅ Combined query: approved deposits + withdrawals + transfers + conversions
+// ✅ Fetch all types of approved transaction activities, including 'stake'
 $sql = "
     (
       SELECT 'deposit' AS type, amount, network AS currency, created_at, 'in' AS direction
@@ -45,12 +45,18 @@ $sql = "
       FROM conversion_requests 
       WHERE user_id = ? AND status = 'approved'
     )
+    UNION ALL
+    (
+      SELECT 'stake' AS type, amount, currency, created_at, 'in' AS direction
+      FROM transaction_history
+      WHERE user_id = ?
+    )
     ORDER BY created_at DESC
     LIMIT 20
 ";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iiiiiii", $userId, $userId, $userId, $userId, $userId, $userId, $userId);
+$stmt->bind_param("iiiiiiii", $userId, $userId, $userId, $userId, $userId, $userId, $userId, $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 

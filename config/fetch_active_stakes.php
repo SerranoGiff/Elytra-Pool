@@ -10,10 +10,12 @@ if (!$userId) {
     exit;
 }
 
-// Show only stakes where end_date is in the future
+// Fetch only active stakes (not canceled or completed)
 $sql = "SELECT id, currency, amount, daily_percent, created_at, end_date 
         FROM stakes 
-        WHERE user_id = ? AND end_date > NOW() 
+        WHERE user_id = ? 
+          AND status = 'active' 
+          AND end_date > NOW() 
         ORDER BY created_at DESC";
 
 $stmt = $conn->prepare($sql);

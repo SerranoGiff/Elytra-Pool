@@ -1,6 +1,35 @@
 <?php
 session_start();
-include '../config/dbcon.php';
+include '../../config/dbcon.php';
+
+// PREMIUM EXPIRATION ENFORCEMENT
+if (isset($_SESSION['user_id']) && isset($_SESSION['type']) && $_SESSION['type'] === 'premium') {
+    $userId = (int) $_SESSION['user_id'];
+    // Fetch current expiration
+    $stmtExp = $conn->prepare("SELECT premium_expiration FROM users WHERE id = ?");
+    $stmtExp->bind_param("i", $userId);
+    $stmtExp->execute();
+    $expResult = $stmtExp->get_result()->fetch_assoc();
+    $stmtExp->close();
+
+    $now = new DateTime('now', new DateTimeZone('Asia/Manila'));
+    $exp  = !empty($expResult['premium_expiration'])
+         ? DateTime::createFromFormat('Y-m-d H:i:s', $expResult['premium_expiration'], new DateTimeZone('Asia/Manila'))
+         : null;
+
+    if (is_null($exp) || $exp < $now) {
+        // expired → downgrade
+        $downgrade = $conn->prepare("UPDATE users SET type = 'free' WHERE id = ?");
+        $downgrade->bind_param("i", $userId);
+        $downgrade->execute();
+        $downgrade->close();
+
+        $_SESSION['type'] = 'free';
+        unset($_SESSION['expires']);
+        header("Location: ../../index.php?error=Subscription expired.");
+        exit;
+    }
+}
 
 // NO CACHE HEADERS
 header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
@@ -10,43 +39,38 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 // VALIDATE SESSION
-if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'free') {
-  header("Location: ../index.php?error=Unauthorized access.");
+if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'premium') {
+  header("Location: ../../index.php?error=Unauthorized access.");
   exit;
 }
 
-$userId = $_SESSION['user_id'] ?? null;
+$userId = $_SESSION['user_id'];
 
-if ($userId) {
-  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
-  $stmt->bind_param("i", $userId);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $user = $result->fetch_assoc();
-
-  $username = $user ? $user['username'] : 'User';
-} else {
-  $username = 'Guest';
-}
-
-$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+// Fetch user data
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo
           FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user = $stmt->get_result()->fetch_assoc();
 
-// Set default values with fallback to 'N/A'
-$firstName = $user['first_name'] ?? 'N/A';
-$lastName = $user['last_name'] ?? 'N/A';
-$birthday = $user['birthday'] ?? '';
-$username = $user['username'] ?? 'N/A';
-$aboutMe = $user['about_me'] ?? 'N/A';
-$email = $user['email'] ?? 'N/A';
-$walletAddress = $user['wallet_address'] ?? '';
-$profileImg = !empty($user['profile_photo']) ? "../" . $user['profile_photo'] : '../assets/default-avatar.png';
-$profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old image
+// Set defaults
+$firstName     = $user['first_name']    ?? 'N/A';
+$lastName      = $user['last_name']     ?? 'N/A';
+$birthday      = $user['birthday']      ?? '';
+$username      = $user['username']      ?? 'N/A';
+$aboutMe       = $user['about_me']      ?? 'N/A';
+$email         = $user['email']         ?? 'N/A';
+$walletAddress = $user['wallet_address']?? '';
+$profileImg    = !empty($user['profile_photo'])
+                 ? "../../" . $user['profile_photo']
+                 : '../../assets/default-avatar.png';
+$profileImg   .= '?v=' . time();
+
+// Generate referral code
+$referralSuffix = sprintf('%04d', $userId % 10000);
+$referralCode   = $username . $referralSuffix;
+$referralLink   = "https://elytra.io/referral/" . $referralCode;
 ?>
 
 <!DOCTYPE html>
@@ -63,9 +87,9 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
   <!-- Optional: Default theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
 
-  <link rel="shortcut icon" href="../assets/img/ELYTRA.jpg" type="image/x-icon" />
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/user.css">
+  <link rel="shortcut icon" href="../../assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/user.css">
 </head>
 
 <body class="min-h-screen">
@@ -75,47 +99,52 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <a href="user.php" class="flex items-center">
+        <a href="premium-dashboard.php" class="flex items-center">
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+            <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
-          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-            Pool</span>
+          <span
+            class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200 flex items-center gap-1">
+            Elytra Pool
+            <span class=" text-s font-semibold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+              <i class="fas fa-crown text-yellow-400"></i>
+            </span>
+          </span>
         </a>
       </div>
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-dashboard.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="leaderboard.php"
+        <a href="premium-leaderboard.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Deposit</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="withdraw.php"
+        <a href="premium-withdraw.php"
           class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Withdraw</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Convert</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -131,7 +160,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <div id="profileMenu"
           class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
           <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-          <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
 
@@ -148,7 +177,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
             <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-            <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+            <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
       </div>
@@ -156,27 +185,27 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
     <!-- Mobile Navigation Links -->
     <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
-      <a href="user.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-dashboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Home
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Staking
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Leaderboard
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Deposit
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Withdraw
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
-      <a href="Convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+      <a href="premium-convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
         Convert
         <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
       </a>
@@ -399,10 +428,10 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.php" class="flex items-center">
+          <a href="user.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
                 class="w-full h-full rounded-full object-cover" />
             </div>
             <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
@@ -413,13 +442,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <div>
           <h4 class="font-semibold mb-4">Products</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#staking" class="hover:text-white">Staking</a></li>
-            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li><a href="premium-staking.php" class="hover:text-white">Staking</a></li>
             <li>
-              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+              <a href="premium-leaderboard.php" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.php" class="hover:text-white">FAQ</a>
+              <a href="faq.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -427,10 +455,10 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         <div>
           <h4 class="font-semibold mb-4">Support</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="../../help center.html" class="hover:text-white">Help Center</a></li>
             <li><a href="#" class="hover:text-white">Contact Us</a></li>
-            <li><a href="#" class="hover:text-white">Status</a></li>
-            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+            <li><a href="../../terms and condition.html" class="hover:text-white">Terms & Conditions</a></li>
+            <li><a href="../../privacy policy.html" class="hover:text-white">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -456,7 +484,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       </div>
     </div>
   </footer>
-
   <!-- Scripts -->
 
   <script>
@@ -613,71 +640,71 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       "Bitget": {
         "USDT": {
           address: "TDfNhM7zLR9MeQSGCNBCvW2NdBZPnhMcXy",
-          qr: "../assets/qr_codes/Bitget_USDT.png"
+          qr: "../../assets/qr_codes/Bitget_USDT.png"
         },
         "BTC": {
           address: "bc1pdse4xuk2r8f0eg8ycfksupw6syq5gw8e4y28p29gdxyma57v5rnqh87jd5",
-          qr: "../assets/qr_codes/Bitget_BTC.png"
+          qr: "../../assets/qr_codes/Bitget_BTC.png"
         },
         "ETH": {
           address: "0x13383459DF26E6ff19EcD27F748e29C302CD8e26",
-          qr: "../assets/qr_codes/Bitget_ETH.png"
+          qr: "../../assets/qr_codes/Bitget_ETH.png"
         }
       },
       "OKX": {
         "USDT": {
           address: "TLZTcjWXdP57hx4NCZ1SdMuNvPE61gvLUo",
-          qr: "../assets/img/OKX_USDT.jpg"
+          qr: "../../assets/img/OKX_USDT.jpg"
         },
         "BTC": {
           address: "bc1q83f3shcnn9ufxrm4jjxtpajk0sh06uummkaww68uxd3279sulpvq4u6q34",
-          qr: "../assets/qr_codes/OKX_BTC.png"
+          qr: "../../assets/qr_codes/OKX_BTC.png"
         },
         "ETH": {
           address: "0x96b90389212dc3ef3bbf550d9d98be9feecd11dc",
-          qr: "../assets/qr_codes/OKX_ETH.png"
+          qr: "../../assets/qr_codes/OKX_ETH.png"
         }
       },
       "Bybit": {
         "USDT": {
           address: "TDPVkMkZsbxYhtH4yUrfV3nbDtfb6GPYAH",
-          qr: "../assets/qr_codes/Bybit_USDT.png"
+          qr: "../../assets/qr_codes/Bybit_USDT.png"
         },
         "BTC": {
           address: "12kFVEtVxgt4GDjoz5uLY4xQyYPsNt1GsL",
-          qr: "../assets/qr_codes/Bybit_BTC.png"
+          qr: "../../assets/qr_codes/Bybit_BTC.png"
         },
         "ETH": {
           address: "0x1fae81ab9ff51645e525d4000556250dc778444f",
-          qr: "../assets/qr_codes/Bybit_ETH.png"
+          qr: "../../assets/qr_codes/Bybit_ETH.png"
         }
       },
       "Gate": {
         "USDT": {
           address: "TKpZDhHDAajPjfmfrQreyr3Sp5JysPZffE",
-          qr: "../assets/qr_codes/Gate_USDT.png"
+          qr: "../../assets/qr_codes/Gate_USDT.png"
         },
         "BTC": {
           address: "1AWYeZ1QReaS5bu3T9gm4wAJP2i7iHtbaV",
-          qr: "../assets/qr_codes/Gate_BTC.png"
+          qr: "../../assets/qr_codes/Gate_BTC.png"
         },
         "ETH": {
           address: "0x6c0e6426279F5b793B75B5cd592FAb93eA64638c",
-          qr: "../assets/qr_codes/Gate_ETH.png"
+          qr: "../../assets/qr_codes/Gate_ETH.png"
         }
       },
       "Binance": {
         "USDT": {
           address: "TLFXrnUuDzHFnhf3Uk4snkVQBVgpzczg2L",
-          qr: "../assets/qr_codes/Binance_USDT.png"
+          qr: "../../assets/qr_codes/Binance_USDT.png"
         },
         "BTC": {
           address: "12Pkd8jvQipC1kKAzWcUeEaFUWoBRMsTPR",
-          qr: "../assets/qr_codes/Binance_BTC.png"
+          qr: "../../assets/qr_codes/Binance_BTC.png"
         },
         "ETH": {
           address: "0x85473395be671cef8a767af53bef0d89af5ec83c",
-          qr: "../assets/qr_codes/Binance_ETH.png"
+          qr: "../../assets/qr_codes/Binance_ETH.png"
         }
       }
     };
@@ -763,7 +790,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       formData.append("receipt", receipt);
       formData.append("agreed", agreed ? 1 : 0);
 
-      fetch("../config/submit_deposit.php", {
+      fetch("../../config/submit_deposit.php", {
           method: "POST",
           body: formData
         })
@@ -785,7 +812,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
               "Deposit Submitted",
               "Your deposit has been successfully submitted and is now under review. Please allow 10 to 20 minutes for approval. If you don't receive confirmation within this time, kindly contact our customer service for assistance."
             ).set('onok', function() {
-              window.location.href = "user.php";
+              window.location.href = "premium-dashboard.php";
             });
 
           } else {

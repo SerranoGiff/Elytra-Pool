@@ -2,6 +2,35 @@
 session_start();
 include '../../config/dbcon.php';
 
+// PREMIUM EXPIRATION ENFORCEMENT
+if (isset($_SESSION['user_id']) && isset($_SESSION['type']) && $_SESSION['type'] === 'premium') {
+    $userId = (int) $_SESSION['user_id'];
+    // Fetch current expiration
+    $stmtExp = $conn->prepare("SELECT premium_expiration FROM users WHERE id = ?");
+    $stmtExp->bind_param("i", $userId);
+    $stmtExp->execute();
+    $expResult = $stmtExp->get_result()->fetch_assoc();
+    $stmtExp->close();
+
+    $now = new DateTime('now', new DateTimeZone('Asia/Manila'));
+    $exp  = !empty($expResult['premium_expiration'])
+         ? DateTime::createFromFormat('Y-m-d H:i:s', $expResult['premium_expiration'], new DateTimeZone('Asia/Manila'))
+         : null;
+
+    if (is_null($exp) || $exp < $now) {
+        // expired → downgrade
+        $downgrade = $conn->prepare("UPDATE users SET type = 'free' WHERE id = ?");
+        $downgrade->bind_param("i", $userId);
+        $downgrade->execute();
+        $downgrade->close();
+
+        $_SESSION['type'] = 'free';
+        unset($_SESSION['expires']);
+        header("Location: ../../index.php?error=Subscription expired.");
+        exit;
+    }
+}
+
 // NO CACHE HEADERS
 header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -15,57 +44,34 @@ if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'premium') {
   exit;
 }
 
-$userId = $_SESSION['user_id'] ?? null;
+$userId = $_SESSION['user_id'];
 
-// Fetch username (used in referral code)
-if ($userId) {
-  $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
-  $stmt->bind_param("i", $userId);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $user = $result->fetch_assoc();
-
-  $username = $user ? $user['username'] : 'User';
-} else {
-  $username = 'Guest';
-}
-
-// Get full user details
-$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo 
+// Fetch user data
+$query = "SELECT first_name, last_name, birthday, username, about_me, email, wallet_address, profile_photo
           FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user = $stmt->get_result()->fetch_assoc();
 
-// Set default values
-$firstName = $user['first_name'] ?? 'N/A';
-$lastName = $user['last_name'] ?? 'N/A';
-$birthday = $user['birthday'] ?? '';
-$username = $user['username'] ?? 'N/A';
-$aboutMe = $user['about_me'] ?? 'N/A';
-$email = $user['email'] ?? 'N/A';
-$walletAddress = $user['wallet_address'] ?? '';
-$photoPath = $user['profile_photo'] ?? '';
-
-// Check if file exists and construct proper image URL (relative to public access)
-if (!empty($photoPath) && file_exists("../../" . $photoPath)) {
-  $profileImg = "../../" . $photoPath;
-} else {
-  $profileImg = '../../assets/default-avatar.png';
-}
-
-// Append cache buster to avoid cached image
-$profileImg .= '?v=' . time();
+// Set defaults
+$firstName     = $user['first_name']    ?? 'N/A';
+$lastName      = $user['last_name']     ?? 'N/A';
+$birthday      = $user['birthday']      ?? '';
+$username      = $user['username']      ?? 'N/A';
+$aboutMe       = $user['about_me']      ?? 'N/A';
+$email         = $user['email']         ?? 'N/A';
+$walletAddress = $user['wallet_address']?? '';
+$profileImg    = !empty($user['profile_photo'])
+                 ? "../../" . $user['profile_photo']
+                 : '../../assets/default-avatar.png';
+$profileImg   .= '?v=' . time();
 
 // Generate referral code
-$referralSuffix = sprintf('%04d', $userId % 10000); // consistent & unique per user
-$referralCode = $username . $referralSuffix;
-$referralLink = "https://elytra.io/referral/" . $referralCode;
+$referralSuffix = sprintf('%04d', $userId % 10000);
+$referralCode   = $username . $referralSuffix;
+$referralLink   = "https://elytra.io/referral/" . $referralCode;
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -74,10 +80,10 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elytra Pool | Asset Wallet</title>
-  <link rel="stylesheet" href="../../assets/css/style.css" />
-  <link rel="stylesheet" href="../../assets/css/user.css" />
+  <link rel="stylesheet" href="../../../../assets/css/style.css" />
+  <link rel="stylesheet" href="../../../../assets/css/user.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="shortcut icon" href="../../assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <link rel="shortcut icon" href="../../../../assets/img/ELYTRA.jpg" type="image/x-icon" />
   <!-- Alertify CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <!-- Optional themes -->
@@ -111,14 +117,12 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-        <a href="premium-dashboard.php"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-dashboard.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="premium-staking.php"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="premium-staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
           <span
             class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
@@ -147,7 +151,6 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         </a>
       </div>
 
-
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
@@ -155,8 +158,8 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
             class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
-          <a href="premium-settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
           <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
@@ -173,7 +176,7 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
           </button>
           <div id="mobileProfileMenu"
             class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-            <a href="premium-settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
             <a href="../../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
           </div>
         </div>
@@ -181,13 +184,31 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
     </div>
 
     <!-- Mobile Navigation Links -->
-    <div id="mobile-menu" class="nav-links">
-      <a href="premium-dashboard.php" class="nav-link">Home</a>
-      <a href="premium-staking.php" class="nav-link">Staking</a>
-      <a href="premium-leaderboard.php" class="nav-link">Leaderboard</a>
-      <a href="premium-deposit.php" class="nav-link">Deposit</a>
-      <a href="premium-withdraw.php" class="nav-link">Withdraw</a>
-      <a href="premium-convert.php" class="nav-link">Convert</a>
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
+      <a href="premium-dashboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Leaderboard
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Deposit
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Withdraw
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="premium-convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Convert
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
     </div>
   </nav>
 
@@ -441,27 +462,26 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.php" class="flex items-center">
+          <a href="user.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-              <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              <img src="../../assets/img/Elytra Logo.png" alt="Elytra Logo"
                 class="w-full h-full rounded-full object-cover" />
             </div>
             <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
               Pool</span>
           </a>
-        </div>‹
+        </div>
 
         <div>
           <h4 class="font-semibold mb-4">Products</h4>
           <ul class="space-y-2 text-sm text-gray-400">
             <li><a href="premium-staking.php" class="hover:text-white">Staking</a></li>
-            <li><a href="premium-dashboard.php" class="hover:text-white">Assets</a></li>
             <li>
               <a href="premium-leaderboard.php" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.php" class="hover:text-white">FAQ</a>
+              <a href="faq.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -469,10 +489,10 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         <div>
           <h4 class="font-semibold mb-4">Support</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="../../help center.html" class="hover:text-white">Help Center</a></li>
             <li><a href="#" class="hover:text-white">Contact Us</a></li>
-            <li><a href="#" class="hover:text-white">Status</a></li>
-            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+            <li><a href="../../terms and condition.html" class="hover:text-white">Terms & Conditions</a></li>
+            <li><a href="../../privacy policy.html" class="hover:text-white">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -503,7 +523,7 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
 
   <script>
     if (!<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-      window.location.href = '../../index.php';
+      window.location.href = '../../../../index.php';
     }
   </script>
 
@@ -529,7 +549,7 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         // Load Wallet Balances
-        const resWallet = await fetch("../../config/wallet_data.php");
+        const resWallet = await fetch("../../../../config/wallet_data.php");
         const dataWallet = await resWallet.json();
 
         if (dataWallet.status === 'success') {
@@ -544,7 +564,7 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         }
 
         // Load Transactions
-        const resTx = await fetch("../../config/transaction_history.php");
+        const resTx = await fetch("../../../../config/transaction_history.php");
         const dataTx = await resTx.json();
         const container = document.getElementById("transactionList");
         if (container) container.innerHTML = "";
@@ -740,8 +760,8 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
     });
   </script>
 
-  <script src="../../assets/js/script.js"></script>
-  <script src="../../assets/js/randomizer.js"></script>
+  <script src="../../../../assets/js/script.js"></script>
+  <script src="../../../../assets/js/randomizer.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <!-- Alertify JS -->
   <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>

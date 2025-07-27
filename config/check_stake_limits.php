@@ -3,10 +3,6 @@ session_start();
 require 'dbcon.php';
 header('Content-Type: application/json');
 
-// Set correct timezone
-date_default_timezone_set('Asia/Manila');
-$conn->query("SET time_zone = '+08:00'");
-
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
     exit;
@@ -15,17 +11,12 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // ✅ Auto-complete expired stakes
-$expiredStmt = $conn->prepare("
-    SELECT id, amount, daily_percent, lock_days 
-    FROM stakes 
-    WHERE user_id = ? 
-      AND status = 'active' 
-      AND end_date <= NOW()
-");
-$expiredStmt->bind_param("i", $user_id);
-$expiredStmt->execute();
-$expiredResult = $expiredStmt->get_result();
+$expiredStakes = $conn->prepare("SELECT id, amount, daily_percent, lock_days FROM stakes WHERE user_id = ? AND status = 'active' AND end_date <= NOW()");
+$expiredStakes->bind_param("i", $user_id);
+$expiredStakes->execute();
+$expiredResult = $expiredStakes->get_result();
 
+$totalReturn = 0;
 $totalEarnings = 0;
 $completedStakeIds = [];
 
@@ -34,40 +25,35 @@ while ($stake = $expiredResult->fetch_assoc()) {
     $dailyPercent = (float) $stake['daily_percent'];
     $days = (int) $stake['lock_days'];
 
-    // ELTR earnings = principal * percent * days
     $earnings = ($principal * ($dailyPercent / 100)) * $days;
     $totalEarnings += $earnings;
+    $totalReturn += $principal + $earnings;
     $completedStakeIds[] = $stake['id'];
 }
-$expiredStmt->close();
+$expiredStakes->close();
 
-// ✅ If expired stakes found, update status and credit user
-if ($totalEarnings > 0 && count($completedStakeIds) > 0) {
+if ($totalReturn > 0 && count($completedStakeIds) > 0) {
     $conn->begin_transaction();
     try {
-        // Build dynamic placeholders
+        // Update completed stakes
         $inClause = implode(',', array_fill(0, count($completedStakeIds), '?'));
         $types = str_repeat('i', count($completedStakeIds));
-        $updateQuery = "UPDATE stakes SET status = 'completed' WHERE id IN ($inClause)";
-        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt = $conn->prepare("UPDATE stakes SET status = 'completed' WHERE id IN ($inClause)");
         $updateStmt->bind_param($types, ...$completedStakeIds);
         $updateStmt->execute();
         $updateStmt->close();
 
-        // Credit ELTR to user
-        $creditStmt = $conn->prepare("UPDATE users SET eltr_balance = eltr_balance + ? WHERE id = ?");
-        $creditStmt->bind_param("di", $totalEarnings, $user_id);
-        $creditStmt->execute();
-        $creditStmt->close();
+        // Credit to user wallet
+        $credit = $conn->prepare("UPDATE users SET eltr_balance = eltr_balance + ?, last_activity = NOW() WHERE id = ?");
+        $credit->bind_param("di", $totalReturn, $user_id);
+        $credit->execute();
+        $credit->close();
 
-        // Log it as a transaction
-        $logStmt = $conn->prepare("
-            INSERT INTO transaction_history (user_id, type, amount, currency, direction, created_at) 
-            VALUES (?, 'stake', ?, 'ELTR', 'in', NOW())
-        ");
-        $logStmt->bind_param("id", $user_id, $totalEarnings);
-        $logStmt->execute();
-        $logStmt->close();
+        // Log to transaction_history
+        $log = $conn->prepare("INSERT INTO transaction_history (user_id, type, amount, currency, direction, created_at) VALUES (?, 'stake', ?, 'ELTR', 'in', NOW())");
+        $log->bind_param("id", $user_id, $totalReturn);
+        $log->execute();
+        $log->close();
 
         $conn->commit();
     } catch (Exception $e) {
@@ -85,7 +71,7 @@ $activeStmt->bind_result($activeStakes);
 $activeStmt->fetch();
 $activeStmt->close();
 
-// ✅ Count stakes this month (excluding canceled)
+// ✅ Count monthly stakes (excluding canceled)
 $monthStart = date('Y-m-01 00:00:00');
 $monthEnd = date('Y-m-t 23:59:59');
 
@@ -102,7 +88,7 @@ $monthlyStmt->bind_result($monthlyStakes);
 $monthlyStmt->fetch();
 $monthlyStmt->close();
 
-// ✅ Return summary
+// ✅ Final JSON Response
 echo json_encode([
     'status' => 'ok',
     'active_stakes' => $activeStakes,

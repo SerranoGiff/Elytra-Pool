@@ -401,7 +401,7 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.php" class="flex items-center">
+          <a href="user.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
               <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
@@ -415,13 +415,12 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         <div>
           <h4 class="font-semibold mb-4">Products</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#staking" class="hover:text-white">Staking</a></li>
-            <li><a href="#mining" class="hover:text-white">Assets</a></li>
+            <li><a href="staking.php" class="hover:text-white">Staking</a></li>
             <li>
-              <a href="#earnings" class="hover:text-white">Leaderboard</a>
+              <a href="leaderboard.php" class="hover:text-white">Leaderboard</a>
             </li>
             <li>
-              <a href="pages/about.php" class="hover:text-white">FAQ</a>
+              <a href="../faq.php" class="hover:text-white">FAQ</a>
             </li>
           </ul>
         </div>
@@ -429,10 +428,10 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         <div>
           <h4 class="font-semibold mb-4">Support</h4>
           <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="../help center.html" class="hover:text-white">Help Center</a></li>
             <li><a href="#" class="hover:text-white">Contact Us</a></li>
-            <li><a href="#" class="hover:text-white">Status</a></li>
-            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+            <li><a href="../terms and condition.html" class="hover:text-white">Terms & Conditions</a></li>
+            <li><a href="../privacy policy.html" class="hover:text-white">Privacy Policy</a></li>
           </ul>
         </div>
 

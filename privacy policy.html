@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Elytra Pool</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .section-title {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #8b5cf6, #6366f1);
+      transition: width 0.3s ease;
+    }
+    
+    .section-title:hover::after {
+      width: 100%;
+    }
+    
+    .policy-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .policy-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-950 text-white">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <!-- Logo and Title -->
+      <a href="index.php" class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform duration-300">
+          <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full object-cover" />
+        </div>
+        <span class="text-xl font-semibold tracking-wide text-white hover:text-purple-300 transition duration-300">
+          Elytra Pool
+        </span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="index.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Home</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="index.php#staking" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Staking</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="index.php#mining" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Features</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="about.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">About</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </div>
+
+      <!-- Login Button and Mobile Toggle -->
+      <div class="flex items-center space-x-2">
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-button" class="md:hidden text-white text-2xl ml-2">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="index.php#login" class="flex items-center space-x-2 px-4 py-2 border border-purple-500 text-purple-400 
+          bg-transparent rounded-lg shadow-[0_0_8px_#a855f7]
+          hover:bg-purple-600 hover:text-white hover:border-purple-600 
+          hover:shadow-[0_0_16px_#9333ea] active:bg-purple-700 
+          transition-all duration-300 ease-in-out">
+          <i class="fas fa-user transition-colors duration-300"></i>
+          <span class="hidden sm:inline transition-colors duration-300">Login</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in">
+      <a href="index.php" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="index.php#staking" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="index.php#mining" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Features
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="about.php" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        About
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 px-6 bg-gradient-to-br from-purple-900/40 via-gray-900 to-indigo-900">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white slide-in-left">Privacy <span class="text-purple-400">Policy</span></h1>
+      <p class="text-lg text-gray-300 mb-8 slide-in-right">We value your privacy and are committed to protecting your personal data and digital rights.</p>
+    </div>
+  </section>
+
+  <!-- Policy Content -->
+  <section class="px-6 py-16 max-w-4xl mx-auto">
+    <div class="space-y-12 text-gray-300 leading-relaxed">
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">1. Information We Collect</h2>
+        <p>We collect information you voluntarily provide such as your name, email address, and wallet address. We also collect technical data including IP address, browser type, and blockchain activity.</p>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">2. How We Use Your Information</h2>
+        <ul class="list-disc ml-6 space-y-2">
+          <li>To deliver and operate our staking services.</li>
+          <li>To enhance security and detect fraudulent activity.</li>
+          <li>To comply with legal requirements.</li>
+          <li>To communicate updates or promotions (opt-out available).</li>
+        </ul>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">3. Sharing Your Information</h2>
+        <p>We do not sell or rent your personal data. We may share information with trusted service providers such as KYC processors, infrastructure partners, and legal authorities when required.</p>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">4. Data Retention</h2>
+        <ul class="list-disc ml-6 space-y-2">
+          <li>KYC records are stored for 5 years unless required longer by law.</li>
+          <li>Blockchain data is publicly available and retained indefinitely.</li>
+          <li>Cookies and session data may be retained for up to 30 days.</li>
+        </ul>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">5. Security Measures</h2>
+        <p>We use encryption, secured wallets, and regular audits to protect your data. However, no system is completely secure. Use of the platform is at your own risk.</p>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">6. Your Rights</h2>
+        <ul class="list-disc ml-6 space-y-2">
+          <li>Request access, correction, or deletion of your data.</li>
+          <li>Withdraw consent or opt out of communications.</li>
+          <li>Exercise additional rights under applicable privacy laws.</li>
+        </ul>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">7. Policy Updates</h2>
+        <p>We may update this policy periodically. Continued use of Elytra Pool indicates your acceptance of the revised terms.</p>
+      </div>
+
+      <div class="policy-item">
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-400 mb-4 section-title">8. Contact Us</h2>
+        <p>If you have privacy concerns or questions, you can contact us:</p>
+        <ul class="mt-4 space-y-2">
+          <li class="flex items-start">
+            <i class="fas fa-envelope text-purple-400 mt-1 mr-2"></i>
+            <span>Email: <a href="mailto:privacy@elytrapool.com" class="text-purple-400 hover:underline">privacy@elytrapool.com</a></span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-globe text-purple-400 mt-1 mr-2"></i>
+            <span>Website: <a href="https://elytrapool.com/contact" class="text-purple-400 hover:underline">https://elytrapool.com/contact</a></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="flex items-center space-x-2">
+          <a href="index.php" class="flex items-center">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+              <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+          </a>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="index.php#staking" class="hover:text-white">Staking</a></li>
+            <li><a href="index.php#mining" class="hover:text-white">Premium</a></li>
+            <li><a href="index.php#earnings" class="hover:text-white">Calculator</a></li>
+            <li><a href="faq.php" class="hover:text-white">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Help Center</a></li>
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Follow Us</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Twitter</a></li>
+            <li><a href="#" class="hover:text-white">Telegram</a></li>
+            <li><a href="#" class="hover:text-white">Discord</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">© 2023 - 2025 Elytra Pool. All rights reserved.</div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener("DOMContentLoaded", function() {
+      const menuBtn = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuBtn?.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      // Scroll animation for policy items
+      const policyItems = document.querySelectorAll('.policy-item');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      policyItems.forEach(item => {
+        observer.observe(item);
+      });
+
+      // Section title hover effect
+      const sectionTitles = document.querySelectorAll('.section-title');
+      sectionTitles.forEach(title => {
+        title.addEventListener('mouseenter', () => {
+          title.classList.add('hover:after:w-full');
+        });
+        title.addEventListener('mouseleave', () => {
+          title.classList.remove('hover:after:w-full');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

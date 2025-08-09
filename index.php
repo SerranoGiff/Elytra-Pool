@@ -32,12 +32,11 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
 
 <body class="min-h-screen bg-gray-950 text-white">
   <!-- Navigation -->
-  <nav
-    class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
       <!-- Logo and Title -->
-      <a href="index.html" class="flex items-center space-x-3">
+      <a href="index.php" class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform duration-300">
           <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full object-cover" />
         </div>
@@ -46,329 +45,343 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
         </span>
       </a>
 
-      <!-- Navigation Links with Hover Zoom -->
+      <!-- Desktop Navigation Links -->
       <div class="hidden md:flex items-center space-x-8">
         <a href="#home" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
-          <span
-            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#staking" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Staking</span>
-          <span
-            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#mining" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Features</span>
-          <span
-            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#earnings" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Calculator</span>
-          <span
-            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a href="about.html#about"
-          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+        <a href="about.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">About</span>
-          <span
-            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
         </a>
       </div>
 
-      <!-- Login Button -->
-      <section>
-        <div class="flex items-center space-x-4">
-          <button id="login-button" class="flex items-center space-x-2 px-6 py-2 border border-purple-500 text-purple-400 
-             bg-transparent rounded-lg shadow-[0_0_8px_#a855f7]
-             hover:bg-purple-600 hover:text-white hover:border-purple-600 
-             hover:shadow-[0_0_16px_#9333ea] active:bg-purple-700 
-             transition-all duration-300 ease-in-out">
-            <i class="fas fa-user transition-colors duration-300"></i>
-            <span class="transition-colors duration-300">Login</span>
-          </button>
-        </div>
-      </section>
+      <!-- Login Button and Mobile Toggle -->
+      <div class="flex items-center space-x-2">
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-button" class="md:hidden text-white text-2xl ml-2">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <button id="login-button" class="flex items-center space-x-2 px-4 py-2 border border-purple-500 text-purple-400 
+        bg-transparent rounded-lg shadow-[0_0_8px_#a855f7]
+        hover:bg-purple-600 hover:text-white hover:border-purple-600 
+        hover:shadow-[0_0_16px_#9333ea] active:bg-purple-700 
+        transition-all duration-300 ease-in-out">
+          <i class="fas fa-user transition-colors duration-300"></i>
+          <span class="hidden sm:inline transition-colors duration-300">Login</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in">
+      <a href="#home" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="#staking" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="#mining" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Features
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="#earnings" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Calculator
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="about.php" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        About
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
     </div>
   </nav>
 
-  <!-- Main Login Modal -->
-  <div id="loginModal"
-    class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-    <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-    <div
-      class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-      id="modalContent">
-      <div id="modalContentInner">
+ <!-- Main Login Modal -->
+<div id="loginModal"
+  class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+  <div class="bg-gray-900/90 absolute inset-0 backdrop-blur-sm"></div>
+  <div
+    class="bg-gray-800 border border-purple-500/30 rounded-lg shadow-lg z-10 p-8 max-w-sm w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+    id="modalContent">
+    <div id="modalContentInner">
 
-        <!-- Login Form -->
-        <div id="loginForm" class="form-section text-black">
-          <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+      <!-- Login Form -->
+      <div id="loginForm" class="form-section text-white">
+        <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
 
-          <!-- Notifications -->
-          <?php if (isset($_GET['error']) || isset($_GET['success'])): ?>
-            <script>
-              document.addEventListener("DOMContentLoaded", () => {
-                const message = <?= json_encode($_GET['error'] ?? $_GET['success']) ?>;
-                const type = <?= isset($_GET['error']) ? json_encode('error') : json_encode('success') ?>;
-                showToast(message, type);
-                history.replaceState(null, "", window.location.pathname); // remove ?error or ?success
-              });
-            </script>
-          <?php endif; ?>
+        <!-- Notifications -->
+        <?php if (isset($_GET['error']) || isset($_GET['success'])): ?>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              const message = <?= json_encode($_GET['error'] ?? $_GET['success']) ?>;
+              const type = <?= isset($_GET['error']) ? json_encode('error') : json_encode('success') ?>;
+              showToast(message, type);
+              history.replaceState(null, "", window.location.pathname); // remove ?error or ?success
+            });
+          </script>
+        <?php endif; ?>
 
-          <form action="config/login.php" method="POST">
-            <div class="mb-4">
-              <label for="email" class="block text-sm font-medium">Email Address</label>
-              <input type="email" id="email" name="email" class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black" required />
+        <form action="config/login.php" method="POST">
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
+            <input type="email" id="email" name="email" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" required />
+          </div>
+          <div class="mb-4">
+            <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+            <input type="password" id="password" name="password" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" required />
+          </div>
+          <div class="flex items-center mb-4">
+            <input type="checkbox" id="rememberMe" name="rememberMe" class="h-4 w-4 text-purple-500 focus:ring-purple-500 border-gray-600 rounded bg-gray-700" />
+            <label for="rememberMe" class="ml-2 block text-sm text-gray-300 cursor-pointer">Remember Me</label>
+          </div>
+          <div class="mb-4 text-right">
+            <button type="button" id="forgotPasswordBtn" class="text-purple-400 hover:text-purple-300 hover:underline">Forgot Password?</button>
+          </div>
+          <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 transition-all duration-500 ease-in-out">
+            Login
+          </button>
+        </form>
+
+        <div class="mt-4 text-center">
+          <button id="switchToSignUp" class="text-purple-400 hover:text-purple-300 hover:underline">Don't have an account? Sign Up</button>
+        </div>
+      </div>
+
+      <!-- Forgot Password Modal -->
+      <div id="forgotPasswordModal"
+        class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+        <div class="bg-gray-900/90 absolute inset-0 backdrop-blur-sm"></div>
+        <div
+          class="bg-gray-800 border border-purple-500/30 rounded-lg shadow-lg z-10 p-6 w-full max-w-md transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+          id="forgotPasswordContent">
+          <h2 class="text-lg font-bold mb-4 text-purple-300">Reset Your Password</h2>
+          <p class="mb-4 text-sm text-gray-400">Enter your email address and we'll send you a password reset link.</p>
+          <form id="forgotPasswordForm">
+            <input type="email" id="forgotEmail"
+              class="w-full mb-4 bg-gray-700 border border-gray-600 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Email address" required />
+            <div class="flex justify-end gap-2">
+              <button type="button" id="cancelForgot"
+                class="px-4 py-2 text-sm bg-gray-600 hover:bg-gray-500 rounded-lg text-white transition">Cancel</button>
+              <button type="submit" class="px-4 py-2 text-sm text-white rounded-lg
+       bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
+       hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
+       shadow-md hover:shadow-lg hover:shadow-purple-500/40
+       transition-all duration-700 ease-in-out">
+                Send Reset Link
+              </button>
             </div>
-            <div class="mb-4">
-              <label for="password" class="block text-sm font-medium">Password</label>
-              <input type="password" id="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black" required />
-            </div>
-            <div class="flex items-center mb-4">
-              <input type="checkbox" id="rememberMe" name="rememberMe" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-              <label for="rememberMe" class="ml-2 block text-sm cursor-pointer">Remember Me</label>
-            </div>
-            <div class="mb-4 text-right">
-              <button type="button" id="forgotPasswordBtn" class="text-blue-600 hover:underline">Forgot Password?</button>
-            </div>
-            <button type="submit" class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 transition-all duration-500 ease-in-out">
-              Login
-            </button>
           </form>
-
-          <div class="mt-4 text-center">
-            <button id="switchToSignUp" class="text-blue-600 hover:underline">Don't have an account? Sign Up</button>
-          </div>
         </div>
-
-        <!-- Forgot Password Modal -->
-        <div id="forgotPasswordModal"
-          class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-          <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-          <div
-            class="bg-white rounded-lg shadow-lg z-10 p-6 w-full max-w-md transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-            id="forgotPasswordContent">
-            <h2 class="text-lg font-bold mb-4 text-black">Reset Your Password</h2>
-            <p class="mb-4 text-sm text-gray-700">Enter your email address and we’ll send you a password reset link.
-            </p>
-            <form id="forgotPasswordForm">
-              <input type="email" id="forgotEmail"
-                class="w-full mb-4 border border-gray-300 rounded-md p-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Email address" required />
-              <div class="flex justify-end gap-2">
-                <button type="button" id="cancelForgot"
-                  class="px-4 py-2 text-sm bg-gray-300 hover:bg-gray-400 rounded-lg text-black">Cancel</button>
-                <button type="submit" class="px-4 py-2 text-sm text-white rounded-lg
-         bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700
-         hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700
-         shadow-md hover:shadow-lg hover:shadow-purple-500/40
-         transition-all duration-700 ease-in-out">
-                  Send Reset Link
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Sign Up Form -->
-        <div id="signUpForm" class="form-section hidden text-black">
-          <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
-          <form action="config/registration.php" method="POST">
-            <!-- Update the action to your PHP registration script -->
-            <div class="mb-3">
-              <label for="username" class="block text-sm font-medium text-gray-700 text-black">Username</label>
-              <input type="text" id="username" name="username" required
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div class="mb-3">
-              <label for="signUpEmail" class="block text-sm font-medium text-gray-700 text-black">Email Address</label>
-              <input type="email" id="signUpEmail" name="email" required
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div class="mb-3">
-              <label for="signUpPassword" class="block text-sm font-medium text-gray-700 text-black">Password</label>
-              <input type="password" id="signUpPassword" name="password" required
-                class="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              <p id="passwordStrength" class="mt-1 text-sm"></p>
-            </div>
-            <div class="mb-3">
-              <div class="flex items-center">
-                <input type="checkbox" id="agreeTerms" name="agreeTerms"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-                <label for="agreeTerms" class="ml-2 block text-sm text-gray-700 cursor-pointer">I agree to the <span
-                    class="text-blue-600 hover:underline">Terms and Conditions</span></label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="flex items-center">
-                <input type="checkbox" id="agreePrivacy" name="agreePrivacy"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
-                <label for="agreePrivacy" class="ml-2 block text-sm text-gray-700 cursor-pointer">I have read and agree
-                  to the <span class="text-blue-600 hover:underline">Privacy Policy</span></label>
-              </div>
-            </div>
-            <button type="submit"
-              class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 shadow-md hover:shadow-lg hover:shadow-purple-500/40 transition-all duration-700 ease-in-out">Sign
-              Up</button>
-          </form>
-          <div class="mt-4 text-center">
-            <button id="switchToLogin" class="text-blue-600 hover:underline">Already have an account? Login</button>
-          </div>
-        </div>
-
-        <!-- Toast Notification Container -->
-        <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
-
       </div>
-      <div class="mt-4 text-center">
-        <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition duration-200">Close</button>
+
+      <!-- Sign Up Form -->
+      <div id="signUpForm" class="form-section hidden text-white">
+        <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
+        <form action="config/registration.php" method="POST">
+          <div class="mb-3">
+            <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+            <input type="text" id="username" name="username" required
+              class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" />
+          </div>
+          <div class="mb-3">
+            <label for="signUpEmail" class="block text-sm font-medium text-gray-300">Email Address</label>
+            <input type="email" id="signUpEmail" name="email" required
+              class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" />
+          </div>
+          <div class="mb-3">
+            <label for="signUpPassword" class="block text-sm font-medium text-gray-300">Password</label>
+            <input type="password" id="signUpPassword" name="password" required
+              class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white" />
+            <p id="passwordStrength" class="mt-1 text-sm text-gray-400"></p>
+          </div>
+          <div class="mb-3">
+            <div class="flex items-center">
+              <input type="checkbox" id="agreeTerms" name="agreeTerms"
+                class="h-4 w-4 text-purple-500 focus:ring-purple-500 border-gray-600 rounded bg-gray-700 cursor-pointer" />
+              <label for="agreeTerms" class="ml-2 block text-sm text-gray-300 cursor-pointer">I agree to the <span
+                  class="text-purple-400 hover:text-purple-300 hover:underline">Terms and Conditions</span></label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="flex items-center">
+              <input type="checkbox" id="agreePrivacy" name="agreePrivacy"
+                class="h-4 w-4 text-purple-500 focus:ring-purple-500 border-gray-600 rounded bg-gray-700 cursor-pointer" />
+              <label for="agreePrivacy" class="ml-2 block text-sm text-gray-300 cursor-pointer">I have read and agree
+                to the <span class="text-purple-400 hover:text-purple-300 hover:underline">Privacy Policy</span></label>
+            </div>
+          </div>
+          <button type="submit"
+            class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 hover:from-indigo-500 hover:via-purple-600 hover:to-indigo-700 shadow-md hover:shadow-lg hover:shadow-purple-500/40 transition-all duration-700 ease-in-out">Sign
+            Up</button>
+        </form>
+        <div class="mt-4 text-center">
+          <button id="switchToLogin" class="text-purple-400 hover:text-purple-300 hover:underline">Already have an account? Login</button>
+        </div>
       </div>
+
+      <!-- Toast Notification Container -->
+      <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    </div>
+    <div class="mt-4 text-center">
+      <button id="closeModal" class="text-gray-400 hover:text-white transition duration-200">Close</button>
     </div>
   </div>
+</div>
 
-  <!-- Terms and Conditions Modal -->
-  <div id="infoModal"
-    class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-    <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-    <div
-      class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-      id="infoModalContent">
-      <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Terms & Conditions</h2>
-      <div class="max-h-96 overflow-y-auto" id="termsContent">
-        <p id="modalContentText" class="text-gray-700 mb-4">
-          <strong>ELYTRA POOL TERMS OF SERVICE</strong><br />
-          <strong>Last Updated:</strong> June 22, 2025<br /><br />
-          <strong>1. Definitions</strong><br />
-          1.1. <strong>"Platform"</strong> refers to Elytra Pool, its affiliates, subsidiaries, and any associated
-          decentralized protocols.<br />
-          1.2. <strong>"User "</strong> ("you") means any entity interacting with the Platform, including but not
-          limited to stakers, referrers, and purchasers of digital assets.<br />
-          1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable incentives distributed at the Platform's
-          sole discretion, with no expectation of profit.<br /><br />
-          <strong>2. Acceptance of Terms</strong><br />
-          2.1. By accessing the Platform, you <strong>irrevocably consent</strong> to these Terms, our Privacy
-          Policy, and any future amendments (posted without notice).<br />
-          2.2. Continued use constitutes <strong>binding arbitration agreement</strong> (waiving class action rights
-          per Section 9.4).<br /><br />
-          <strong>3. Eligibility & Account Creation</strong><br />
-          3.1. Users affirm they are <strong>not</strong> a citizen/resident of prohibited jurisdictions (e.g., USA,
-          Cuba, North Korea) unless compliant with local regulations.<br />
-          3.2. <strong>No Guaranteed Access</strong>: Accounts may be terminated without explanation (Section
-          7.3).<br /><br />
-          <strong>4. Staking & Rewards (No Promises)</strong><br />
-          4.1. <strong>Variable Rewards</strong>: APY estimates are hypothetical, subject to smart contract risks,
-          slashing, and protocol changes.<br />
-          4.2. <strong>No Ownership</strong>: Staked assets remain User's property, but rewards are
-          <strong>unsecured claims</strong> until distributed.<br />
-          4.3. <strong>Tax Liability</strong>: Users alone are responsible for reporting rewards as income (consult
-          a tax advisor).<br /><br />
-          <strong>5. Referral Program (No Pyramid Schemes)</strong><br />
-          5.1. Referral rewards are <strong>limited to 10 levels deep</strong> to avoid regulatory classification as
-          a security/Ponzi.<br />
-          5.2. Platform reserves the right to <strong>withhold referrals</strong> deemed fraudulent (no
-          appeals).<br /><br />
-          <strong>6. NFT Avatars & Microtransactions</strong><br />
-          6.1. <strong>Non-Refundable</strong>: All purchases of digital assets (e.g., avatars, gems) are
-          final.<br />
-          6.2. <strong>No Financial Utility</strong>: Avatars confer no staking advantages—purely
-          cosmetic.<br /><br />
-          <strong>7. Termination & Fund Seizure</strong><br />
-          7.1. <strong>At-Will Suspension</strong>: We may freeze accounts for "suspicious activity"
-          (undefined).<br />
-          7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12 months may be <strong>repurposed as
-            protocol fees</strong>.<br /><br />
-          <strong>8. Disclaimers (No Liability)</strong><br />
-          8.1. <strong>As-Is Service</strong>: The Platform disclaims warranties of merchantability, fitness, or
-          non-infringement.<br />
-          8.2. <strong>Third-Party Risks</strong>: We are not liable for exploits in underlying blockchains (e.g.,
-          Ethereum, Solana).<br /><br />
-          <strong>9. Governing Law & Arbitration</strong><br />
-          9.1. <strong>Jurisdiction</strong>: Disputes resolved under [Cayman Islands law] (favors
-          arbitration).<br />
-          9.2. <strong>Class Action Waiver</strong>: Users may only pursue individual claims (no class
-          actions).<br /><br />
-          <strong>10. Amendments</strong><br />
-          10.1. <strong>Unilateral Changes</strong>: We may modify these Terms at any time; continued use =
-          acceptance.
-        </p>
-      </div>
-      <div class="text-center mt-4">
-        <button id="confirmTerms"
-          class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>I
-          Accept</button>
-      </div>
+<!-- Terms and Conditions Modal -->
+<div id="infoModal"
+  class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+  <div class="bg-gray-900/90 absolute inset-0 backdrop-blur-sm"></div>
+  <div
+    class="bg-gray-800 border border-purple-500/30 rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+    id="infoModalContent">
+    <h2 class="text-purple-300 font-bold mb-4" id="modalTitle">Terms & Conditions</h2>
+    <div class="max-h-96 overflow-y-auto" id="termsContent">
+      <p id="modalContentText" class="text-gray-300 mb-4">
+        <strong class="text-white">ELYTRA POOL TERMS OF SERVICE</strong><br />
+        <strong class="text-gray-400">Last Updated:</strong> June 22, 2025<br /><br />
+        <strong class="text-white">1. Definitions</strong><br />
+        1.1. <strong>"Platform"</strong> refers to Elytra Pool, its affiliates, subsidiaries, and any associated
+        decentralized protocols.<br />
+        1.2. <strong>"User "</strong> ("you") means any entity interacting with the Platform, including but not
+        limited to stakers, referrers, and purchasers of digital assets.<br />
+        1.3. <strong>"Rewards"</strong> denote non-guaranteed, variable incentives distributed at the Platform's
+        sole discretion, with no expectation of profit.<br /><br />
+        <strong class="text-white">2. Acceptance of Terms</strong><br />
+        2.1. By accessing the Platform, you <strong>irrevocably consent</strong> to these Terms, our Privacy
+        Policy, and any future amendments (posted without notice).<br />
+        2.2. Continued use constitutes <strong>binding arbitration agreement</strong> (waiving class action rights
+        per Section 9.4).<br /><br />
+        <strong class="text-white">3. Eligibility & Account Creation</strong><br />
+        3.1. Users affirm they are <strong>not</strong> a citizen/resident of prohibited jurisdictions (e.g., USA,
+        Cuba, North Korea) unless compliant with local regulations.<br />
+        3.2. <strong>No Guaranteed Access</strong>: Accounts may be terminated without explanation (Section
+        7.3).<br /><br />
+        <strong class="text-white">4. Staking & Rewards (No Promises)</strong><br />
+        4.1. <strong>Variable Rewards</strong>: APY estimates are hypothetical, subject to smart contract risks,
+        slashing, and protocol changes.<br />
+        4.2. <strong>No Ownership</strong>: Staked assets remain User's property, but rewards are
+        <strong>unsecured claims</strong> until distributed.<br />
+        4.3. <strong>Tax Liability</strong>: Users alone are responsible for reporting rewards as income (consult
+        a tax advisor).<br /><br />
+        <strong class="text-white">5. Referral Program (No Pyramid Schemes)</strong><br />
+        5.1. Referral rewards are <strong>limited to 10 levels deep</strong> to avoid regulatory classification as
+        a security/Ponzi.<br />
+        5.2. Platform reserves the right to <strong>withhold referrals</strong> deemed fraudulent (no
+        appeals).<br /><br />
+        <strong class="text-white">6. NFT Avatars & Microtransactions</strong><br />
+        6.1. <strong>Non-Refundable</strong>: All purchases of digital assets (e.g., avatars, gems) are
+        final.<br />
+        6.2. <strong>No Financial Utility</strong>: Avatars confer no staking advantages—purely
+        cosmetic.<br /><br />
+        <strong class="text-white">7. Termination & Fund Seizure</strong><br />
+        7.1. <strong>At-Will Suspension</strong>: We may freeze accounts for "suspicious activity"
+        (undefined).<br />
+        7.2. <strong>Abandoned Accounts</strong>: Balances inactive >12 months may be <strong>repurposed as
+          protocol fees</strong>.<br /><br />
+        <strong class="text-white">8. Disclaimers (No Liability)</strong><br />
+        8.1. <strong>As-Is Service</strong>: The Platform disclaims warranties of merchantability, fitness, or
+        non-infringement.<br />
+        8.2. <strong>Third-Party Risks</strong>: We are not liable for exploits in underlying blockchains (e.g.,
+        Ethereum, Solana).<br /><br />
+        <strong class="text-white">9. Governing Law & Arbitration</strong><br />
+        9.1. <strong>Jurisdiction</strong>: Disputes resolved under [Cayman Islands law] (favors
+        arbitration).<br />
+        9.2. <strong>Class Action Waiver</strong>: Users may only pursue individual claims (no class
+        actions).<br /><br />
+        <strong class="text-white">10. Amendments</strong><br />
+        10.1. <strong>Unilateral Changes</strong>: We may modify these Terms at any time; continued use =
+        acceptance.
+      </p>
+    </div>
+    <div class="text-center mt-4">
+      <button id="confirmTerms"
+        class="rounded-lg px-4 py-2 transition duration-200 bg-gray-600 text-white cursor-not-allowed" disabled>I
+        Accept</button>
     </div>
   </div>
+</div>
 
-  <!-- Privacy Policy Modal -->
-  <div id="privacyModal"
-    class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
-    <div class="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
-    <div
-      class="bg-white rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
-      id="privacyModalContent">
-      <h2 class="text-gray-800 font-bold mb-4" id="modalTitle">Privacy Policy</h2>
-      <div class="max-h-96 overflow-y-auto" id="privacyContent">
-        <p id="modalContentText" class="text-gray-700 mb-4">
-          <strong>ELYTRA POOL PRIVACY POLICY</strong><br />
-          <strong>Last Updated:</strong> June 22, 2025<br /><br />
+<!-- Privacy Policy Modal -->
+<div id="privacyModal"
+  class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300 ease-in-out">
+  <div class="bg-gray-900/90 absolute inset-0 backdrop-blur-sm"></div>
+  <div
+    class="bg-gray-800 border border-purple-500/30 rounded-lg shadow-lg z-10 p-8 max-w-md w-full overflow-hidden transform transition-transform duration-300 ease-in-out scale-95 opacity-0"
+    id="privacyModalContent">
+    <h2 class="text-purple-300 font-bold mb-4" id="modalTitle">Privacy Policy</h2>
+    <div class="max-h-96 overflow-y-auto" id="privacyContent">
+      <p id="modalContentText" class="text-gray-300 mb-4">
+        <strong class="text-white">ELYTRA POOL PRIVACY POLICY</strong><br />
+        <strong class="text-gray-400">Last Updated:</strong> June 22, 2025<br /><br />
 
-          <strong>1. Information We Collect</strong><br />
-          1.1. We may collect personal information that you provide to us directly, such as your name, email
-          address, and any other information you choose to provide.<br />
-          1.2. We also collect wallet addresses, on-chain activity, IP addresses, browser/device information, and
-          technical metadata.<br /><br />
+        <strong class="text-white">1. Information We Collect</strong><br />
+        1.1. We may collect personal information that you provide to us directly, such as your name, email
+        address, and any other information you choose to provide.<br />
+        1.2. We also collect wallet addresses, on-chain activity, IP addresses, browser/device information, and
+        technical metadata.<br /><br />
 
-          <strong>2. How We Use Your Information</strong><br />
-          2.1. We use your data to enable core services (staking, transactions).<br />
-          2.2. We use data to improve security, detect fraud, and comply with legal obligations.<br />
-          2.3. We may send updates or marketing messages (opt-out is available).<br /><br />
+        <strong class="text-white">2. How We Use Your Information</strong><br />
+        2.1. We use your data to enable core services (staking, transactions).<br />
+        2.2. We use data to improve security, detect fraud, and comply with legal obligations.<br />
+        2.3. We may send updates or marketing messages (opt-out is available).<br /><br />
 
-          <strong>3. Sharing Your Information</strong><br />
-          3.1. We do not sell or rent your personal information.<br />
-          3.2. We may share data with third-party vendors (e.g., KYC providers), validators, cloud infrastructure,
-          or when legally required.<br /><br />
+        <strong class="text-white">3. Sharing Your Information</strong><br />
+        3.1. We do not sell or rent your personal information.<br />
+        3.2. We may share data with third-party vendors (e.g., KYC providers), validators, cloud infrastructure,
+        or when legally required.<br /><br />
 
-          <strong>4. Data Retention</strong><br />
-          4.1. KYC data is stored for 5 years unless legally mandated otherwise.<br />
-          4.2. Wallet activity and public blockchain data are stored indefinitely.<br />
-          4.3. Cookies and session data may be retained for up to 30 days.<br /><br />
+        <strong class="text-white">4. Data Retention</strong><br />
+        4.1. KYC data is stored for 5 years unless legally mandated otherwise.<br />
+        4.2. Wallet activity and public blockchain data are stored indefinitely.<br />
+        4.3. Cookies and session data may be retained for up to 30 days.<br /><br />
 
-          <strong>5. Security Measures</strong><br />
-          5.1. We implement encryption, secure wallets, and periodic audits.<br />
-          5.2. However, no system is 100% secure. Use the platform at your own risk.<br /><br />
+        <strong class="text-white">5. Security Measures</strong><br />
+        5.1. We implement encryption, secure wallets, and periodic audits.<br />
+        5.2. However, no system is 100% secure. Use the platform at your own risk.<br /><br />
 
-          <strong>6. Your Rights</strong><br />
-          6.1. Depending on your jurisdiction, you may access, update, or request deletion of your data.<br />
-          6.2. You may opt-out of marketing or withdraw consent, though some features may become
-          restricted.<br /><br />
+        <strong class="text-white">6. Your Rights</strong><br />
+        6.1. Depending on your jurisdiction, you may access, update, or request deletion of your data.<br />
+        6.2. You may opt-out of marketing or withdraw consent, though some features may become
+        restricted.<br /><br />
 
-          <strong>7. Changes to This Policy</strong><br />
-          7.1. We may modify this policy from time to time.<br />
-          7.2. Continued use of the platform signifies acceptance of updates.<br /><br />
+        <strong class="text-white">7. Changes to This Policy</strong><br />
+        7.1. We may modify this policy from time to time.<br />
+        7.2. Continued use of the platform signifies acceptance of updates.<br /><br />
 
-          <strong>8. Contact Us</strong><br />
-          For privacy-related concerns:<br />
-          Email: privacy@elytrapool.com<br />
-          Website: https://elytrapool.com/contact<br /><br />
+        <strong class="text-white">8. Contact Us</strong><br />
+        For privacy-related concerns:<br />
+        Email: privacy@elytrapool.com<br />
+        Website: https://elytrapool.com/contact<br /><br />
 
-          By using Elytra Pool, you acknowledge that you have read and agree to this Privacy Policy.
-        </p>
-      </div>
-      <div class="text-center mt-4">
-        <button id="confirmPrivacy"
-          class="rounded-lg px-4 py-2 transition duration-200 bg-gray-400 text-white cursor-not-allowed" disabled>I
-          Accept</button>
-      </div>
+        By using Elytra Pool, you acknowledge that you have read and agree to this Privacy Policy.
+      </p>
+    </div>
+    <div class="text-center mt-4">
+      <button id="confirmPrivacy"
+        class="rounded-lg px-4 py-2 transition duration-200 bg-gray-600 text-white cursor-not-allowed" disabled>I
+        Accept</button>
     </div>
   </div>
-
-  <button class="md:hidden" id="menu-button" aria-label="Toggle navigation">
-    <i class="fas fa-bars text-xl"></i>
-  </button>
-  </div>
+</div>
   </nav>
 
   <!-- Hero Section -->
@@ -455,7 +468,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   </section>
 
   <!-- Stats Section -->
-  <section class="py-12 bg-gray-900">
+  <section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div
@@ -698,7 +711,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   </section>
 
   <!-- Mining Section -->
-  <section id="mining" class="py-20 px-6 bg-gray-900 text-center">
+  <section id="mining" class="py-20 px-6 text-center">
     <div class="max-w-7xl mx-auto">
       <h2 class="text-3xl font-bold mb-2 text-purple-400">Staking Features</h2>
       <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Start mining cryptocurrency without hardware or technical
@@ -928,7 +941,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   </section>
 
   <!-- Call to Action -->
-  <section class="py-20 px-6 bg-gradient-to-r from-blue-700 to-purple-600">
+  <section class="py-20 px-6 bg-gradient-to-br from-purple-900 to-indigo-900">
     <div class="max-w-7xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-4">Ready to Start Earning with Elytra Pool?</h2>
       <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">Earn up to <span class="font-semibold text-white">25%
@@ -947,7 +960,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
     <div class="max-w-7xl mx-auto">
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <div class="flex items-center space-x-2">
-          <a href="index.html" class="flex items-center">
+          <a href="index.php" class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
               <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
@@ -963,7 +976,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
             <li><a href="#staking" class="hover:text-white">Staking</a></li>
             <li><a href="#mining" class="hover:text-white">Premium</a></li>
             <li><a href="#earnings" class="hover:text-white">Calculator</a></li>
-            <li><a href="pages/about.html" class="hover:text-white">FAQ</a></li>
+            <li><a href="faq.php" class="hover:text-white">FAQ</a></li>
           </ul>
         </div>
 
@@ -1005,6 +1018,17 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
 
       menuButton.addEventListener("click", () => {
         navLinks.classList.toggle("active");
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const menuBtn = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuBtn?.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
       });
     });
   </script>

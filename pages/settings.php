@@ -76,7 +76,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
               class="w-full h-full rounded-full object-cover" />
           </div>
-          <span class="text-xl font-bold text-white hover:text-purple-400 transition-colors duration-200">Elytra
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
             Pool</span>
         </a>
       </div>
@@ -124,7 +124,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
           <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
       </div>
@@ -149,13 +150,31 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     </div>
 
     <!-- Mobile Navigation Links -->
-    <div id="mobile-menu" class="hidden flex-col mt-4 space-y-2 md:hidden">
-      <a href="user.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Home</a>
-      <a href="staking.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Staking</a>
-      <a href="leaderboard.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Leaderboard</a>
-      <a href="deposit.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Deposit</a>
-      <a href="withdraw.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Withdraw</a>
-      <a href="Convert.php" class="block text-white px-4 py-2 hover:bg-[#1E293B] rounded">Convert</a>
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
+      <a href="user.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Leaderboard
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Deposit
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Withdraw
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="Convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Convert
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
     </div>
   </nav>
 

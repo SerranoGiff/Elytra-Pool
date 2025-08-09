@@ -119,7 +119,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       </div>
 
       <!-- Desktop Nav Links -->
-      <!-- Desktop Nav Links -->
       <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
         <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
           <span class="text-white hover:text-purple-300 transition">Home</span>
@@ -155,7 +154,6 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         </a>
       </div>
 
-
       <!-- Desktop Profile -->
       <div class="relative hidden md:block">
         <button id="profileBtn" class="focus:outline-none">
@@ -163,7 +161,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
           <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
           <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
@@ -189,13 +187,31 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     </div>
 
     <!-- Mobile Navigation Links -->
-    <div id="mobile-menu" class="nav-links">
-      <a href="user.php" class="nav-link">Home</a>
-      <a href="staking.php" class="nav-link">Staking</a>
-      <a href="leaderboard.php" class="nav-link">Leaderboard</a>
-      <a href="deposit.php" class="nav-link">Deposit</a>
-      <a href="withdraw.php" class="nav-link">Withdraw</a>
-      <a href="Convert.php" class="nav-link">Convert</a>
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
+      <a href="user.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Leaderboard
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Deposit
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Withdraw
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="Convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Convert
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
     </div>
   </nav>
 
@@ -841,12 +857,13 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
     function renderActiveStakes(data) {
       const container = document.getElementById('stakingCards');
 
-      // Hide default cards before rendering dynamic ones
-      document.querySelectorAll('.staking-card').forEach(card => {
-        if (card.dataset.default === "true") {
-          card.classList.add('hidden');
-        }
+      // Hide default cards
+      document.querySelectorAll('.staking-card[data-default="true"]').forEach(card => {
+        card.classList.add('hidden');
       });
+
+      // REMOVE previously rendered dynamic cards
+      document.querySelectorAll('.staking-card[data-default="false"]').forEach(card => card.remove());
 
       data.forEach(stake => {
         const hashRate = (Math.random() * 100).toFixed(2);
@@ -858,6 +875,8 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         const elapsed = now - start;
         let progress = Math.min(100, Math.floor((elapsed / totalDuration) * 100));
         if (progress < 0) progress = 0;
+
+        const currencyLabel = stake.currency === 'ELTR' ? 'Elytra' : stake.currency;
 
         const iconData = {
           'BTC': {
@@ -899,42 +918,38 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
         card.className = 'staking-card p-4 bg-gray-800 rounded-lg shadow text-white';
         card.dataset.default = "false";
         card.innerHTML = `
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 ${selected.color} rounded-full flex items-center justify-center">
-            ${selected.icon}
-          </div>
-          <div class="text-lg font-semibold">${stake.currency} Stake</div>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 ${selected.color} rounded-full flex items-center justify-center">
+          ${selected.icon}
         </div>
-
-        <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
-          <div>
-            <div class="text-xs text-gray-400">Hashrate</div>
-            <div class="text-base font-semibold">${hashRate} TH/s</div>
-          </div>
-          <div>
-            <div class="text-xs text-gray-400">Daily Earnings</div>
-            <div class="text-base font-semibold">${dailyEarnings} ${stake.currency}</div>
-          </div>
+        <div class="text-lg font-semibold">${currencyLabel} Stake</div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+        <div>
+          <div class="text-xs text-gray-400">Hashrate</div>
+          <div class="text-base font-semibold">${hashRate} TH/s</div>
         </div>
-
-        <div class="mb-2 text-xs text-gray-400">Staked Amount: 
-          <span class="text-white font-semibold">${stake.amount} ${stake.currency}</span>
+        <div>
+          <div class="text-xs text-gray-400">Daily Earnings</div>
+          <div class="text-base font-semibold">${dailyEarnings} ELTR</div>
         </div>
-
-        <div class="flex justify-between text-xs text-white mb-1">
-          <span>Progress</span>
-          <span>${progress}%</span>
-        </div>
-        <div class="w-full bg-gray-700 rounded-full h-1.5 mb-4">
-          <div class="bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 h-1.5 rounded-full" style="width: ${progress}%"></div>
-        </div>
-
-        <a href="#"
-          onclick="openCancelModal(${stake.id}, ${stake.amount}, '${stake.currency}')"
-          class="w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:brightness-110 text-sm font-medium">
-          Cancel Stake
-        </a>
-      `;
+      </div>
+      <div class="mb-2 text-xs text-gray-400">Staked Amount: 
+        <span class="text-white font-semibold">${stake.amount} ELTR</span>
+      </div>
+      <div class="flex justify-between text-xs text-white mb-1">
+        <span>Progress</span>
+        <span>${progress}%</span>
+      </div>
+      <div class="w-full bg-gray-700 rounded-full h-1.5 mb-4">
+        <div class="bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 h-1.5 rounded-full" style="width: ${progress}%"></div>
+      </div>
+      <a href="#"
+        onclick="openCancelModal(${stake.id}, ${stake.amount}, 'ELTR')"
+        class="w-full py-2 rounded-lg text-center block text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:brightness-110 text-sm font-medium">
+        Cancel Stake
+      </a>
+    `;
         container.appendChild(card);
       });
     }
@@ -969,29 +984,25 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 
     tabs.forEach((btn, index) => {
       btn.addEventListener('click', () => {
-        // Reset tab styles
+        // Reset styles
         tabs.forEach(tab => {
-          tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
-          tab.classList.remove('bg-purple-700');
+          tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700', 'bg-purple-700');
           tab.classList.add('bg-gray-700');
         });
 
-        // Highlight selected tab
         btn.classList.remove('bg-gray-700');
         btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'via-indigo-600', 'to-purple-700');
 
-        // Hide all sections
         stakingCycles.classList.add('hidden');
         activeStakes.classList.add('hidden');
         stakingHistory.classList.add('hidden');
         stakingCards.classList.add('hidden');
 
         if (index === 0) {
-          // Tab 1: Show default staking cycles
+          // Staking Cycles
           stakingCycles.classList.remove('hidden');
           stakingCards.classList.remove('hidden');
 
-          // Show default cards, hide dynamically added cards
           document.querySelectorAll('.staking-card').forEach(card => {
             if (card.dataset.default === "true") {
               card.classList.remove('hidden');
@@ -1001,15 +1012,12 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
           });
 
         } else if (index === 1) {
-          // Tab 2: Active Stakes
+          // Active Stakes
           fetch('../config/fetch_active_stakes.php')
             .then(res => res.json())
             .then(data => {
-              // Hide all default cards
               document.querySelectorAll('.staking-card').forEach(card => {
-                if (card.dataset.default === "true") {
-                  card.classList.add('hidden');
-                }
+                if (card.dataset.default === "true") card.classList.add('hidden');
               });
 
               if (data.length > 0) {
@@ -1028,9 +1036,82 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
             });
 
         } else if (index === 2) {
-          // Tab 3: Staking History
-          stakingHistory.classList.remove('hidden');
-        }
+  stakingHistory.classList.remove('hidden');
+  stakingCards.classList.add('hidden');
+  activeStakes.classList.add('hidden');
+  stakingCycles.classList.add('hidden');
+
+  // Clear any previous content
+  stakingHistory.innerHTML = `
+    <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
+      <p class="text-lg">Loading staking history...</p>
+    </div>`;
+
+  fetch('../config/fetch_staking_archive.php')
+    .then(res => res.json())
+    .then(data => {
+      stakingHistory.innerHTML = ''; // clear loader
+
+      if (!Array.isArray(data) || data.length === 0) {
+        stakingHistory.innerHTML = `
+          <div class="bg-gray-800 p-6 rounded-lg text-white text-center shadow-lg">
+            <p class="text-lg">No staking history found.</p>
+          </div>`;
+        return;
+      }
+
+      data.forEach(stake => {
+        const currency = stake.currency ?? 'N/A';
+        const amount = parseFloat(stake.amount ?? 0);
+        const dailyPercent = parseFloat(stake.daily_percent ?? 0);
+        const createdAt = new Date(stake.created_at);
+        const endedAt = new Date(stake.end_date);
+
+        const isValidDates = !isNaN(createdAt) && !isNaN(endedAt);
+        const duration = isValidDates
+          ? Math.ceil((endedAt - createdAt) / (1000 * 60 * 60 * 24))
+          : 'N/A';
+        const dailyEarnings = (amount * (dailyPercent / 100)).toFixed(6);
+
+        const card = document.createElement('div');
+        card.className = 'staking-card p-4 bg-gray-800 rounded-lg shadow text-white mb-4 fade-in';
+        card.dataset.default = "false";
+        card.innerHTML = `
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+              <i class="fas fa-history text-white"></i>
+            </div>
+            <div>
+              <div class="text-lg font-semibold">${currency} (Completed)</div>
+              <div class="text-sm text-gray-400">${createdAt.toLocaleDateString()} → ${endedAt.toLocaleDateString()}</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 text-sm mb-3">
+            <div>
+              <div class="text-xs text-gray-400">Stake Duration</div>
+              <div class="font-semibold">${duration} days</div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-400">Daily %</div>
+              <div class="font-semibold">${dailyPercent}%</div>
+            </div>
+          </div>
+          <div class="text-sm text-gray-400 mb-1">Staked Amount: <span class="text-white font-semibold">${amount} ELTR</span></div>
+          <div class="text-sm text-gray-400 mb-1">Total Est. Earnings: <span class="text-green-400 font-semibold">${(dailyEarnings * duration).toFixed(2)} ELTR</span></div>
+        `;
+
+        stakingHistory.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error("Archive fetch failed:", err);
+      stakingHistory.innerHTML = `
+        <div class="bg-red-600 p-4 text-white rounded-lg shadow">
+          Error loading staking history.
+        </div>`;
+    });
+}
+
       });
     });
 
@@ -1040,6 +1121,7 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
       });
     }
   </script>
+
 
   <script>
     const supportButton = document.getElementById("supportButton");

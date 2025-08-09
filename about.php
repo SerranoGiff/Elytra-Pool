@@ -16,42 +16,71 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elytra Pool | Frequently Asked Questions</title>
+  <title>Elytra Pool | About Us</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .faq-item {
+    .card-glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       transition: all 0.3s ease;
     }
 
-    .faq-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(167, 139, 250, 0.1), 0 4px 6px -2px rgba(167, 139, 250, 0.05);
+    .card-glass:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(167, 139, 250, 0.3);
+      border-color: rgba(167, 139, 250, 0.3);
     }
 
-    .faq-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease, opacity 0.3s ease;
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
       opacity: 0;
     }
 
-    .faq-content.show {
-      max-height: 500px;
-      opacity: 1;
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
 
-    .rotate-180 {
-      transform: rotate(180deg);
+    .section-title {
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50%;
+      height: 3px;
+      background: linear-gradient(90deg, #7c3aed, #a855f7);
+      border-radius: 3px;
+    }
+
+    .team-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 3px solid rgba(167, 139, 250, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .team-member:hover .team-img {
+      transform: scale(1.05);
+      border-color: #a855f7;
     }
   </style>
 </head>
@@ -417,483 +446,182 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
   </div>
   </nav>
 
-  <!-- FAQ Hero Section -->
-  <section class="pt-32 pb-16 px-6 bg-gradient-to-b from-purple-900/20 to-gray-950">
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 px-6 bg-gradient-to-b from-purple-900/10 to-gray-950">
     <div class="max-w-7xl mx-auto text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-white">Frequently Asked <span class="text-purple-400">Questions</span></h1>
-      <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
-        Find answers to common questions about Elytra Pool's staking platform, rewards system, and account management.
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">About <span class="text-purple-400">Elytra Pool</span></h1>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+        Pioneering the future of decentralized finance with secure, transparent, and high-yield staking solutions.
       </p>
     </div>
   </section>
 
-  <!-- FAQ Section -->
-  <section class="py-2 px-4 md:px-6">
-    <div class="max-w-5xl mx-auto">
-      <!-- FAQ Categories -->
-      <div class="grid md:grid-cols-2 gap-6 mb-12">
-        <a href="#general" class="category-card bg-gray-800/50 hover:bg-gray-800 border border-gray-700 rounded-xl p-6 transition-all duration-300 hover:border-purple-500">
-          <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
-              <i class="fas fa-globe text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-white">General Information</h3>
-              <p class="text-sm text-gray-400">Basic platform overview</p>
-            </div>
-          </div>
-        </a>
-
-        <a href="#staking" class="category-card bg-gray-800/50 hover:bg-gray-800 border border-gray-700 rounded-xl p-6 transition-all duration-300 hover:border-purple-500">
-          <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
-              <i class="fas fa-coins text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-white">Staking Process</h3>
-              <p class="text-sm text-gray-400">How to stake assets</p>
-            </div>
-          </div>
-        </a>
-
-        <a href="#rewards" class="category-card bg-gray-800/50 hover:bg-gray-800 border border-gray-700 rounded-xl p-6 transition-all duration-300 hover:border-purple-500">
-          <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
-              <i class="fas fa-chart-line text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-white">Rewards System</h3>
-              <p class="text-sm text-gray-400">Earnings & payouts</p>
-            </div>
-          </div>
-        </a>
-
-        <a href="#security" class="category-card bg-gray-800/50 hover:bg-gray-800 border border-gray-700 rounded-xl p-6 transition-all duration-300 hover:border-purple-500">
-          <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
-              <i class="fas fa-shield-alt text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-white">Security & Policies</h3>
-              <p class="text-sm text-gray-400">Safety measures</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- FAQ Content -->
-      <div class="space-y-8">
-        <!-- General Information -->
-        <div id="general" class="scroll-mt-20">
-          <h2 class="text-2xl font-bold mb-6 text-white border-b border-gray-800 pb-2 flex items-center">
-            <i class="fas fa-globe text-purple-400 mr-3"></i>
-            General Information
-          </h2>
-          <div class="space-y-4">
-            <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-              <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-                <span class="text-lg font-medium text-purple-300">What is Elytra Pool?</span>
-                <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-              </button>
-              <div class="faq-content px-6">
-                <div class="pb-6 text-gray-300">
-                  Elytra Pool is a decentralized staking platform that allows users to earn passive income by participating in blockchain validation. Our platform offers:
-                  <ul class="list-disc pl-5 mt-2 space-y-1">
-                    <li>Multi-chain staking support</li>
-                    <li>Competitive APY returns</li>
-                    <li>Non-custodial asset management</li>
-                    <li>Automated reward compounding</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-              <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-                <span class="text-lg font-medium text-purple-300">What is the ELTR token?</span>
-                <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-              </button>
-              <div class="faq-content px-6">
-                <div class="pb-6 text-gray-300">
-                  ELTR is the native utility token of the Elytra Pool ecosystem with multiple functions:
-                  <ul class="list-disc pl-5 mt-2 space-y-1">
-                    <li><strong>Staking:</strong> All staking activities require ELTR</li>
-                    <li><strong>Rewards:</strong> Distributed in ELTR with optional auto-compounding</li>
-                    <li><strong>Governance:</strong> Voting rights for platform decisions</li>
-                    <li><strong>Fee Reduction:</strong> Discounts on transaction fees</li>
-                  </ul>
-                  The token follows a deflationary model with periodic burns.
-                </div>
-              </div>
-            </div>
-
-            <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-              <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-                <span class="text-lg font-medium text-purple-300">Which blockchains are supported?</span>
-                <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-              </button>
-              <div class="faq-content px-6">
-                <div class="pb-6 text-gray-300">
-                  Currently supported networks:
-                  <div class="grid grid-cols-2 gap-4 mt-3">
-                    <div class="flex items-center space-x-2">
-                      <i class="fab fa-ethereum text-blue-400"></i>
-                      <span>Ethereum</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                      <i class="fab fa-bitcoin text-orange-400"></i>
-                      <span>Bitcoin (wrapped)</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                      <i class="fas fa-bolt text-purple-400"></i>
-                      <span>Solana</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                      <i class="fas fa-link text-blue-300"></i>
-                      <span>Chainlink</span>
-                    </div>
-                  </div>
-                  <p class="mt-4">More chains are added quarterly based on community voting.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Staking Process -->
-        <div id="staking" class="scroll-mt-20">
-          <h2 class="text-2xl font-bold mb-6 text-white border-b border-gray-800 pb-2 flex items-center">
-            <i class="fas fa-coins text-purple-400 mr-3"></i>
-            Staking Process
-          </h2>
-          <div class="space-y-4">
-            <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-              <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-                <span class="text-lg font-medium text-purple-300">How do I stake assets on Elytra Pool?</span>
-                <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-              </button>
-              <div class="faq-content px-6">
-                <div class="pb-6 text-gray-300">
-                  <p>Our staking process is designed for simplicity:</p>
-                  <ol class="list-decimal pl-5 mt-2 space-y-2">
-                    <li><strong>Deposit:</strong> Transfer supported assets (USDT, ETH, BTC, etc.) to your Elytra wallet</li>
-                    <li><strong>Convert:</strong> Assets are automatically converted to ELTR at market rates (1.9% conversion fee for premium user)</li>
-                    <li><strong>Select Pool:</strong> Choose from our curated staking pools with varying lock periods</li>
-                    <li><strong>Confirm:</strong> Approve the staking transaction via your Elytra wallet</li>
-                  </ol>
-                  <p class="mt-3 text-sm text-purple-300">Note: Only ELTR tokens can be staked directly. Other assets are automatically converted.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-              <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-                <span class="text-lg font-medium text-purple-300">What are the different staking pool types?</span>
-                <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-              </button>
-              <div class="faq-content px-6">
-                <div class="pb-6 text-gray-300">
-                  We offer two staking pool types:
-
-                  <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-blue-400">
-                    <h4 class="font-semibold text-white">Standard Staking (Free)</h4>
-                    <p class="text-sm mt-1">- Higher APY (scales with duration)<br>- Can only stake one at a time<br>- Limited Access</p>
-                  </div>
-                  <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-purple-400">
-                    <h4 class="font-semibold text-white">VIP Staking (Premium users)</h4>
-                    <p class="text-sm mt-1">- Highest APY rates<br>- Unlimited Staking<br>- Priority support<br>- Custom strategies</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-              <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-                <span class="text-lg font-medium text-purple-300">What is the minimum staking amount?</span>
-                <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-              </button>
-              <div class="faq-content px-6">
-                <div class="pb-6 text-gray-300">
-                  <p>Minimum staking requirements vary by pool type:</p>
-                  <table class="w-full mt-3 border-collapse">
-                    <thead>
-                      <tr class="bg-gray-800 text-left">
-                        <th class="p-3 border-b border-gray-700">Pool Type</th>
-                        <th class="p-3 border-b border-gray-700">Minimum ELTR</th>
-                        <th class="p-3 border-b border-gray-700">USDT Equivalent</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="border-b border-gray-800">
-                        <td class="p-3">Flexible</td>
-                        <td class="p-3">200 ELTR</td>
-                        <td class="p-3">≈100 USDT</td>
-                      </tr>
-                      <tr class="border-b border-gray-800">
-                        <td class="p-3">7-day Locked</td>
-                        <td class="p-3">3000 ELTR</td>
-                        <td class="p-3">≈1500 USDT</td>
-                      </tr>
-                      <tr>
-                        <td class="p-3">30-day Locked</td>
-                        <td class="p-3">10000 ELTR</td>
-                        <td class="p-3">≈5000 USD</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p class="mt-3 text-sm">Note: Minimums may change based on network conditions.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rewards System -->
-      <div id="rewards" class="pt-7 scroll-mt-20">
-        <h2 class="text-2xl font-bold mb-6 text-white border-b border-gray-800 pb-2 flex items-center">
-          <i class="fas fa-chart-line text-purple-400 mr-3"></i>
-          Rewards System
-        </h2>
+  <!-- Mission Section -->
+  <section class="py-16 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="order-2 md:order-1">
+        <h2 class="text-3xl font-bold mb-6 section-title">Our Mission</h2>
+        <p class="text-gray-300 mb-6">
+          At Elytra Pool, we're committed to democratizing access to cryptocurrency staking by providing an intuitive platform that bridges the gap between traditional finance and decentralized technologies.
+        </p>
         <div class="space-y-4">
-          <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-            <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-              <span class="text-lg font-medium text-purple-300">How are staking rewards calculated?</span>
-              <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-            </button>
-            <div class="faq-content px-6">
-              <div class="pb-6 text-gray-300">
-                <p>Rewards follow this formula:</p>
-                <div class="bg-gray-800 p-4 rounded-lg my-3 font-mono">
-                  (Your Stake ÷ Total Pool Size) × Daily Reward Pool × (1 - Platform Fee)
-                </div>
-                <p>Key factors affecting rewards:</p>
-                <ul class="list-disc pl-5 mt-2 space-y-1">
-                  <li><strong>Stake duration:</strong> Longer locks = higher multipliers</li>
-                  <li><strong>Pool performance:</strong> Varies by blockchain activity</li>
-                  <li><strong>Platform fee:</strong> 2% for standard users, 1% for Premium</li>
-                  <li><strong>Compounding:</strong> Auto-compound boosts effective APY</li>
-                </ul>
-              </div>
+          <div class="flex items-start">
+            <div class="bg-purple-500/10 text-purple-400 rounded-full p-2 mr-4">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-1">Security First</h4>
+              <p class="text-gray-400 text-sm">Enterprise-grade security protocols to protect your assets</p>
             </div>
           </div>
-
-          <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-            <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-              <span class="text-lg font-medium text-purple-300">When and how are rewards distributed?</span>
-              <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-            </button>
-            <div class="faq-content px-6">
-              <div class="pb-6 text-gray-300">
-                <p>Reward distribution schedule:</p>
-                <div class="mt-3 space-y-3">
-                  <div class="flex items-start">
-                    <div class="bg-purple-500/10 text-purple-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-clock text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">Weekly Payouts</h4>
-                      <p class="text-sm text-gray-400">Credited every 24 hours at 00:00 UTC</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-purple-500/10 text-purple-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-wallet text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">Distribution Methods</h4>
-                      <p class="text-sm text-gray-400">Auto-staked by default or claimable to wallet</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-purple-500/10 text-purple-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-bell text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">Notifications</h4>
-                      <p class="text-sm text-gray-400">Email/web notifications for each distribution</p>
-                    </div>
-                  </div>
-                </div>
-                <p class="mt-4">Rewards appear in your dashboard within 5 minutes of distribution.</p>
-              </div>
+          <div class="flex items-start">
+            <div class="bg-purple-500/10 text-purple-400 rounded-full p-2 mr-4">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-1">Optimal Yields</h4>
+              <p class="text-gray-400 text-sm">Competitive returns through advanced staking strategies</p>
             </div>
           </div>
-
-          <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-            <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-              <span class="text-lg font-medium text-purple-300">What is the difference between APY and APR?</span>
-              <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-            </button>
-            <div class="faq-content px-6">
-              <div class="pb-6 text-gray-300">
-                <div class="grid md:grid-cols-2 gap-6">
-                  <div class="bg-gray-800/50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-purple-300 mb-2">APR (Annual Percentage Rate)</h4>
-                    <ul class="list-disc pl-5 space-y-1 text-sm">
-                      <li>Simple interest rate</li>
-                      <li>Doesn't account for compounding</li>
-                      <li>Fixed rate for locked staking</li>
-                      <li>Easier to calculate</li>
-                    </ul>
-                  </div>
-                  <div class="bg-gray-800/50 p-4 rounded-lg">
-                    <h4 class="font-semibold text-purple-300 mb-2">APY (Annual Percentage Yield)</h4>
-                    <ul class="list-disc pl-5 space-y-1 text-sm">
-                      <li>Includes compounding effects</li>
-                      <li>Reflects actual earnings</li>
-                      <li>Variable for flexible staking</li>
-                      <li>Higher than APR with compounding</li>
-                    </ul>
-                  </div>
-                </div>
-                <p class="mt-4">Fun Fact: We Use Daily Earnings Percentage so you don't have to worry calculating it!</p>
-              </div>
+          <div class="flex items-start">
+            <div class="bg-purple-500/10 text-purple-400 rounded-full p-2 mr-4">
+              <i class="fas fa-users"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-1">Community Focused</h4>
+              <p class="text-gray-400 text-sm">Built by stakers, for stakers</p>
             </div>
           </div>
         </div>
       </div>
+      <div class="order-1 md:order-2">
+        <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-1">
+          <img src="https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop"
+            alt="Blockchain technology"
+            class="w-full h-auto rounded-lg">
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <!-- Security & Policies -->
-      <div id="security" class="pt-7 scroll-mt-20">
-        <h2 class="text-2xl font-bold mb-6 text-white border-b border-gray-800 pb-2 flex items-center">
-          <i class="fas fa-shield-alt text-purple-400 mr-3"></i>
-          Security & Policies
-        </h2>
-        <div class="space-y-4">
-          <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-            <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-              <span class="text-lg font-medium text-purple-300">What security measures protect my assets?</span>
-              <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-            </button>
-            <div class="faq-content px-6">
-              <div class="pb-6 text-gray-300">
-                <p>Elytra Pool employs multiple security layers:</p>
-                <div class="mt-4 space-y-4">
-                  <div class="flex items-start">
-                    <div class="bg-green-500/10 text-green-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-lock text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">Non-Custodial Staking</h4>
-                      <p class="text-sm text-gray-400">You retain control of private keys</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-blue-500/10 text-blue-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-shield-alt text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">Smart Contract Audits</h4>
-                      <p class="text-sm text-gray-400">Quarterly audits by CertiK & Hacken</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-purple-500/10 text-purple-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-user-shield text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">2FA Authentication</h4>
-                      <p class="text-sm text-gray-400">Required for withdrawals</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-red-500/10 text-red-400 rounded-full p-1 mr-3 mt-1">
-                      <i class="fas fa-bell text-xs"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-medium">Activity Monitoring</h4>
-                      <p class="text-sm text-gray-400">Real-time suspicious activity alerts</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <!-- Team Section -->
+  <section class="pt-20 pb-16 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-4 section-title inline-block">Meet Our Team</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">The brilliant minds behind Elytra Pool's innovative staking platform</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Team Member 1 -->
+        <div class="card-glass p-6 rounded-2xl text-center team-member fade-in" style="animation-delay: 0.1s;">
+          <div class="mb-6 -mt-12">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg"
+              alt="Alice Johnson"
+              class="team-img rounded-full mx-auto">
           </div>
-
-          <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-            <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-              <span class="text-lg font-medium text-purple-300">What happens if I unstake early?</span>
-              <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-            </button>
-            <div class="faq-content px-6">
-              <div class="pb-6 text-gray-300">
-                <p>Early unstaking policies vary by pool type:</p>
-                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-400">
-                  <h4 class="font-semibold text-white">Locked Pools (Standard)</h4>
-                  <p class="text-sm mt-1">- early unstaking fee<br>- 14-day processing period<br>- Forfeiture of current cycle rewards</p>
-                </div>
-                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-red-400">
-                  <h4 class="font-semibold text-white">VIP Locked Pools</h4>
-                  <p class="text-sm mt-1">- early unstaking fee<br>- 7-day processing period<br>- Forfeiture of current + next cycle rewards</p>
-                </div>
-              </div>
-              <p class="mt-4 text-sm text-purple-300">Note: Fees are deducted from principal, not rewards.</p>
-            </div>
+          <h3 class="text-xl font-semibold mb-1">Alice Johnson</h3>
+          <p class="text-purple-400 mb-4">CEO & Founder</p>
+          <p class="text-gray-300 mb-4">Blockchain expert with 10+ years in cryptocurrency and decentralized systems development.</p>
+          <div class="flex justify-center space-x-4">
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fas fa-link"></i></a>
           </div>
+        </div>
 
-          <div class="faq-item bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden transition-all duration-300">
-            <button class="faq-question w-full text-left p-6 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
-              <span class="text-lg font-medium text-purple-300">What is your withdrawal verification process?</span>
-              <i class="fas fa-chevron-down text-purple-400 transition-transform duration-300"></i>
-            </button>
-            <div class="faq-content px-6">
-              <div class="pb-6 text-gray-300">
-                <p>For security, we require:</p>
-                <ol class="list-decimal pl-5 mt-2 space-y-2">
-                  <li><strong>Initial Verification:</strong>
-                    <ul class="list-disc pl-5 mt-1 space-y-1">
-                      <li>Email confirmation</li>
-                      <li>Wallet signature verification</li>
-                    </ul>
-                  </li>
-                  <li><strong>For Withdrawals</strong>
-                    <ul class="list-disc pl-5 mt-1 space-y-1">
-                      <li>ID document verification (KYC)</li>
-                      <li>24-hour security hold</li>
-                      <li>Manual review by security team</li>
-                    </ul>
-                  </li>
-                  <li><strong>Ongoing Security:</strong>
-                    <ul class="list-disc pl-5 mt-1 space-y-1">
-                      <li>Withdrawal address whitelisting</li>
-                      <li>IP change notifications</li>
-                      <li>Multi-signature approvals</li>
-                    </ul>
-                  </li>
-                </ol>
-                <p class="mt-3 text-sm">Standard withdrawals process within 24 hours after verification.</p>
-              </div>
-            </div>
+        <!-- Team Member 2 -->
+        <div class="card-glass p-6 rounded-2xl text-center team-member fade-in" style="animation-delay: 0.2s;">
+          <div class="mb-6 -mt-12">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg"
+              alt="Bob Smith"
+              class="team-img rounded-full mx-auto">
+          </div>
+          <h3 class="text-xl font-semibold mb-1">Bob Smith</h3>
+          <p class="text-purple-400 mb-4">CTO</p>
+          <p class="text-gray-300 mb-4">Software architect specializing in blockchain infrastructure and smart contract security.</p>
+          <div class="flex justify-center space-x-4">
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-github"></i></a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="card-glass p-6 rounded-2xl text-center team-member fade-in" style="animation-delay: 0.3s;">
+          <div class="mb-6 -mt-12">
+            <img src="https://randomuser.me/api/portraits/men/67.jpg"
+              alt="Charlie Brown"
+              class="team-img rounded-full mx-auto">
+          </div>
+          <h3 class="text-xl font-semibold mb-1">Charlie Brown</h3>
+          <p class="text-purple-400 mb-4">Marketing Director</p>
+          <p class="text-gray-300 mb-4">Growth hacker with expertise in crypto community building and digital marketing strategies.</p>
+          <div class="flex justify-center space-x-4">
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="mt-16 py-15 px-4 md:px-10 bg-gray-900">
-    <!-- Support Section -->
-    <div class="p-10 text-center max-w-3xl mx-auto">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Still have questions?</h2>
-      <p class="text-gray-300 mb-8 text-lg">Our support team is available 24/7 to assist you.</p>
+  <!-- Stats Section -->
+  <section class="pt-16 pb-16 px-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          class="p-6 rounded-2xl text-center bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 shadow-md transition-transform duration-300 hover:scale-105">
+          <div class="text-3xl font-bold text-white mb-2">$1.2B+</div>
+          <div class="text-white-600 text-sm">Assets Staked</div>
+        </div>
+
+        <div
+          class="p-6 rounded-2xl text-center bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 shadow-md transition-transform duration-400 hover:scale-105">
+          <div id="active-users" class="text-3xl font-bold text-white mb-2">1,500,000</div>
+          <div class="text-white-600 text-sm">Active Users</div>
+        </div>
+
+        <div
+          class="p-6 rounded-2xl text-center bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 shadow-md transition-transform duration-300 hover:scale-105">
+          <div class="text-3xl font-bold text-white mb-2">15+</div>
+          <div class="text-white-600 text-sm">Supported Coins</div>
+        </div>
+
+        <div
+          class="p-6 rounded-2xl text-center bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 shadow-md transition-transform duration-300 hover:scale-105">
+          <div id="uptime" class="text-3xl font-bold text-white mb-2">99.9%</div>
+          <div class="text-white-600 text-sm">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6 bg-gradient-to-br from-purple-900 to-indigo-900 text-white">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-4xl sm:text-5xl font-extrabold mb-6">Need Help or Want to Estimate Your Rewards?</h2>
+      <p class="text-lg sm:text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+        Check out our FAQs for quick answers or use our earnings calculator to estimate your staking income.
+      </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="mailto:support@elytrapool.com"
-          class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md">
-          <i class="fas fa-envelope"></i>
-          <span>Email Support</span>
+        <!-- FAQ Button with background -->
+        <a href="faq.php" class="inline-flex items-center justify-center bg-white text-purple-800 px-6 py-3 rounded-lg font-semibold hover:bg-purple-100 transition duration-300 shadow-md text-base sm:text-lg">
+          <i class="fas fa-question-circle mr-2"></i>
+          Frequently Asked Questions
         </a>
 
-        <a href="https://t.me/elytrapool_support" target="_blank"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md">
-          <i class="fab fa-telegram"></i>
-          <span>Live Chat</span>
+        <!-- Calculate Earnings Button remains bordered white -->
+        <a href="index.php#earnings" class="inline-flex items-center justify-center border border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition duration-300 shadow-md text-base sm:text-lg">
+          <i class="fas fa-calculator mr-2"></i>
+          Calculate Earnings
         </a>
       </div>
-
-      <p class="mt-8 text-sm text-gray-500">Last Updated: <?= date("F j, Y") ?></p>
     </div>
   </section>
+
 
   <!-- Footer -->
   <footer class="py-12 px-6 border-t border-gray-800">
@@ -916,7 +644,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
             <li><a href="#staking" class="hover:text-white">Staking</a></li>
             <li><a href="#mining" class="hover:text-white">Premium</a></li>
             <li><a href="#earnings" class="hover:text-white">Calculator</a></li>
-            <li><a href="pages/about.php" class="hover:text-white">FAQ</a></li>
+            <li><a href="faq.php" class="hover:text-white">FAQ</a></li>
           </ul>
         </div>
 
@@ -951,57 +679,22 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script>
-    // FAQ Toggle Functionality
-    document.querySelectorAll('.faq-question').forEach(button => {
-      button.addEventListener('click', () => {
-        const faqItem = button.closest('.faq-item');
-        const content = faqItem.querySelector('.faq-content');
-        const icon = button.querySelector('i');
+    // Simple animation trigger
+    document.addEventListener('DOMContentLoaded', () => {
+      const fadeElements = document.querySelectorAll('.fade-in');
 
-        // Toggle the current item
-        content.classList.toggle('show');
-        icon.classList.toggle('rotate-180');
-
-        // Close other open items
-        document.querySelectorAll('.faq-item').forEach(item => {
-          if (item !== faqItem) {
-            item.querySelector('.faq-content').classList.remove('show');
-            item.querySelector('i').classList.remove('rotate-180');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
           }
         });
+      }, {
+        threshold: 0.1
       });
-    });
 
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
-        });
-      });
-    });
-
-    // Search functionality
-    const searchInput = document.querySelector('input[placeholder="Search FAQs..."]');
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-
-      document.querySelectorAll('.faq-item').forEach(item => {
-        const question = item.querySelector('.faq-question span').textContent.toLowerCase();
-        const answer = item.querySelector('.faq-content').textContent.toLowerCase();
-
-        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
-          item.style.display = 'block';
-          // Highlight matching text
-          const regex = new RegExp(searchTerm, 'gi');
-          item.innerHTML = item.innerHTML.replace(regex, match => `<span class="bg-yellow-500/20 text-yellow-300">${match}</span>`);
-        } else {
-          item.style.display = 'none';
-        }
-      });
+      fadeElements.forEach(el => observer.observe(el));
     });
   </script>
 
@@ -1291,9 +984,72 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'MasterAdmin') {
     });
   </script>
 
+  <script>
+    window.onload = function() {
+      const savedEmail = localStorage.getItem("rememberedEmail");
+      const remember = localStorage.getItem("rememberMeChecked");
+      if (savedEmail && remember === "true") {
+        document.getElementById("email").value = savedEmail;
+        document.getElementById("rememberMe").checked = true;
+      }
+    };
+
+    document.querySelector("form").addEventListener("submit", () => {
+      const remember = document.getElementById("rememberMe").checked;
+      const email = document.getElementById("email").value;
+      if (remember) {
+        localStorage.setItem("rememberedEmail", email);
+        localStorage.setItem("rememberMeChecked", "true");
+      } else {
+        localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberMeChecked");
+      }
+    });
+  </script>
+
+  <script>
+    // Connect buttons to the login modal
+    document.addEventListener("DOMContentLoaded", function() {
+      const loginModal = document.getElementById("loginModal");
+      const closeModal = document.getElementById("closeModal");
+
+      // Function to show the login modal
+      function showLoginModal() {
+        loginModal.classList.remove("hidden");
+        setTimeout(() => {
+          loginModal.querySelector("#modalContent").classList.remove("scale-95", "opacity-0");
+          loginModal.querySelector("#modalContent").classList.add("scale-100", "opacity-100");
+        }, 10);
+      }
+
+      // Connect "Start Earning" button
+      document.getElementById("start-earning-button").addEventListener("click", showLoginModal);
+
+      // Connect "Stake Now" buttons
+      document.querySelectorAll("button[id$='-stake-button']").forEach(button => {
+        button.addEventListener("click", showLoginModal);
+      });
+
+      // Connect "Get Started Now" button
+      document.getElementById("login-button-modal").addEventListener("click", showLoginModal);
+
+      // Close modal functionality
+      closeModal.addEventListener("click", () => {
+        loginModal.querySelector("#modalContent").classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          loginModal.classList.add("hidden");
+        }, 300);
+      });
+    });
+  </script>
+
   <script src="assets/js/script.js"></script>
+  <script src="assets/js/randomizer.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="assets/js/calculator.js"></script>
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 </body>
 
 </html>

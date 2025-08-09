@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help Center | Elytra Pool</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/img/ELYTRA.jpg" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .category-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease-out;
+    }
+    
+    .category-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .support-option {
+      transition: all 0.3s ease;
+      border: 1px solid rgba(207, 159, 255, 0.2);
+    }
+    
+    .support-option:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(167, 139, 250, 0.3);
+      border-color: rgba(207, 159, 255, 0.4);
+    }
+    
+    #chatMessages {
+      scrollbar-width: thin;
+      scrollbar-color: #8b5cf6 #f3f4f6;
+    }
+    
+    #chatMessages::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    #chatMessages::-webkit-scrollbar-track {
+      background: #f3f4f6;
+    }
+    
+    #chatMessages::-webkit-scrollbar-thumb {
+      background-color: #8b5cf6;
+      border-radius: 3px;
+    }
+    
+    .article-link {
+      position: relative;
+    }
+    
+    .article-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 1px;
+      background: #8b5cf6;
+      transition: width 0.3s ease;
+    }
+    
+    .article-link:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-950 text-white">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <!-- Logo and Title -->
+      <a href="index.php" class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform duration-300">
+          <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full object-cover" />
+        </div>
+        <span class="text-xl font-semibold tracking-wide text-white hover:text-purple-300 transition duration-300">
+          Elytra Pool
+        </span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="index.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Home</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="index.php#staking" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Staking</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="index.php#mining" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Features</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="help-center.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Help Center</span>
+          <span class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </div>
+
+      <!-- Login Button and Mobile Toggle -->
+      <div class="flex items-center space-x-2">
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-button" class="md:hidden text-white text-2xl ml-2">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="index.php#login" class="flex items-center space-x-2 px-4 py-2 border border-purple-500 text-purple-400 
+          bg-transparent rounded-lg shadow-[0_0_8px_#a855f7]
+          hover:bg-purple-600 hover:text-white hover:border-purple-600 
+          hover:shadow-[0_0_16px_#9333ea] active:bg-purple-700 
+          transition-all duration-300 ease-in-out">
+          <i class="fas fa-user transition-colors duration-300"></i>
+          <span class="hidden sm:inline transition-colors duration-300">Login</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in">
+      <a href="index.php" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="index.php#staking" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="index.php#mining" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Features
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="help-center.php" class="block px-6 py-4 transition-all duration-300 transform hover:scale-105 hover:text-purple-300 relative group">
+        Help Center
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-16 px-6 bg-gradient-to-br from-purple-900/40 via-gray-900 to-indigo-900">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white slide-in-left">Help <span class="text-purple-400">Center</span></h1>
+      <p class="text-lg text-gray-300 mb-8 slide-in-right">How can we assist you today?</p>
+      <div class="relative max-w-xl mx-auto slide-in-bottom">
+        <input type="text" id="searchInput" placeholder="Search articles..."
+          class="w-full px-6 py-3 rounded-lg bg-white/10 text-white border border-purple-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-300" />
+        <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="py-14 px-6">
+    <div id="categoryContainer" class="grid gap-8 max-w-7xl mx-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"></div>
+  </section>
+
+  <!-- Contact Support Options -->
+  <section class="py-16 px-6 bg-gradient-to-br from-indigo-800/70 to-purple-900/60 text-center">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold mb-4 text-white">Still need help?</h2>
+      <p class="text-gray-300 mb-8 max-w-2xl mx-auto">Reach out to us through any of the following channels.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <a href="mailto:support@elytrapool.com" class="support-option bg-white/5 p-6 rounded-xl hover:shadow-xl transition">
+          <i class="fas fa-envelope text-purple-300 text-2xl mb-2"></i>
+          <h3 class="text-lg font-semibold text-white">Email Support</h3>
+          <p class="text-sm text-gray-300">support@elytrapool.com</p>
+        </a>
+        <button id="supportButton" class="support-option bg-white/5 p-6 rounded-xl hover:shadow-xl transition w-full">
+          <i class="fas fa-comments text-purple-300 text-2xl mb-2"></i>
+          <h3 class="text-lg font-semibold text-white">Live Chat</h3>
+          <p class="text-sm text-gray-300">Talk to our support team</p>
+        </button>
+        <a href="#" class="support-option bg-white/5 p-6 rounded-xl hover:shadow-xl transition">
+          <i class="fas fa-ticket-alt text-purple-300 text-2xl mb-2"></i>
+          <h3 class="text-lg font-semibold text-white">Submit Ticket</h3>
+          <p class="text-sm text-gray-300">Response within 24 hours</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Chat Modal -->
+  <div id="chatBox" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-purple-500/30 text-white w-full max-w-lg rounded-xl p-4 shadow-xl relative">
+      <div class="flex justify-between items-center border-b border-purple-500/20 pb-3 mb-3">
+        <div class="flex items-center">
+          <div class="w-3 h-3 rounded-full bg-green-400 mr-2 animate-pulse"></div>
+          <h3 class="text-lg font-semibold text-purple-300">Live Support</h3>
+        </div>
+        <button id="closeChat" class="text-xl font-bold text-gray-400 hover:text-red-400 transition">&times;</button>
+      </div>
+      <div id="chatMessages" class="h-80 overflow-y-auto space-y-3 mb-3 px-2"></div>
+      <div class="flex">
+        <input type="text" placeholder="Type your message..." 
+          class="w-full px-4 py-2 bg-gray-800 border border-purple-500/30 rounded-l-lg text-white focus:outline-none focus:ring-1 focus:ring-purple-500" />
+        <button id="sendMessage" class="bg-purple-600 hover:bg-purple-700 px-4 rounded-r-lg transition">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Modal -->
+  <div id="articleModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-purple-500/30 max-w-2xl w-full rounded-xl p-6 relative shadow-xl">
+      <button id="closeArticleModal" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-red-400 transition">×</button>
+      <h2 id="articleTitle" class="text-xl font-semibold mb-4 text-purple-300"></h2>
+      <div id="articleContent" class="text-gray-300 text-sm space-y-4 leading-relaxed"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="flex items-center space-x-2">
+          <a href="index.php" class="flex items-center">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+              <img src="assets/img/Elytra Logo.png" alt="Elytra Logo" class="w-full h-full rounded-full object-cover" />
+            </div>
+            <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra Pool</span>
+          </a>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="index.php#staking" class="hover:text-white">Staking</a></li>
+            <li><a href="index.php#mining" class="hover:text-white">Premium</a></li>
+            <li><a href="index.php#earnings" class="hover:text-white">Calculator</a></li>
+            <li><a href="faq.php" class="hover:text-white">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="help-center.php" class="hover:text-white">Help Center</a></li>
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">Status</a></li>
+            <li><a href="privacy-policy.php" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Follow Us</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Twitter</a></li>
+            <li><a href="#" class="hover:text-white">Telegram</a></li>
+            <li><a href="#" class="hover:text-white">Discord</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div class="text-sm text-gray-400 mb-4 md:mb-0">© 2023 - 2025 Elytra Pool. All rights reserved.</div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener("DOMContentLoaded", function() {
+      const menuBtn = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuBtn?.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      // Scroll animation for category cards
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.category-card').forEach(card => {
+        observer.observe(card);
+      });
+    });
+
+    const categories = [
+      {
+        icon: "fas fa-rocket",
+        title: "Getting Started",
+        articles: [
+          {
+            title: "How to create an account",
+            content: [
+              "Click 'Sign Up' on the homepage.",
+              "Enter your email and password.",
+              "Verify your email and log in to your dashboard."
+            ]
+          },
+          {
+            title: "Connecting your wallet",
+            content: [
+              "Click 'Connect Wallet' in your dashboard.",
+              "Select your provider (MetaMask, WalletConnect, etc.).",
+              "Approve the connection request in your wallet."
+            ]
+          },
+          {
+            title: "Choosing your first staking plan",
+            content: [
+              "Browse available staking plans in your dashboard.",
+              "Compare APY rates and lock periods.",
+              "Click 'Stake Now' and confirm the transaction in your wallet."
+            ]
+          }
+        ]
+      },
+      {
+        icon: "fas fa-user-cog",
+        title: "Account Issues",
+        articles: [
+          {
+            title: "Resetting your password",
+            content: [
+              "Click 'Forgot Password' on the login screen.",
+              "Enter your registered email address.",
+              "Follow the instructions in the email to reset your password."
+            ]
+          },
+          {
+            title: "Account verification",
+            content: [
+              "Go to Profile Settings and click 'Verify Account'.",
+              "Upload a clear photo of your government-issued ID.",
+              "Wait for our team to review (usually within 24 hours)."
+            ]
+          },
+          {
+            title: "Profile update errors",
+            content: [
+              "Ensure all required fields are filled correctly.",
+              "Check for special characters in text fields.",
+              "Try clearing your browser cache or using a different browser."
+            ]
+          }
+        ]
+      },
+      {
+        icon: "fas fa-lock",
+        title: "Security",
+        articles: [
+          {
+            title: "Two-factor authentication",
+            content: [
+              "Navigate to Security Settings in your account.",
+              "Click 'Enable 2FA' and scan the QR code with Google Authenticator.",
+              "Enter the verification code to complete setup."
+            ]
+          },
+          {
+            title: "Recognizing phishing attempts",
+            content: [
+              "Always check the URL is https://elytrapool.com.",
+              "Never share your seed phrase or private key with anyone.",
+              "Be wary of unsolicited emails asking for personal information."
+            ]
+          },
+          {
+            title: "Reporting a hacked account",
+            content: [
+              "Contact our live support immediately if you suspect unauthorized access.",
+              "We'll guide you through the account recovery process.",
+              "Enable 2FA after regaining access for added security."
+            ]
+          }
+        ]
+      },
+      {
+        icon: "fas fa-credit-card",
+        title: "Payments",
+        articles: [
+          {
+            title: "Understanding fees",
+            content: [
+              "All fees are clearly displayed before transaction confirmation.",
+              "Standard staking fee is 2% of rewards (varies by plan).",
+              "Blockchain gas fees are paid directly to the network."
+            ]
+          },
+          {
+            title: "Deposit not showing",
+            content: [
+              "First check the transaction on the blockchain explorer.",
+              "Ensure you sent to the correct wallet address.",
+              "Contact support with your transaction hash if needed."
+            ]
+          },
+          {
+            title: "Withdrawing rewards",
+            content: [
+              "Navigate to the Earnings section of your dashboard.",
+              "Click 'Withdraw' and select the amount.",
+              "Approve the transaction in your wallet to receive funds."
+            ]
+          }
+        ]
+      }
+    ];
+
+    const categoryContainer = document.getElementById("categoryContainer");
+    const articleModal = document.getElementById("articleModal");
+    const articleTitle = document.getElementById("articleTitle");
+    const articleContent = document.getElementById("articleContent");
+    const searchInput = document.getElementById("searchInput");
+
+    function renderCategories(data) {
+      categoryContainer.innerHTML = "";
+      data.forEach((cat, index) => {
+        const card = document.createElement("div");
+        card.className = `category-card bg-white/5 border border-white/10 rounded-xl p-6 shadow hover:shadow-purple-600/30 transition`;
+        card.style.transitionDelay = `${index * 100}ms`;
+        card.innerHTML = `
+          <div class="flex items-center mb-4">
+            <i class="${cat.icon} text-purple-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold">${cat.title}</h3>
+          </div>
+          <ul class="text-sm space-y-2 text-gray-300">
+            ${cat.articles.map(a => `<li><a href="#" class="hover:text-white article-link" data-title="${a.title}">${a.title}</a></li>`).join("")}
+          </ul>`;
+        categoryContainer.appendChild(card);
+      });
+      bindArticleClicks();
+      
+      // Trigger animations after render
+      setTimeout(() => {
+        document.querySelectorAll('.category-card').forEach(card => {
+          card.classList.add('visible');
+        });
+      }, 100);
+    }
+
+    function bindArticleClicks() {
+      document.querySelectorAll(".article-link").forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          const title = link.dataset.title;
+          const article = categories.flatMap(c => c.articles).find(a => a.title === title);
+          if (article) {
+            articleTitle.textContent = article.title;
+            articleContent.innerHTML = article.content.map(p => `<p class="border-l-2 border-purple-500 pl-4">${p}</p>`).join("");
+            articleModal.classList.remove("hidden");
+            document.body.style.overflow = 'hidden';
+          }
+        });
+      });
+    }
+
+    document.getElementById("closeArticleModal").addEventListener("click", () => {
+      articleModal.classList.add("hidden");
+      document.body.style.overflow = 'auto';
+    });
+
+    searchInput.addEventListener("input", () => {
+      const term = searchInput.value.toLowerCase();
+      const filtered = categories.map(c => ({
+        ...c,
+        articles: c.articles.filter(a => a.title.toLowerCase().includes(term) || 
+               a.content.some(p => p.toLowerCase().includes(term)))
+      })).filter(c => c.articles.length);
+      renderCategories(filtered);
+    });
+
+    renderCategories(categories);
+
+    // Live Chat Logic
+    const supportButton = document.getElementById("supportButton");
+    const chatBox = document.getElementById("chatBox");
+    const closeChat = document.getElementById("closeChat");
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = chatBox.querySelector("input[type='text']");
+    const sendButton = document.getElementById("sendMessage");
+
+    supportButton.addEventListener("click", () => {
+      chatBox.classList.remove("hidden");
+      document.body.style.overflow = 'hidden';
+      chatMessages.innerHTML = `
+        <div class="flex mb-2">
+          <div class="bg-purple-500/20 p-3 rounded-lg max-w-xs">
+            <div class="text-xs text-purple-300 mb-1">Elytra Support</div>
+            <div class="text-sm">👋 Hi there! How can we help you today?</div>
+          </div>
+        </div>`;
+      userInput.focus();
+    });
+
+    closeChat.addEventListener("click", () => {
+      chatBox.classList.add("hidden");
+      document.body.style.overflow = 'auto';
+      userInput.value = "";
+    });
+
+    function sendMessage() {
+      if (userInput.value.trim()) {
+        // User message
+        const userMsg = document.createElement("div");
+        userMsg.className = "flex justify-end mb-2";
+        userMsg.innerHTML = `
+          <div class="bg-purple-600 p-3 rounded-lg max-w-xs">
+            <div class="text-xs text-purple-200 mb-1">You</div>
+            <div class="text-sm">${userInput.value.trim()}</div>
+          </div>`;
+        chatMessages.appendChild(userMsg);
+        
+        // Clear input
+        userInput.value = "";
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Simulate bot response after delay
+        setTimeout(() => {
+          const botMsg = document.createElement("div");
+          botMsg.className = "flex mb-2";
+          botMsg.innerHTML = `
+            <div class="bg-purple-500/20 p-3 rounded-lg max-w-xs">
+              <div class="text-xs text-purple-300 mb-1">Elytra Support</div>
+              <div class="text-sm">Thanks for your message! Our team will respond shortly. In the meantime, you might find answers in our <a href="#" class="text-purple-400 underline">Help Center</a>.</div>
+            </div>`;
+          chatMessages.appendChild(botMsg);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+      }
+    }
+
+    userInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+
+    sendButton.addEventListener("click", sendMessage);
+  </script>
+</body>
+
+</html>

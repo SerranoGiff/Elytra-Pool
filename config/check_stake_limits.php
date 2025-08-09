@@ -8,29 +8,29 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
+$userId = $_SESSION['user_id'];
 
-// Count active stakes
-$activeStmt = $conn->prepare("SELECT COUNT(*) FROM stakes WHERE user_id = ? AND status = 'active'");
-$activeStmt->bind_param("i", $user_id);
-$activeStmt->execute();
-$activeStmt->bind_result($activeStakes);
-$activeStmt->fetch();
-$activeStmt->close();
+// ✅ Only count active stakes (not yet ended)
+$activeQuery = "SELECT COUNT(*) as total FROM stakes WHERE user_id = ? AND end_date > NOW()";
+$stmt = $conn->prepare($activeQuery);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$activeStakes = (int) $row['total'];
 
-// Count monthly stakes
-$monthStart = date('Y-m-01 00:00:00');
-$monthEnd = date('Y-m-t 23:59:59');
-
-$monthlyStmt = $conn->prepare("SELECT COUNT(*) FROM stakes WHERE user_id = ? AND created_at BETWEEN ? AND ?");
-$monthlyStmt->bind_param("iss", $user_id, $monthStart, $monthEnd);
-$monthlyStmt->execute();
-$monthlyStmt->bind_result($monthlyStakes);
-$monthlyStmt->fetch();
-$monthlyStmt->close();
+// ✅ Count monthly stakes
+$monthlyQuery = "SELECT COUNT(*) as total FROM stakes WHERE user_id = ? AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())";
+$stmt = $conn->prepare($monthlyQuery);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$monthlyStakes = (int) $row['total'];
 
 echo json_encode([
     'status' => 'ok',
     'active_stakes' => $activeStakes,
     'monthly_stakes' => $monthlyStakes
 ]);
+?>

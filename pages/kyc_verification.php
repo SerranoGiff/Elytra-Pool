@@ -71,99 +71,117 @@ $profileImg .= '?v=' . time(); // Cache buster to avoid browser caching old imag
 <body class="min-h-screen">
     <!-- Navigation -->
     <nav
-        class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
-        <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-            <!-- Logo -->
-            <div class="flex items-center space-x-2">
-                <a href="user.php" class="flex items-center">
-                    <div
-                        class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
-                        <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
-                            class="w-full h-full rounded-full object-cover" />
-                    </div>
-                    <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
-                        Pool</span>
-                </a>
-            </div>
+    class="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10 shadow-md transition-all duration-500 ease-in-out">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <a href="user.php" class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center pulse hover:scale-105 transition-transform duration-200">
+            <img src="../assets/img/Elytra Logo.png" alt="Elytra Logo"
+              class="w-full h-full rounded-full object-cover" />
+          </div>
+          <span class="text-xl font-bold text-white hover:text-blue-200 transition-colors duration-200">Elytra
+            Pool</span>
+        </a>
+      </div>
 
-            <!-- Desktop Nav Links -->
-            <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
-                <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    <span class="text-white hover:text-purple-300 transition">Home</span>
-                    <span
-                        class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    <span class="text-white hover:text-purple-300 transition">Staking</span>
-                    <span
-                        class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="leaderboard.php"
-                    class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
-                    <span
-                        class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    <span class="text-white hover:text-purple-300 transition">Deposit</span>
-                    <span
-                        class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="withdraw.php"
-                    class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    <span class="text-white hover:text-purple-300 transition">Withdraw</span>
-                    <span
-                        class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
-                    <span class="text-white hover:text-purple-300 transition">Convert</span>
-                    <span
-                        class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-            </div>
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex nav-links space-x-6 items-center" id="nav-links">
+        <a href="user.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Home</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="staking.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Staking</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="leaderboard.php"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Leaderboard</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="deposit.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Deposit</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="withdraw.php"
+          class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Withdraw</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="Convert.php" class="relative group transform hover:scale-105 transition-all duration-300 ease-in-out">
+          <span class="text-white hover:text-purple-300 transition">Convert</span>
+          <span
+            class="absolute left-0 -bottom-1 h-0.5 w-0 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </div>
 
-            <!-- Desktop Profile -->
-            <div class="relative hidden md:block">
-                <button id="profileBtn" class="focus:outline-none">
-                    <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
-                        class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
-                </button>
-                <div id="profileMenu"
-                    class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-                    <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-                    <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
-                </div>
-            </div>
-
-            <!-- Mobile Menu & Profile -->
-            <div class="md:hidden flex items-center gap-4">
-                <button id="menu-button" aria-label="Toggle navigation">
-                    <i class="fas fa-bars text-xl text-white"></i>
-                </button>
-                <div class="relative">
-                    <button id="mobileProfileBtn" class="focus:outline-none">
-                        <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
-                            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
-                    </button>
-                    <div id="mobileProfileMenu"
-                        class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
-                        <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-                        <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
-                    </div>
-                </div>
-            </div>
+      <!-- Desktop Profile -->
+      <div class="relative hidden md:block">
+        <button id="profileBtn" class="focus:outline-none">
+          <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+        </button>
+        <div id="profileMenu"
+          class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+          <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
+      </div>
 
-        <!-- Mobile Navigation Links -->
-        <div id="mobile-menu" class="nav-links">
-            <a href="user.php" class="nav-link">Home</a>
-            <a href="staking.php" class="nav-link">Staking</a>
-            <a href="leaderboard.php" class="nav-link">Leaderboard</a>
-            <a href="deposit.php" class="nav-link">Deposit</a>
-            <a href="withdraw.php" class="nav-link">Withdraw</a>
-            <a href="Convert.php" class="nav-link">Convert</a>
+      <!-- Mobile Menu & Profile -->
+      <div class="md:hidden flex items-center gap-4">
+        <button id="menu-button" aria-label="Toggle navigation">
+          <i class="fas fa-bars text-xl text-white"></i>
+        </button>
+        <div class="relative">
+          <button id="mobileProfileBtn" class="focus:outline-none">
+            <img src="<?= htmlspecialchars($profileImg) ?>" alt="Profile"
+              class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
+          </button>
+          <div id="mobileProfileMenu"
+            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
+            <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+            <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Links -->
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
+      <a href="user.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Leaderboard
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Deposit
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Withdraw
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="Convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Convert
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+    </div>
+  </nav>
 
     <!-- Main Section -->
     <main class="flex items-center justify-center px-4 pt-28 pb-20">

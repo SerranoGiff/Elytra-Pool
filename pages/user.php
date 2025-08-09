@@ -132,7 +132,7 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
             class="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
         </button>
         <div id="profileMenu"
-          class="absolute right-0 mt-2 w-40 bg-purple-100 rounded-lg shadow-lg text-sm text-black hidden z-50">
+          class="absolute right-0 mt-2 w-40  bg-white rounded-lg shadow-lg text-sm text-black hidden z-50">
           <a href="settings.php" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
           <a href="../config/logout.php" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
         </div>
@@ -158,13 +158,31 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
     </div>
 
     <!-- Mobile Navigation Links -->
-    <div id="mobile-menu" class="nav-links">
-      <a href="user.php" class="nav-link">Home</a>
-      <a href="staking.php" class="nav-link">Staking</a>
-      <a href="leaderboard.php" class="nav-link">Leaderboard</a>
-      <a href="deposit.php" class="nav-link">Deposit</a>
-      <a href="withdraw.php" class="nav-link">Withdraw</a>
-      <a href="Convert.php" class="nav-link">Convert</a>
+    <div id="mobile-menu" class="md:hidden hidden text-white text-center animate-fade-in backdrop-blur-xl bg-white/10 rounded-b-xl p-4 space-y-2 shadow-xl border-t border-white/10">
+      <a href="user.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Home
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="staking.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Staking
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="leaderboard.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Leaderboard
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="deposit.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Deposit
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="withdraw.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Withdraw
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
+      <a href="Convert.php" class="block px-6 py-3 rounded-md transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:text-purple-300 relative group">
+        Convert
+        <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>
+      </a>
     </div>
   </nav>
 
@@ -476,30 +494,30 @@ $referralLink = "https://elytra.io/referral/" . $referralCode;
         const dataWallet = await resWallet.json();
 
         if (dataWallet.status === 'success') {
-  const btc = parseFloat(dataWallet.btc);
-  const eth = parseFloat(dataWallet.eth);
-  const usdt = parseFloat(dataWallet.usdt);
-  const eltr = parseFloat(dataWallet.eltr);
+          const btc = parseFloat(dataWallet.btc);
+          const eth = parseFloat(dataWallet.eth);
+          const usdt = parseFloat(dataWallet.usdt);
+          const eltr = parseFloat(dataWallet.eltr);
 
-  const eltrToUsdt = 0.5;
-const btcToUsdt = 235929.62 * eltrToUsdt; // = 117964.81
-const ethToUsdt = 13764.70 * eltrToUsdt;  // = 6882.35
+          const eltrToUsdt = 0.5;
+          const btcToUsdt = 235929.62 * eltrToUsdt; // = 117964.81
+          const ethToUsdt = 13764.70 * eltrToUsdt; // = 6882.35
 
-const totalInUsdt = 
-  (btc * btcToUsdt) +
-  (eth * ethToUsdt) +
-  usdt +
-  (eltr * eltrToUsdt);
+          const totalInUsdt =
+            (btc * btcToUsdt) +
+            (eth * ethToUsdt) +
+            usdt +
+            (eltr * eltrToUsdt);
 
 
-  document.getElementById("btcBalance").textContent = `${btc.toFixed(8)} BTC`;
-  document.getElementById("ethBalance").textContent = `${eth.toFixed(8)} ETH`;
-  document.getElementById("usdtBalance").textContent = `${usdt.toLocaleString()} USDT`;
-  document.getElementById("elytrsBalance").textContent = `${eltr.toLocaleString()} ELTR`;
+          document.getElementById("btcBalance").textContent = `${btc.toFixed(8)} BTC`;
+          document.getElementById("ethBalance").textContent = `${eth.toFixed(8)} ETH`;
+          document.getElementById("usdtBalance").textContent = `${usdt.toLocaleString()} USDT`;
+          document.getElementById("elytrsBalance").textContent = `${eltr.toLocaleString()} ELTR`;
 
-  document.getElementById("totalBalance").textContent = `$${totalInUsdt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(dataWallet.last_activity).toLocaleString()}`;
-}
+          document.getElementById("totalBalance").textContent = `$${totalInUsdt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          document.getElementById("lastActivity").textContent = `Last Activity: ${new Date(dataWallet.last_activity).toLocaleString()}`;
+        }
 
 
         // Load Transactions
